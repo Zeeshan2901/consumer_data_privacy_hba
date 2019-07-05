@@ -86,7 +86,6 @@ public class ConsumerDataPrivacyHBA {
     			while (sc.hasNextLine()) {
     				alice=sc.nextLine();
     			}
-    			System.out.println("Data of Alice: " +alice);
     			sc.close();
     	}catch(IOException e) {
     		System.out.println("Exception in reading from Alice");
@@ -105,7 +104,6 @@ public class ConsumerDataPrivacyHBA {
 			while (sc.hasNextLine()) {
 				bob=sc.nextLine();
 			}
-			System.out.println("Data of Bob: " +bob);
 			sc.close();
 		}catch(IOException e) {
 		System.out.println("Exception in reading from Bob");
@@ -118,7 +116,6 @@ public class ConsumerDataPrivacyHBA {
 	public void readFile(String location) {
 		
 		Map <String, SortedMap <String,String>> hmap = new HashMap<String, SortedMap <String,String>>();
-		//SortedMap <String,String> sm=new TreeMap<String,String>();
 		String line ="";
 		try {
 			FileReader fr = new FileReader(location);
@@ -128,12 +125,9 @@ public class ConsumerDataPrivacyHBA {
 				String[] row=line.split("\t");
 				
 				if (isHomozygous(row[3])) {
-					if(hmap.containsKey(row[1])) {
-						SortedMap <String,String> sm=new TreeMap<String,String>();
-						sm.put(row[0],row[3]);
+					if(hmap.containsKey(row[1])) 
 						hmap.get(row[1]).put(row[0],row[3]);
-					
-					}else {
+					else {
 						SortedMap <String,String> sm=new TreeMap<String,String>();
 						sm.put(row[0],row[3]);
 						hmap.put(row[1],sm);		
