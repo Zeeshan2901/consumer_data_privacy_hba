@@ -1,1 +1,3 @@
-My Name is Zeeshan!
+rsid	chromosome	position	genotype
+rs9988179	5	865694	CT
+121212
