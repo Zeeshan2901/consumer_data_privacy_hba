@@ -2,10 +2,6 @@ package consumer_data_privacy_hba;
 
 public class HashiingClient {
 
-	public HashiingClient() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -13,6 +9,9 @@ public class HashiingClient {
 		obj.readFromAlice();
 		obj.readFromBob();
 		obj.hashMatch();
+		obj.readFile("input/alice.txt");
+		//obj.readFile("input/bob.txt");
+		
 
 	}
 
