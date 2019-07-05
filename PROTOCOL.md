@@ -20,4 +20,4 @@ Alice - sends the sorted hash values to Bob
 Bob - the same thing
 
 
-Both can count the number of matches.
+Both can count the number of matches. They can tell where the matches come from in their genomes.
