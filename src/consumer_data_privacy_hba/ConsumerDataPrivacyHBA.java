@@ -128,12 +128,9 @@ public class ConsumerDataPrivacyHBA {
 				String[] row=line.split("\t");
 				
 				if (isHomozygous(row[3])) {
-					if(hmap.containsKey(row[1])) {
-						SortedMap <String,String> sm=new TreeMap<String,String>();
-						sm.put(row[0],row[3]);
+					if(hmap.containsKey(row[1])) 
 						hmap.get(row[1]).put(row[0],row[3]);
-					
-					}else {
+					else {
 						SortedMap <String,String> sm=new TreeMap<String,String>();
 						sm.put(row[0],row[3]);
 						hmap.put(row[1],sm);		
