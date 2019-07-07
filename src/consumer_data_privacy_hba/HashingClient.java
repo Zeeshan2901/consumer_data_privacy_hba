@@ -9,10 +9,13 @@ public class HashingClient {
 		//obj.readFromAlice();
 		//obj.readFromBob();
 		//obj.hashMatch();
-		obj.readFile("input/alice.txt");
-		//obj.readFile("input/bob.txt");
+		obj.readFile("input/bob.txt");
 		System.out.println("\nContents of LocGene : \n" +obj.locGene);
 		System.out.println("\nContents of LocRsid : \n" +obj.locRsid);
+		//obj.readFile("input/bob.txt");
+		//obj.putInClass("input/alice.txt");
+		obj.implementFrames();
+
 		
 
 	}
