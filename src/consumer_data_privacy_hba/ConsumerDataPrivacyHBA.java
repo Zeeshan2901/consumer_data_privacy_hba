@@ -55,7 +55,11 @@ public class ConsumerDataPrivacyHBA {
 	            Integer key = (Integer) m.getKey(); 
 	            String value = (String) m.getValue(); 
 	            substring+=value;
-	  
+
+                    // ofk: unless Java compilers have improved, in the
+                    // past one would get much better speed from using a
+                    // StringBuilder rather than "+=".
+                    
 	            //System.out.println("Key : " + key +  "  value : " + value); 
 	        } 
 			
