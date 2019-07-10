@@ -7,7 +7,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
@@ -18,10 +20,13 @@ import java.util.TreeMap;
  * @author Zeeshan
  *
  */
+
+
 public class ConsumerDataPrivacyHBA {
 	
 	Map <String, SortedMap <Integer,String>> locGene;
 	Map <String, SortedMap <Integer,String>> locRsid;
+	LinkedHashMap <String, String> level1Frames;
 	String alice, bob;
 	int t1;
 	
@@ -30,50 +35,73 @@ public class ConsumerDataPrivacyHBA {
 		bob="";
 		locGene = new HashMap<String, SortedMap <Integer,String>>();
 		locRsid = new HashMap<String, SortedMap <Integer,String>>();
-		t1=4;
+		level1Frames = new LinkedHashMap<String, String>();
+		t1=40;
 	}
 	
+	public String findRsid(int key, int location) {
+		for(Map.Entry<String, SortedMap<Integer, String>> entry : locRsid.entrySet()) {
+			if (Integer.parseInt(entry.getKey())==key) {
+				SortedMap<Integer, String> temp = entry.getValue();
+				return temp.get(location);
+			}
+		}
+		return null;
+	}
 	
+	public String findGenotype(int key, int location) {
+		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {
+			if (Integer.parseInt(entry.getKey())==key) {
+				SortedMap<Integer, String> temp = entry.getValue();
+				return temp.get(location);
+			}
+		}
+		return null;
+	}
+	
+	public void displayFrames (LinkedHashMap <String, String> frames) {
+		for(Map.Entry<String, String> m:frames.entrySet()){  
+			   System.out.println("\nLocation Details : " +m.getKey()+" || Hashed Text :  "+m.getValue());  
+			  }   
+	}
 	
 	public void implementFrames() {
 		
 		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {
+			
 			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap containing location and genotype
-			Set sm =temp.entrySet();
-			Iterator i=sm.iterator();
-			int counter,start,end=0;
+			Set<Entry<Integer, String>> sm =temp.entrySet();
+			Iterator<Entry<Integer, String>> i=sm.iterator();
+			int counter=0,start=0,end=0;
 			String substring="";
 			while (i.hasNext()) 
 	        { 
-				if (counter==t1) {
+				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
+				if (counter==0) {
+					start=(Integer) m.getKey();
+					substring="";
+				}  
+	            counter++;	            
+	            String value = (String) m.getValue(); 
+	            if (isHomozygous(value))
+	            	substring+=value;
+	            		// ofk: unless Java compilers have improved, in the
+                    	// past one would get much better speed from using a
+                    	// StringBuilder rather than "+=".
+	            if (counter==t1) {
+					end=(Integer) m.getKey();
 					counter=0;
-					System.out.println("String of Alleles : " +substring);
+					int chromosome=Integer.parseInt(entry.getKey());
+					String startRsid=findRsid(chromosome,start);
+					String endRsid=findRsid(chromosome,end);
+					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
+					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHA(substring));
 					substring="";
 				}
-	            Map.Entry m = (Map.Entry)i.next(); 
-	            counter++;
-	            Integer key = (Integer) m.getKey(); 
-	            String value = (String) m.getValue(); 
-	            substring+=value;
-
-                    // ofk: unless Java compilers have improved, in the
-                    // past one would get much better speed from using a
-                    // StringBuilder rather than "+=".
-                    
-	            //System.out.println("Key : " + key +  "  value : " + value); 
 	        } 
-			
-	        
-	        
-	        //if (temp.containsKey("1003")) // If location match
-	          //  System.out.println("Value at 100 : " +entry.getKey()+" "+temp.get("1002")); // Return the 
-	    
-		
-		
-		
-		}
-		 
-		
+		}	
+		System.out.println("\n Frames of size T1 : "+t1);
+		displayFrames(level1Frames);
 	}
 	 
 	
@@ -102,9 +130,7 @@ public class ConsumerDataPrivacyHBA {
 					locGene.put(row[1],sm);	
 					locRsid.put(row[1],sm1);
 				}			
-			}
-			
-			
+			}			
 			sc.close();
 		}catch(IOException e) {
 		System.out.println("Exception in reading at "+location);
@@ -116,7 +142,7 @@ public class ConsumerDataPrivacyHBA {
 		return (allele.charAt(0)==allele.charAt(1));
 	}
 	
-	public  String getSHA(String input){ 
+	public  String getSHA(String input ){ 
         try { 
   
             // Static getInstance method is called with hashing SHA 
@@ -214,7 +240,6 @@ public void readFromBob() {
 }*/
 	
 }
-
 
 
 

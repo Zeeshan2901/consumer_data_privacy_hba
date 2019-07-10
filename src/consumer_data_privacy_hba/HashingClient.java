@@ -5,16 +5,21 @@ public class HashingClient {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		ConsumerDataPrivacyHBA obj = new ConsumerDataPrivacyHBA();
+		ConsumerDataPrivacyHBA bob = new ConsumerDataPrivacyHBA();
+		ConsumerDataPrivacyHBA alice = new ConsumerDataPrivacyHBA();
+
 		//obj.readFromAlice();
 		//obj.readFromBob();
 		//obj.hashMatch();
-		obj.readFile("input/bob.txt");
-		System.out.println("\nContents of LocGene : \n" +obj.locGene);
-		System.out.println("\nContents of LocRsid : \n" +obj.locRsid);
-		//obj.readFile("input/bob.txt");
-		//obj.putInClass("input/alice.txt");
-		obj.implementFrames();
+		bob.readFile("input/bob.txt");
+		System.out.println("\nContents of LocGene : \n" +bob.locGene);
+		System.out.println("\nContents of LocRsid : \n" +bob.locRsid);
+		bob.implementFrames();
+		
+		alice.readFile("input/alice.txt");
+		System.out.println("\nContents of LocGene : \n" +alice.locGene);
+		System.out.println("\nContents of LocRsid : \n" +alice.locRsid);
+		alice.implementFrames();
 
 		
 

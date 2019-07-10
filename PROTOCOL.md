@@ -3,13 +3,13 @@
 
 Alice - generates a random number, she sends a hash to Bob
 
-Bob - generate sa random number, he sends a hash to Alice
+Bob - generates a random number, he sends a hash to Alice
 
 Alice - sends the random number to Bob
 
-Bob - sends the randoom number Alice
+Bob - sends the random number Alice
 
-Both - they xor the random numbers and that's the nonce.
+Both - they XOR the random numbers and that's the nonce.
 
 
 
