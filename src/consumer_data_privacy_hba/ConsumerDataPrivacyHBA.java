@@ -24,11 +24,12 @@ import java.util.TreeMap;
 
 public class ConsumerDataPrivacyHBA {
 	
-	Map <String, SortedMap <Integer,String>> locGene;
-	Map <String, SortedMap <Integer,String>> locRsid;
-	LinkedHashMap <String, String> level1Frames;
+	Map <String, SortedMap <Integer,String>> locGene;	// Stores Chromosome as Key and <Location,Genotype> in the SM
+	Map <String, SortedMap <Integer,String>> locRsid;	// Stores Chromosome as Key and <Location,RSID> in the SM
+	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ locations and RSIDs, HashedValue>
+													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
 	String alice, bob;
-	int t1;
+	int t1;												//Size of Frame
 	
 	public ConsumerDataPrivacyHBA() {
 		alice="";
@@ -39,6 +40,7 @@ public class ConsumerDataPrivacyHBA {
 		t1=40;
 	}
 	
+	//Method to find RSID given the chromosome and location
 	public String findRsid(int key, int location) {
 		for(Map.Entry<String, SortedMap<Integer, String>> entry : locRsid.entrySet()) {
 			if (Integer.parseInt(entry.getKey())==key) {
@@ -49,6 +51,7 @@ public class ConsumerDataPrivacyHBA {
 		return null;
 	}
 	
+	//Method to find Genotype given the chromosome and location
 	public String findGenotype(int key, int location) {
 		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {
 			if (Integer.parseInt(entry.getKey())==key) {
@@ -59,17 +62,19 @@ public class ConsumerDataPrivacyHBA {
 		return null;
 	}
 	
+	//Method to display the Frame Structure
 	public void displayFrames (LinkedHashMap <String, String> frames) {
 		for(Map.Entry<String, String> m:frames.entrySet()){  
 			   System.out.println("\nLocation Details : " +m.getKey()+" || Hashed Text :  "+m.getValue());  
 			  }   
 	}
 	
+	//Method to divide the chromosomes into Frames of size T1
 	public void implementFrames() {
 		
-		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {
+		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {		//outer map iterator to traverse genotype data of each chromosome
 			
-			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap containing location and genotype
+			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
 			Set<Entry<Integer, String>> sm =temp.entrySet();
 			Iterator<Entry<Integer, String>> i=sm.iterator();
 			int counter=0,start=0,end=0;
@@ -77,18 +82,18 @@ public class ConsumerDataPrivacyHBA {
 			while (i.hasNext()) 
 	        { 
 				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
-				if (counter==0) {
+				if (counter==0) {		// Beginning of Frame to capture start location and initialize the substing to empty
 					start=(Integer) m.getKey();
 					substring="";
 				}  
-	            counter++;	            
-	            String value = (String) m.getValue(); 
-	            if (isHomozygous(value))
+	            counter++;				// for each location increasing the counter          
+	            String value = (String) m.getValue(); 		// capture the genotype value
+	            if (isHomozygous(value))					// form a substring only if its homozygous
 	            	substring+=value;
 	            		// ofk: unless Java compilers have improved, in the
                     	// past one would get much better speed from using a
                     	// StringBuilder rather than "+=".
-	            if (counter==t1) {
+	            if (counter==t1) {			//end of frame, capture end location and rsid to form the Frame Linked hashmap 
 					end=(Integer) m.getKey();
 					counter=0;
 					int chromosome=Integer.parseInt(entry.getKey());
