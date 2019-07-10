@@ -176,7 +176,7 @@ public class ConsumerDataPrivacyHBA {
 					int chromosome=Integer.parseInt(entry.getKey());
 					String startRsid=findRsid(chromosome,start);
 					String endRsid=findRsid(chromosome,end);
-					//System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
+					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
 					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring,nonce));
 					substring="";
 				}

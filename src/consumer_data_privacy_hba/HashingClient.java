@@ -46,18 +46,17 @@ public class HashingClient {
 		alice.caluclateNonce();
 		bob.caluclateNonce();
 		
-		
+		System.out.println("\n\n\t\t\t\t ***** BOB's Data ***** ");
 		bob.readFile("input/bob.txt");
-		//System.out.println("\nContents of LocGene : \n" +bob.locGene);
-		//System.out.println("\nContents of LocRsid : \n" +bob.locRsid);
+		System.out.println("\nContents of LocGene : \n" +bob.locGene);
+		System.out.println("\nContents of LocRsid : \n" +bob.locRsid);
 		bob.implementFrames();
 		
+		System.out.println("\n\n\t\t\t\t ***** ALICE's Data ***** ");
 		alice.readFile("input/alice.txt");
-		//System.out.println("\nContents of LocGene : \n" +alice.locGene);
-		//System.out.println("\nContents of LocRsid : \n" +alice.locRsid);
-		alice.implementFrames();
-
-		
+		System.out.println("\nContents of LocGene : \n" +alice.locGene);
+		System.out.println("\nContents of LocRsid : \n" +alice.locRsid);
+		alice.implementFrames();	
 
 	}
 
