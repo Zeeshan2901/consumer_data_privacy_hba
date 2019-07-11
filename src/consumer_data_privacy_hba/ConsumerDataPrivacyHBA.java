@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
@@ -30,6 +31,8 @@ public class ConsumerDataPrivacyHBA {
 													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
 	String alice, bob;
 	int t1;												//Size of Frame
+	int my_nonce, party_nonce, nonce;
+	String hashOfMyNonce, hashOfPartyNonce;
 	
 	public ConsumerDataPrivacyHBA() {
 		alice="";
@@ -69,6 +72,80 @@ public class ConsumerDataPrivacyHBA {
 			  }   
 	}
 	
+	//Method to generate a Random number
+	public int generateRandom() {
+		Random rand = new Random();
+		return my_nonce= rand.nextInt((32671234 - 100000) + 1) + 100000;
+	}
+	
+	public String sendHash() {
+		return(hashOfMyNonce=getSHA(String.valueOf(generateRandom())));
+	}
+	
+	public boolean verifyHashNonce() {
+		return hashOfPartyNonce.contentEquals(getSHA(String.valueOf(party_nonce)));
+	}
+	
+	public int sendRandom() {
+		return my_nonce;
+	}
+	
+	//method to store other parties nonce
+	public void getNonce(int n) {
+		party_nonce=n;
+	}
+	
+	//get  hash of other parties nonce
+	public void getHashofNonce(String s) {
+		hashOfPartyNonce=s;
+	}
+	
+	public void displayNonce() {
+		System.out.println("\n My Data		: "+my_nonce+" :: "+hashOfMyNonce);
+		System.out.println("\n Party Data	: "+party_nonce+" :: "+hashOfPartyNonce);
+	}
+	
+	public void caluclateNonce() {
+		nonce=my_nonce^party_nonce;
+		System.out.println("\n Nonce : " +nonce);
+	}
+	
+	
+	public  String getSHAWitnNonce(String input, int nonce1 ){ 
+        try { 
+  
+            // Static getInstance method is called with hashing SHA 
+            MessageDigest md = MessageDigest.getInstance("SHA-256"); 
+  
+            
+            md.update(String.valueOf(nonce1).getBytes());
+            // digest() method called 
+            // to calculate message digest of an input 
+            // and return array of byte 
+            byte[] messageDigest = md.digest(input.getBytes()); 
+  
+            // Convert byte array into sign-magnitude  representation 
+            BigInteger no = new BigInteger(1, messageDigest); 
+  
+            // Convert message digest into hex value 
+            String hashtext = no.toString(16); 
+  
+            while (hashtext.length() < 32) { 
+                hashtext = "0" + hashtext; 
+            } 
+  
+            return hashtext; 
+        } 
+  
+        // For specifying wrong message digest algorithms 
+        catch (NoSuchAlgorithmException e) { 
+            System.out.println("Exception thrown"
+                               + " for incorrect algorithm: " + e); 
+  
+            return null; 
+        } 
+    } 
+	
 	//Method to divide the chromosomes into Frames of size T1
 	public void implementFrames() {
 		
@@ -99,8 +176,8 @@ public class ConsumerDataPrivacyHBA {
 					int chromosome=Integer.parseInt(entry.getKey());
 					String startRsid=findRsid(chromosome,start);
 					String endRsid=findRsid(chromosome,end);
-					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
-					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHA(substring));
+					//System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
+					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring,nonce));
 					substring="";
 				}
 	        } 
