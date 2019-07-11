@@ -29,6 +29,7 @@ public class ConsumerDataPrivacyHBA {
 	Map <String, SortedMap <Integer,String>> locRsid;	// Stores Chromosome as Key and <Location,RSID> in the SM
 	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ locations and RSIDs, HashedValue>
 													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
+	LinkedHashMap <String, String> match;
 	String alice, bob;
 	int t1;												//Size of Frame
 	int my_nonce, party_nonce, nonce;
@@ -40,6 +41,7 @@ public class ConsumerDataPrivacyHBA {
 		locGene = new HashMap<String, SortedMap <Integer,String>>();
 		locRsid = new HashMap<String, SortedMap <Integer,String>>();
 		level1Frames = new LinkedHashMap<String, String>();
+		match = new LinkedHashMap<String, String>();
 		t1=40;
 	}
 	
@@ -70,6 +72,18 @@ public class ConsumerDataPrivacyHBA {
 		for(Map.Entry<String, String> m:frames.entrySet()){  
 			   System.out.println("\nLocation Details : " +m.getKey()+" || Hashed Text :  "+m.getValue());  
 			  }   
+	}
+	
+	public void DNAMatch(LinkedHashMap <String, String> party) {
+		
+		for(Map.Entry<String, String> m:level1Frames.entrySet()){  
+			String key = m.getKey();
+			String value1 = m.getValue();
+			String value2 = party.get(key);
+			if (value1.contentEquals(value2))
+				match.put(key,value1);
+		}	
+		displayFrames(match);
 	}
 	
 	//Method to generate a Random number
