@@ -46,6 +46,8 @@ public class ConsumerDataPrivacyHBA {
 	}
 	
 	//Method to find RSID given the chromosome and location
+        // OFK: why not something like locRsid.get(""+key).get(location) to gain full benefit of top-level Map
+    
 	public String findRsid(int key, int location) {
 		for(Map.Entry<String, SortedMap<Integer, String>> entry : locRsid.entrySet()) {
 			if (Integer.parseInt(entry.getKey())==key) {
@@ -57,6 +59,8 @@ public class ConsumerDataPrivacyHBA {
 	}
 	
 	//Method to find Genotype given the chromosome and location
+        // OFK: same issue as findRsid
+    
 	public String findGenotype(int key, int location) {
 		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {
 			if (Integer.parseInt(entry.getKey())==key) {
@@ -187,9 +191,13 @@ public class ConsumerDataPrivacyHBA {
 	            if (counter==t1) {			//end of frame, capture end location and rsid to form the Frame Linked hashmap 
 					end=(Integer) m.getKey();
 					counter=0;
-					int chromosome=Integer.parseInt(entry.getKey());
+					int chromosome=Integer.parseInt(entry.getKey());  // OFK: maybe better if the map's keys were Integers?
+                                        
 					String startRsid=findRsid(chromosome,start);
 					String endRsid=findRsid(chromosome,end);
+
+                                        // OFK: eventual security issue: we don't want to use frames whose substrings are too short (have to set thrshold)
+                                        // because someone could try to determine the substring from the SHA by brute force
 					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
 					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring,nonce));
 					substring="";
