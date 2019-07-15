@@ -25,8 +25,8 @@ import java.util.TreeMap;
 
 public class ConsumerDataPrivacyHBA {
 	
-	Map <String, SortedMap <Integer,String>> locGene;	// Stores Chromosome as Key and <Location,Genotype> in the SM
-	Map <String, SortedMap <Integer,String>> locRsid;	// Stores Chromosome as Key and <Location,RSID> in the SM
+	Map <Integer, SortedMap <Integer,String>> locGene;	// Stores Chromosome as Key and <Location,Genotype> in the SM
+	Map <Integer, SortedMap <Integer,String>> locRsid;	// Stores Chromosome as Key and <Location,RSID> in the SM
 	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ locations and RSIDs, HashedValue>
 													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
 	LinkedHashMap <String, String> match;
@@ -38,37 +38,35 @@ public class ConsumerDataPrivacyHBA {
 	public ConsumerDataPrivacyHBA() {
 		alice="";
 		bob="";
-		locGene = new HashMap<String, SortedMap <Integer,String>>();
-		locRsid = new HashMap<String, SortedMap <Integer,String>>();
+		locGene = new HashMap<Integer, SortedMap <Integer,String>>();
+		locRsid = new HashMap<Integer, SortedMap <Integer,String>>();
 		level1Frames = new LinkedHashMap<String, String>();
 		match = new LinkedHashMap<String, String>();
-		t1=40;
+		t1=200;
 	}
 	
 	//Method to find RSID given the chromosome and location
-        // OFK: why not something like locRsid.get(""+key).get(location) to gain full benefit of top-level Map
+    // OFK: why not something like locRsid.get(""+key).get(location) to gain full benefit of top-level Map
     
 	public String findRsid(int key, int location) {
-		for(Map.Entry<String, SortedMap<Integer, String>> entry : locRsid.entrySet()) {
-			if (Integer.parseInt(entry.getKey())==key) {
-				SortedMap<Integer, String> temp = entry.getValue();
-				return temp.get(location);
-			}
-		}
-		return null;
+		/*
+		 * for(Map.Entry<String, SortedMap<Integer, String>> entry : locRsid.entrySet())
+		 * { if (Integer.parseInt(entry.getKey())==key) { SortedMap<Integer, String>
+		 * temp = entry.getValue(); return temp.get(location); } }
+		 */
+		return locRsid.get(key).get(location);
 	}
 	
 	//Method to find Genotype given the chromosome and location
-        // OFK: same issue as findRsid
+    // OFK: same issue as findRsid
     
 	public String findGenotype(int key, int location) {
-		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {
-			if (Integer.parseInt(entry.getKey())==key) {
-				SortedMap<Integer, String> temp = entry.getValue();
-				return temp.get(location);
-			}
-		}
-		return null;
+		/*
+		 * for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet())
+		 * { if (Integer.parseInt(entry.getKey())==key) { SortedMap<Integer, String>
+		 * temp = entry.getValue(); return temp.get(location); } } return null;
+		 */
+		return locGene.get(key).get(location);
 	}
 	
 	//Method to display the Frame Structure
@@ -167,40 +165,40 @@ public class ConsumerDataPrivacyHBA {
 	//Method to divide the chromosomes into Frames of size T1
 	public void implementFrames() {
 		
-		for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet()) {		//outer map iterator to traverse genotype data of each chromosome
+		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {		//outer map iterator to traverse genotype data of each chromosome
 			
 			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
 			Set<Entry<Integer, String>> sm =temp.entrySet();
 			Iterator<Entry<Integer, String>> i=sm.iterator();
 			int counter=0,start=0,end=0;
-			String substring="";
+			StringBuilder substring= new StringBuilder("");
 			while (i.hasNext()) 
 	        { 
 				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
 				if (counter==0) {		// Beginning of Frame to capture start location and initialize the substing to empty
 					start=(Integer) m.getKey();
-					substring="";
+					substring.delete(0, substring.length());
 				}  
 	            counter++;				// for each location increasing the counter          
 	            String value = (String) m.getValue(); 		// capture the genotype value
 	            if (isHomozygous(value))					// form a substring only if its homozygous
-	            	substring+=value;
+	            	substring.append(value);
 	            		// ofk: unless Java compilers have improved, in the
                     	// past one would get much better speed from using a
                     	// StringBuilder rather than "+=".
 	            if (counter==t1) {			//end of frame, capture end location and rsid to form the Frame Linked hashmap 
 					end=(Integer) m.getKey();
 					counter=0;
-					int chromosome=Integer.parseInt(entry.getKey());  // OFK: maybe better if the map's keys were Integers?
+					int chromosome=(entry.getKey());  // OFK: maybe better if the map's keys were Integers?
                                         
 					String startRsid=findRsid(chromosome,start);
 					String endRsid=findRsid(chromosome,end);
 
-                                        // OFK: eventual security issue: we don't want to use frames whose substrings are too short (have to set thrshold)
+                                        // OFK: eventual security issue: we don't want to use frames whose substrings are too short (have to set threshold)
                                         // because someone could try to determine the substring from the SHA by brute force
-					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring));
-					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring,nonce));
-					substring="";
+					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
+					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring.toString(),nonce));
+					substring.delete(0, substring.length());
 				}
 	        } 
 		}	
@@ -222,17 +220,17 @@ public class ConsumerDataPrivacyHBA {
 				String[] row=line.split("\t");
 				
 				
-				if ( locGene.containsKey(row[1]) ) {
-					locGene.get(row[1]).put(Integer.parseInt(row[2]),row[3]);
-					locRsid.get(row[1]).put(Integer.parseInt(row[2]),row[0]);
+				if ( locGene.containsKey(Integer.parseInt(row[1])) ) {
+					locGene.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[3]);
+					locRsid.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[0]);
 				}
 				else{
 					SortedMap <Integer,String> sm=new TreeMap<Integer,String>();
 					SortedMap <Integer,String> sm1=new TreeMap<Integer,String>();
 					sm.put(Integer.parseInt(row[2]),row[3]);
 					sm1.put(Integer.parseInt(row[2]),row[0]);
-					locGene.put(row[1],sm);	
-					locRsid.put(row[1],sm1);
+					locGene.put(Integer.parseInt(row[1]),sm);	
+					locRsid.put(Integer.parseInt(row[1]),sm1);
 				}			
 			}			
 			sc.close();
