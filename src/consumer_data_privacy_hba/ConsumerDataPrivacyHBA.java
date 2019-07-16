@@ -105,7 +105,17 @@ public class ConsumerDataPrivacyHBA {
 	public int sendRandom() {
 		return my_nonce;
 	}
-	
+
+
+    // since Java ints are only 32 bits, evil Bob could take Alice's declared
+    //  hash-of-nonce and by brute force determine what her nonce-contribution value is going
+    // to be, and thereby be able to determine his own nonce-contribution so as to force
+    // the nonce to a previously-used value.   A naive brute force attack like this would
+    // not work for 64-bit longs, though maybe some more sophisticated approach would.  For
+    // the short term, I recommend that you just make  nonces "long" instead of "int".
+
+
+    
 	//method to store other parties nonce
 	public void getNonce(int n) {
 		party_nonce=n;
