@@ -47,9 +47,12 @@ public class HashingClient {
 		bob.caluclateNonce();
 		
 		
-		bob.readFile("input/dad.txt");
-		alice.readFile("input/sister.txt");
+		bob.readFile("input/sister.txt");
+		alice.readFile("input/dad.txt");
 		
+		
+		bob.removeSpecial(alice.locGene);
+		alice.removeSpecial(bob.locGene);
 		
 		
 		//bob.locationMatch(alice.locGene);
@@ -66,10 +69,15 @@ public class HashingClient {
 		alice.implementFrames(bob.locGene);
 		
 		
+		
+		
 		System.out.println("\n\n\t\t\t\t ***** DNA Match Results ***** ");
 		bob.hashMatch(alice.level1Frames);
 		
 		bob.locMatch(alice.level1Frames);
+		
+		alice.showSpecial();
+		bob.showSpecial();
 		
 
 	}
