@@ -13,6 +13,15 @@ public class FrameData implements Comparable <FrameData> {
 		hashValue=hash;
 	}
 	
+	public FrameData(FrameData obj) {
+		this.end=obj.end;
+		this.start=obj.start;
+		this.startRSID=obj.startRSID;
+		this.endRSID=obj.endRSID;
+		this.hashValue=obj.hashValue;
+	}
+	
+	
 	public void display(FrameData ob, int chromo) {
 		System.out.println("\n Chromosome : "+chromo+" || Start :" +ob.start+" || StartRSID : "+ob.startRSID+" || End : "+ob.end+" || EndRSID : "+ob.endRSID+" || HashValue : "+ob.hashValue);
 	}

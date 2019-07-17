@@ -32,7 +32,12 @@ public class ConsumerDataPrivacyHBA {
 	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ locations and RSIDs, HashedValue>
 													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
 	LinkedHashMap <String, String> match;
+	
+	//Frame fields are stored in a LinkedHashMap <Integer, SortedSet<FrameData>> 
+	//where the Key is the integer and
+	//value is Sorted Set of Frame Data objects (custom objects)
 	LinkedHashMap <Integer, SortedSet<FrameData>> level1FRAMES;
+	LinkedHashMap <Integer, SortedSet<FrameData>> matchingFrames;
 	String alice, bob;
 	int t1;												//Size of Frame
 	int my_nonce, party_nonce, nonce;
@@ -44,7 +49,8 @@ public class ConsumerDataPrivacyHBA {
 		locGene = new HashMap<Integer, SortedMap <Integer,String>>();
 		locRsid = new HashMap<Integer, SortedMap <Integer,String>>();
 		level1Frames = new LinkedHashMap<String, String>();
-		level1FRAMES= new LinkedHashMap<Integer, SortedSet<FrameData>>();
+		level1FRAMES = new LinkedHashMap<Integer, SortedSet<FrameData>>();
+		matchingFrames = new LinkedHashMap<Integer, SortedSet<FrameData>>();
 		match = new LinkedHashMap<String, String>();
 		t1=700;
 	}
@@ -92,37 +98,32 @@ public class ConsumerDataPrivacyHBA {
 		for(Map.Entry<Integer, SortedSet<FrameData>> entry : level1FRAMES.entrySet()) {
 			count=aliceSize=bobSize=0;
 			chromosome=(entry.getKey());
+			SortedSet<FrameData> matchingSet = new TreeSet<FrameData>();
 			SortedSet<FrameData> set=entry.getValue();
 			Iterator<FrameData> i=set.iterator();
 			aliceSize=set.size();
 			while (i.hasNext()) {
-				FrameData objM=(FrameData)i.next();
+				FrameData objA=(FrameData)i.next();
 				SortedSet<FrameData> partySet=party.get(chromosome);
 				Iterator<FrameData> it=partySet.iterator();
 				bobSize=partySet.size();
 				//System.out.println("\n At Chromosome "+chromosome+" the no. of Alice's Frames are "+set.size()+" and the no. of Bob's Frames are "+partySet.size());
 				while(it.hasNext()) {
-					FrameData objP=(FrameData)it.next();
-					if (someMatch(objM,objP)) {
-						//objM.display(objM, chromosome);				
+					FrameData objB=(FrameData)it.next();
+					if (someMatch(objA,objB)) {
+						FrameData matchingObject= new FrameData(objA);
+						matchingSet.add(matchingObject);
 						count++;
 					}
 				}
 			}
+		matchingFrames.put(chromosome,matchingSet);
 		System.out.println("\n At Chromosome "+chromosome);
 		System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
 		System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
 		System.out.println("\t\t No. of matching Frames are "+count+"");
 		}
-		/*
-		System.out.println("\n Size of T1   Frame : " +t1);
-		System.out.println("\n No. of Alice's Frames : " +level1FRAMES.size());
-		System.out.println("\n No. of Bob's   Frames : " +party.size());
-		System.out.println("\n No. of Match   Frames : " +match.size());
-		System.out.println("\n No. of Frames matches b/w Alice and Bob : " +count);
-		System.out.println("\n Size of locRsid : " +locRsid.size());
-		System.out.println("\n Size of locGene : " +locGene.size());
-		*/
+		
 	}
 	
 	public void displaySet(LinkedHashMap <Integer, SortedSet<FrameData>> map) {
@@ -196,6 +197,10 @@ public class ConsumerDataPrivacyHBA {
 	}
 	 
 	
+	public boolean isNumeric(String s) {
+		return (s.charAt(0)=='1' || s.charAt(0)=='2') ? true:false;
+			
+	}
 
 	//Data File Parser
 	public void readFile(String location) {
@@ -208,20 +213,22 @@ public class ConsumerDataPrivacyHBA {
 				line=sc.nextLine();
 				String[] row=line.split("\t");
 				
-				
-				if ( locGene.containsKey(Integer.parseInt(row[1])) ) {
-					locGene.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[3]);
-					locRsid.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[0]);
+				// Read chromosomes only between 1 and 22
+				if (isNumeric(row[1]) && Integer.parseInt(row[1]) <= 22){
+					if ( locGene.containsKey(Integer.parseInt(row[1])) ) {
+						locGene.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[3]);
+						locRsid.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[0]);
+					}
+					else{
+						SortedMap <Integer,String> sm=new TreeMap<Integer,String>();
+						SortedMap <Integer,String> sm1=new TreeMap<Integer,String>();
+						sm.put(Integer.parseInt(row[2]),row[3]);
+						sm1.put(Integer.parseInt(row[2]),row[0]);
+						locGene.put(Integer.parseInt(row[1]),sm);	
+						locRsid.put(Integer.parseInt(row[1]),sm1);
+					}			
 				}
-				else{
-					SortedMap <Integer,String> sm=new TreeMap<Integer,String>();
-					SortedMap <Integer,String> sm1=new TreeMap<Integer,String>();
-					sm.put(Integer.parseInt(row[2]),row[3]);
-					sm1.put(Integer.parseInt(row[2]),row[0]);
-					locGene.put(Integer.parseInt(row[1]),sm);	
-					locRsid.put(Integer.parseInt(row[1]),sm1);
-				}			
-			}			
+			}
 			sc.close();
 		}catch(IOException e) {
 		System.out.println("Exception in reading at "+location);
@@ -353,7 +360,7 @@ public class ConsumerDataPrivacyHBA {
 	//Method to Calculate the Ultimate NONCE
 	public void caluclateNonce() {
 		nonce=my_nonce^party_nonce;
-		System.out.println("\n Nonce : " +nonce);
+		//System.out.println("\n Nonce : " +nonce);
 	}
 	
 	//Method to generate Hash with nonce

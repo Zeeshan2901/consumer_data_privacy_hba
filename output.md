@@ -1,203 +1,85 @@
 
- HASH sent by Alice to BOB : b8a2643ac13f4e16d720cf82dee369ebef62b9845e3c0b3701546485cd9e972c
-
- HASH sent by Bob to Alice : dfecd3b399b3ebe37ccea0f41c7096ffc4c497ba5966b67598ef5a786f35c3ff
-
- Random Number sent by Alice to BOB : 24397775
-
- Random Number sent by Bob to Alice : 17006241
-
- ALICE's Data:
-
- My Data		: 24397775 :: b8a2643ac13f4e16d720cf82dee369ebef62b9845e3c0b3701546485cd9e972c
-
- Party Data	: 17006241 :: dfecd3b399b3ebe37ccea0f41c7096ffc4c497ba5966b67598ef5a786f35c3ff
-
- BOB's Data:
-
- My Data		: 17006241 :: dfecd3b399b3ebe37ccea0f41c7096ffc4c497ba5966b67598ef5a786f35c3ff
-
- Party Data	: 24397775 :: b8a2643ac13f4e16d720cf82dee369ebef62b9845e3c0b3701546485cd9e972c
-
 		 ***** BOB is HONEST ***** 
 
 		 ***** ALICE is HONEST ***** 
-
- Nonce : 7813486
-
- Nonce : 7813486
-
-
-				 ***** BOB's Data ***** 
-
-Contents of LocGene : 
-{1={1=AA, 2=AC, 3=AG, 4=AT, 5=CC, 6=CG, 7=CT, 8=GG, 9=GT, 10=TT, 11=AA, 12=AC, 13=AG, 14=AT, 15=CC, 16=CG, 17=CT, 18=GG, 19=GT, 20=TT, 21=AA, 22=AC, 23=AG, 24=AT, 25=CC, 26=CG, 27=CT, 28=GG, 29=GT, 30=TT, 31=AA, 32=AC, 33=AG, 34=AT, 35=CC, 36=CG, 37=CT, 38=GG, 39=GT, 40=TT, 41=AA, 42=AC, 43=AG, 44=AT, 45=CC, 46=CG, 47=CT, 48=GG, 49=GT, 50=TT, 51=AA, 52=AC, 53=AG, 54=AT, 55=CC, 56=CG, 57=CT, 58=GG, 59=GT, 60=TT, 61=AA, 62=AC, 63=AG, 64=AT, 65=CC, 66=CG, 67=CT, 68=GG, 69=GT, 70=TT, 71=AA, 72=AC, 73=AG, 74=AT, 75=CC, 76=CG, 77=CT, 78=GG, 79=GT, 80=TT, 81=AA, 82=AC, 83=AG, 84=AT, 85=CC, 86=CG, 87=CT, 88=GG, 89=GT, 90=TT, 91=AA, 92=AC, 93=AG, 94=AT, 95=CC, 96=CG, 97=CT, 98=GG, 99=GT, 100=TT, 101=AA, 102=AC, 103=AG, 104=AT, 105=CC, 106=CG, 107=CT, 108=GG, 109=GT, 110=TT, 111=AA, 112=AC, 113=AG, 114=AT, 115=CC, 116=CG, 117=CT, 118=GG, 119=GT, 120=TT, 121=AA, 122=AC, 123=AG, 124=AT, 125=CC, 126=CG, 127=CT, 128=GG, 129=GT, 130=TT, 131=AA, 132=AC, 133=AG, 134=AT, 135=CC, 136=CG, 137=CT, 138=GG, 139=GT, 140=TT, 141=AA, 142=AC, 143=AG, 144=AT, 145=CC, 146=CG, 147=CT, 148=GG, 149=GT, 150=TT, 151=AA, 152=AC, 153=AG, 154=AT, 155=CC, 156=CG, 157=CT, 158=GG, 159=GT, 160=TT, 161=AA, 162=AC, 163=AG, 164=AT, 165=CC, 166=CG, 167=CT, 168=GG, 169=GT, 170=TT, 171=AA, 172=AC, 173=AG, 174=AT, 175=CC, 176=CG, 177=CT, 178=GG, 179=GT, 180=TT, 181=AA, 182=AC, 183=AG, 184=AT, 185=CC, 186=CG, 187=CT, 188=GG, 189=GT, 190=TT, 191=AA, 192=AC, 193=AG, 194=AT, 195=CC, 196=CG, 197=CT, 198=GG, 199=GT, 200=TT}, 2={1=AA, 2=AC, 3=AG, 4=AT, 5=CC, 6=CG, 7=CT, 8=GG, 9=GT, 10=TT, 11=AA, 12=AC, 13=AG, 14=AT, 15=CC, 16=CG, 17=CT, 18=GG, 19=GT, 20=TT, 21=AA, 22=AC, 23=AG, 24=AT, 25=CC, 26=CG, 27=CT, 28=GG, 29=GT, 30=TT, 31=AA, 32=AC, 33=AG, 34=AT, 35=CC, 36=CG, 37=CT, 38=GG, 39=GT, 40=TT, 41=AA, 42=AC, 43=AG, 44=AT, 45=CC, 46=CG, 47=CT, 48=GG, 49=GT, 50=TT, 51=AA, 52=AC, 53=AG, 54=AT, 55=CC, 56=CG, 57=CT, 58=GG, 59=GT, 60=TT, 61=AA, 62=AC, 63=AG, 64=AT, 65=CC, 66=CG, 67=CT, 68=GG, 69=GT, 70=TT, 71=AA, 72=AC, 73=AG, 74=AT, 75=CC, 76=CG, 77=CT, 78=GG, 79=GT, 80=TT, 81=AA, 82=AC, 83=AG, 84=AT, 85=CC, 86=CG, 87=CT, 88=GG, 89=GT, 90=TT, 91=AA, 92=AC, 93=AG, 94=AT, 95=CC, 96=CG, 97=CT, 98=GG, 99=GT, 100=TT, 101=AA, 102=AC, 103=AG, 104=AT, 105=CC, 106=CG, 107=CT, 108=GG, 109=GT, 110=TT, 111=AA, 112=AC, 113=AG, 114=AT, 115=CC, 116=CG, 117=CT, 118=GG, 119=GT, 120=TT, 121=AA, 122=AC, 123=AG, 124=AT, 125=CC, 126=CG, 127=CT, 128=GG, 129=GT, 130=TT, 131=AA, 132=AC, 133=AG, 134=AT, 135=CC, 136=CG, 137=CT, 138=GG, 139=GT, 140=TT, 141=AA, 142=AC, 143=AG, 144=AT, 145=CC, 146=CG, 147=CT, 148=GG, 149=GT, 150=TT, 151=AA, 152=AC, 153=AG, 154=AT, 155=CC, 156=CG, 157=CT, 158=GG, 159=GT, 160=TT, 161=AA, 162=AC, 163=AG, 164=AT, 165=CC, 166=CG, 167=CT, 168=GG, 169=GT, 170=TT, 171=AA, 172=AC, 173=AG, 174=AT, 175=CC, 176=CG, 177=CT, 178=GG, 179=GT, 180=TT, 181=AA, 182=AC, 183=AG, 184=AT, 185=CC, 186=CG, 187=CT, 188=GG, 189=GT, 190=TT, 191=AA, 192=AC, 193=AG, 194=AT, 195=CC, 196=CG, 197=CT, 198=GG, 199=GT, 200=TT}, 3={1=AA, 2=AC, 3=AG, 4=AT, 5=CC, 6=CG, 7=CT, 8=GG, 9=GT, 10=TT, 11=AA, 12=AC, 13=AG, 14=AT, 15=CC, 16=CG, 17=CT, 18=GG, 19=GT, 20=TT, 21=AA, 22=AC, 23=AG, 24=AT, 25=CC, 26=CG, 27=CT, 28=GG, 29=GT, 30=TT, 31=AA, 32=AC, 33=AG, 34=AT, 35=CC, 36=CG, 37=CT, 38=GG, 39=GT, 40=TT, 41=AA, 42=AC, 43=AG, 44=AT, 45=CC, 46=CG, 47=CT, 48=GG, 49=GT, 50=TT, 51=AA, 52=AC, 53=AG, 54=AT, 55=CC, 56=CG, 57=CT, 58=GG, 59=GT, 60=TT, 61=AA, 62=AC, 63=AG, 64=AT, 65=CC, 66=CG, 67=CT, 68=GG, 69=GT, 70=TT, 71=AA, 72=AC, 73=AG, 74=AT, 75=CC, 76=CG, 77=CT, 78=GG, 79=GT, 80=TT, 81=AA, 82=AC, 83=AG, 84=AT, 85=CC, 86=CG, 87=CT, 88=GG, 89=GT, 90=TT, 91=AA, 92=AC, 93=AG, 94=AT, 95=CC, 96=CG, 97=CT, 98=GG, 99=GT, 100=TT, 101=AA, 102=AC, 103=AG, 104=AT, 105=CC, 106=CG, 107=CT, 108=GG, 109=GT, 110=TT, 111=AA, 112=AC, 113=AG, 114=AT, 115=CC, 116=CG, 117=CT, 118=GG, 119=GT, 120=TT, 121=AA, 122=AC, 123=AG, 124=AT, 125=CC, 126=CG, 127=CT, 128=GG, 129=GT, 130=TT, 131=AA, 132=AC, 133=AG, 134=AT, 135=CC, 136=CG, 137=CT, 138=GG, 139=GT, 140=TT, 141=AA, 142=AC, 143=AG, 144=AT, 145=CC, 146=CG, 147=CT, 148=GG, 149=GT, 150=TT, 151=AA, 152=AC, 153=AG, 154=AT, 155=CC, 156=CG, 157=CT, 158=GG, 159=GT, 160=TT, 161=AA, 162=AC, 163=AG, 164=AT, 165=CC, 166=CG, 167=CT, 168=GG, 169=GT, 170=TT, 171=AA, 172=AC, 173=AG, 174=AT, 175=CC, 176=CG, 177=CT, 178=GG, 179=GT, 180=TT, 181=AA, 182=AC, 183=AG, 184=AT, 185=CC, 186=CG, 187=CT, 188=GG, 189=GT, 190=TT, 191=AA, 192=AC, 193=AG, 194=AT, 195=CC, 196=CG, 197=CT, 198=GG, 199=GT, 200=TT}}
-
-Contents of LocRsid : 
-{1={1=rs1, 2=rs2, 3=rs3, 4=rs4, 5=rs5, 6=rs6, 7=rs7, 8=rs8, 9=rs9, 10=rs10, 11=rs11, 12=rs12, 13=rs13, 14=rs14, 15=rs15, 16=rs16, 17=rs17, 18=rs18, 19=rs19, 20=rs20, 21=rs21, 22=rs22, 23=rs23, 24=rs24, 25=rs25, 26=rs26, 27=rs27, 28=rs28, 29=rs29, 30=rs30, 31=rs31, 32=rs32, 33=rs33, 34=rs34, 35=rs35, 36=rs36, 37=rs37, 38=rs38, 39=rs39, 40=rs40, 41=rs41, 42=rs42, 43=rs43, 44=rs44, 45=rs45, 46=rs46, 47=rs47, 48=rs48, 49=rs49, 50=rs50, 51=rs51, 52=rs52, 53=rs53, 54=rs54, 55=rs55, 56=rs56, 57=rs57, 58=rs58, 59=rs59, 60=rs60, 61=rs61, 62=rs62, 63=rs63, 64=rs64, 65=rs65, 66=rs66, 67=rs67, 68=rs68, 69=rs69, 70=rs70, 71=rs71, 72=rs72, 73=rs73, 74=rs74, 75=rs75, 76=rs76, 77=rs77, 78=rs78, 79=rs79, 80=rs80, 81=rs81, 82=rs82, 83=rs83, 84=rs84, 85=rs85, 86=rs86, 87=rs87, 88=rs88, 89=rs89, 90=rs90, 91=rs91, 92=rs92, 93=rs93, 94=rs94, 95=rs95, 96=rs96, 97=rs97, 98=rs98, 99=rs99, 100=rs100, 101=rs101, 102=rs102, 103=rs103, 104=rs104, 105=rs105, 106=rs106, 107=rs107, 108=rs108, 109=rs109, 110=rs110, 111=rs111, 112=rs112, 113=rs113, 114=rs114, 115=rs115, 116=rs116, 117=rs117, 118=rs118, 119=rs119, 120=rs120, 121=rs121, 122=rs122, 123=rs123, 124=rs124, 125=rs125, 126=rs126, 127=rs127, 128=rs128, 129=rs129, 130=rs130, 131=rs131, 132=rs132, 133=rs133, 134=rs134, 135=rs135, 136=rs136, 137=rs137, 138=rs138, 139=rs139, 140=rs140, 141=rs141, 142=rs142, 143=rs143, 144=rs144, 145=rs145, 146=rs146, 147=rs147, 148=rs148, 149=rs149, 150=rs150, 151=rs151, 152=rs152, 153=rs153, 154=rs154, 155=rs155, 156=rs156, 157=rs157, 158=rs158, 159=rs159, 160=rs160, 161=rs161, 162=rs162, 163=rs163, 164=rs164, 165=rs165, 166=rs166, 167=rs167, 168=rs168, 169=rs169, 170=rs170, 171=rs171, 172=rs172, 173=rs173, 174=rs174, 175=rs175, 176=rs176, 177=rs177, 178=rs178, 179=rs179, 180=rs180, 181=rs181, 182=rs182, 183=rs183, 184=rs184, 185=rs185, 186=rs186, 187=rs187, 188=rs188, 189=rs189, 190=rs190, 191=rs191, 192=rs192, 193=rs193, 194=rs194, 195=rs195, 196=rs196, 197=rs197, 198=rs198, 199=rs199, 200=rs200}, 2={1=rs1, 2=rs2, 3=rs3, 4=rs4, 5=rs5, 6=rs6, 7=rs7, 8=rs8, 9=rs9, 10=rs10, 11=rs11, 12=rs12, 13=rs13, 14=rs14, 15=rs15, 16=rs16, 17=rs17, 18=rs18, 19=rs19, 20=rs20, 21=rs21, 22=rs22, 23=rs23, 24=rs24, 25=rs25, 26=rs26, 27=rs27, 28=rs28, 29=rs29, 30=rs30, 31=rs31, 32=rs32, 33=rs33, 34=rs34, 35=rs35, 36=rs36, 37=rs37, 38=rs38, 39=rs39, 40=rs40, 41=rs41, 42=rs42, 43=rs43, 44=rs44, 45=rs45, 46=rs46, 47=rs47, 48=rs48, 49=rs49, 50=rs50, 51=rs51, 52=rs52, 53=rs53, 54=rs54, 55=rs55, 56=rs56, 57=rs57, 58=rs58, 59=rs59, 60=rs60, 61=rs61, 62=rs62, 63=rs63, 64=rs64, 65=rs65, 66=rs66, 67=rs67, 68=rs68, 69=rs69, 70=rs70, 71=rs71, 72=rs72, 73=rs73, 74=rs74, 75=rs75, 76=rs76, 77=rs77, 78=rs78, 79=rs79, 80=rs80, 81=rs81, 82=rs82, 83=rs83, 84=rs84, 85=rs85, 86=rs86, 87=rs87, 88=rs88, 89=rs89, 90=rs90, 91=rs91, 92=rs92, 93=rs93, 94=rs94, 95=rs95, 96=rs96, 97=rs97, 98=rs98, 99=rs99, 100=rs100, 101=rs101, 102=rs102, 103=rs103, 104=rs104, 105=rs105, 106=rs106, 107=rs107, 108=rs108, 109=rs109, 110=rs110, 111=rs111, 112=rs112, 113=rs113, 114=rs114, 115=rs115, 116=rs116, 117=rs117, 118=rs118, 119=rs119, 120=rs120, 121=rs121, 122=rs122, 123=rs123, 124=rs124, 125=rs125, 126=rs126, 127=rs127, 128=rs128, 129=rs129, 130=rs130, 131=rs131, 132=rs132, 133=rs133, 134=rs134, 135=rs135, 136=rs136, 137=rs137, 138=rs138, 139=rs139, 140=rs140, 141=rs141, 142=rs142, 143=rs143, 144=rs144, 145=rs145, 146=rs146, 147=rs147, 148=rs148, 149=rs149, 150=rs150, 151=rs151, 152=rs152, 153=rs153, 154=rs154, 155=rs155, 156=rs156, 157=rs157, 158=rs158, 159=rs159, 160=rs160, 161=rs161, 162=rs162, 163=rs163, 164=rs164, 165=rs165, 166=rs166, 167=rs167, 168=rs168, 169=rs169, 170=rs170, 171=rs171, 172=rs172, 173=rs173, 174=rs174, 175=rs175, 176=rs176, 177=rs177, 178=rs178, 179=rs179, 180=rs180, 181=rs181, 182=rs182, 183=rs183, 184=rs184, 185=rs185, 186=rs186, 187=rs187, 188=rs188, 189=rs189, 190=rs190, 191=rs191, 192=rs192, 193=rs193, 194=rs194, 195=rs195, 196=rs196, 197=rs197, 198=rs198, 199=rs199, 200=rs200}, 3={1=rs1, 2=rs2, 3=rs3, 4=rs4, 5=rs5, 6=rs6, 7=rs7, 8=rs8, 9=rs9, 10=rs10, 11=rs11, 12=rs12, 13=rs13, 14=rs14, 15=rs15, 16=rs16, 17=rs17, 18=rs18, 19=rs19, 20=rs20, 21=rs21, 22=rs22, 23=rs23, 24=rs24, 25=rs25, 26=rs26, 27=rs27, 28=rs28, 29=rs29, 30=rs30, 31=rs31, 32=rs32, 33=rs33, 34=rs34, 35=rs35, 36=rs36, 37=rs37, 38=rs38, 39=rs39, 40=rs40, 41=rs41, 42=rs42, 43=rs43, 44=rs44, 45=rs45, 46=rs46, 47=rs47, 48=rs48, 49=rs49, 50=rs50, 51=rs51, 52=rs52, 53=rs53, 54=rs54, 55=rs55, 56=rs56, 57=rs57, 58=rs58, 59=rs59, 60=rs60, 61=rs61, 62=rs62, 63=rs63, 64=rs64, 65=rs65, 66=rs66, 67=rs67, 68=rs68, 69=rs69, 70=rs70, 71=rs71, 72=rs72, 73=rs73, 74=rs74, 75=rs75, 76=rs76, 77=rs77, 78=rs78, 79=rs79, 80=rs80, 81=rs81, 82=rs82, 83=rs83, 84=rs84, 85=rs85, 86=rs86, 87=rs87, 88=rs88, 89=rs89, 90=rs90, 91=rs91, 92=rs92, 93=rs93, 94=rs94, 95=rs95, 96=rs96, 97=rs97, 98=rs98, 99=rs99, 100=rs100, 101=rs101, 102=rs102, 103=rs103, 104=rs104, 105=rs105, 106=rs106, 107=rs107, 108=rs108, 109=rs109, 110=rs110, 111=rs111, 112=rs112, 113=rs113, 114=rs114, 115=rs115, 116=rs116, 117=rs117, 118=rs118, 119=rs119, 120=rs120, 121=rs121, 122=rs122, 123=rs123, 124=rs124, 125=rs125, 126=rs126, 127=rs127, 128=rs128, 129=rs129, 130=rs130, 131=rs131, 132=rs132, 133=rs133, 134=rs134, 135=rs135, 136=rs136, 137=rs137, 138=rs138, 139=rs139, 140=rs140, 141=rs141, 142=rs142, 143=rs143, 144=rs144, 145=rs145, 146=rs146, 147=rs147, 148=rs148, 149=rs149, 150=rs150, 151=rs151, 152=rs152, 153=rs153, 154=rs154, 155=rs155, 156=rs156, 157=rs157, 158=rs158, 159=rs159, 160=rs160, 161=rs161, 162=rs162, 163=rs163, 164=rs164, 165=rs165, 166=rs166, 167=rs167, 168=rs168, 169=rs169, 170=rs170, 171=rs171, 172=rs172, 173=rs173, 174=rs174, 175=rs175, 176=rs176, 177=rs177, 178=rs178, 179=rs179, 180=rs180, 181=rs181, 182=rs182, 183=rs183, 184=rs184, 185=rs185, 186=rs186, 187=rs187, 188=rs188, 189=rs189, 190=rs190, 191=rs191, 192=rs192, 193=rs193, 194=rs194, 195=rs195, 196=rs196, 197=rs197, 198=rs198, 199=rs199, 200=rs200}}
-
- Chromosome : 1 || Start : 1 || RSID : rs1 || End : 40 || RSID : rs40 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 41 || RSID : rs41 || End : 80 || RSID : rs80 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 81 || RSID : rs81 || End : 120 || RSID : rs120 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 121 || RSID : rs121 || End : 160 || RSID : rs160 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 161 || RSID : rs161 || End : 200 || RSID : rs200 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 1 || RSID : rs1 || End : 40 || RSID : rs40 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 41 || RSID : rs41 || End : 80 || RSID : rs80 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 81 || RSID : rs81 || End : 120 || RSID : rs120 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 121 || RSID : rs121 || End : 160 || RSID : rs160 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 161 || RSID : rs161 || End : 200 || RSID : rs200 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 1 || RSID : rs1 || End : 40 || RSID : rs40 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 41 || RSID : rs41 || End : 80 || RSID : rs80 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 81 || RSID : rs81 || End : 120 || RSID : rs120 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 121 || RSID : rs121 || End : 160 || RSID : rs160 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 161 || RSID : rs161 || End : 200 || RSID : rs200 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Frames of size T1 : 40
-
-Location Details : 1#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-
-				 ***** ALICE's Data ***** 
-
-Contents of LocGene : 
-{1={1=AA, 2=AC, 3=AG, 4=AT, 5=CC, 6=CG, 7=CT, 8=GG, 9=GT, 10=TT, 11=AA, 12=AC, 13=AG, 14=AT, 15=CC, 16=CG, 17=CT, 18=GG, 19=GT, 20=TT, 21=AA, 22=AC, 23=AG, 24=AT, 25=CC, 26=CG, 27=CT, 28=GG, 29=GT, 30=TT, 31=AA, 32=AC, 33=AG, 34=AT, 35=CC, 36=CG, 37=CT, 38=GG, 39=GT, 40=TT, 41=AA, 42=AC, 43=AG, 44=AT, 45=CC, 46=CG, 47=CT, 48=GG, 49=GT, 50=TT, 51=AA, 52=AC, 53=AG, 54=AT, 55=CC, 56=CG, 57=CT, 58=GG, 59=GT, 60=TT, 61=AA, 62=AC, 63=AG, 64=AT, 65=CC, 66=CG, 67=CT, 68=GG, 69=GT, 70=TT, 71=AA, 72=AC, 73=AG, 74=AT, 75=CC, 76=CG, 77=CT, 78=GG, 79=GT, 80=TT, 81=AA, 82=AC, 83=AG, 84=AT, 85=CC, 86=CG, 87=CT, 88=GG, 89=GT, 90=TT, 91=AA, 92=AC, 93=AG, 94=AT, 95=CC, 96=CG, 97=CT, 98=GG, 99=GT, 100=TT, 101=AA, 102=AC, 103=AG, 104=AT, 105=CC, 106=CG, 107=CT, 108=GG, 109=GT, 110=TT, 111=AA, 112=AC, 113=AG, 114=AT, 115=CC, 116=CG, 117=CT, 118=GG, 119=GT, 120=TT, 121=AA, 122=AC, 123=AG, 124=AT, 125=CC, 126=CG, 127=CT, 128=GG, 129=GT, 130=TT, 131=AA, 132=AC, 133=AG, 134=AT, 135=CC, 136=CG, 137=CT, 138=GG, 139=GT, 140=TT, 141=AA, 142=AC, 143=AG, 144=AT, 145=CC, 146=CG, 147=CT, 148=GG, 149=GT, 150=TT, 151=AA, 152=AC, 153=AG, 154=AT, 155=CC, 156=CG, 157=CT, 158=GG, 159=GT, 160=TT, 161=AA, 162=AC, 163=AG, 164=AT, 165=CC, 166=CG, 167=CT, 168=GG, 169=GT, 170=TT, 171=AA, 172=AC, 173=AG, 174=AT, 175=CC, 176=CG, 177=CT, 178=GG, 179=GT, 180=TT, 181=AA, 182=AC, 183=AG, 184=AT, 185=CC, 186=CG, 187=CT, 188=GG, 189=GT, 190=TT, 191=AA, 192=AC, 193=AG, 194=AT, 195=CC, 196=CG, 197=CT, 198=GG, 199=GT, 200=TT}, 2={1=AA, 2=AC, 3=AG, 4=AT, 5=CC, 6=CG, 7=CT, 8=GG, 9=GT, 10=TT, 11=AA, 12=AC, 13=AG, 14=AT, 15=CC, 16=CG, 17=CT, 18=GG, 19=GT, 20=TT, 21=AA, 22=AC, 23=AG, 24=AT, 25=CC, 26=CG, 27=CT, 28=GG, 29=GT, 30=TT, 31=AA, 32=AC, 33=AG, 34=AT, 35=CC, 36=CG, 37=CT, 38=GG, 39=GT, 40=TT, 41=AA, 42=AC, 43=AG, 44=AT, 45=CC, 46=CG, 47=CT, 48=GG, 49=GT, 50=TT, 51=AA, 52=AC, 53=AG, 54=AT, 55=CC, 56=CG, 57=CT, 58=GG, 59=GT, 60=TT, 61=AA, 62=AC, 63=AG, 64=AT, 65=CC, 66=CG, 67=CT, 68=GG, 69=GT, 70=TT, 71=AA, 72=AC, 73=AG, 74=AT, 75=CC, 76=CG, 77=CT, 78=GG, 79=GT, 80=TT, 81=AA, 82=AC, 83=AG, 84=AT, 85=CC, 86=CG, 87=CT, 88=GG, 89=GT, 90=TT, 91=AA, 92=AC, 93=AG, 94=AT, 95=CC, 96=CG, 97=CT, 98=GG, 99=GT, 100=TT, 101=AA, 102=AC, 103=AG, 104=AT, 105=CC, 106=CG, 107=CT, 108=GG, 109=GT, 110=TT, 111=AA, 112=AC, 113=AG, 114=AT, 115=CC, 116=CG, 117=CT, 118=GG, 119=GT, 120=TT, 121=AA, 122=AC, 123=AG, 124=AT, 125=CC, 126=CG, 127=CT, 128=GG, 129=GT, 130=TT, 131=AA, 132=AC, 133=AG, 134=AT, 135=CC, 136=CG, 137=CT, 138=GG, 139=GT, 140=TT, 141=AA, 142=AC, 143=AG, 144=AT, 145=CC, 146=CG, 147=CT, 148=GG, 149=GT, 150=TT, 151=AA, 152=AC, 153=AG, 154=AT, 155=CC, 156=CG, 157=CT, 158=GG, 159=GT, 160=TT, 161=AA, 162=AC, 163=AG, 164=AT, 165=CC, 166=CG, 167=CT, 168=GG, 169=GT, 170=TT, 171=AA, 172=AC, 173=AG, 174=AT, 175=CC, 176=CG, 177=CT, 178=GG, 179=GT, 180=TT, 181=AA, 182=AC, 183=AG, 184=AT, 185=CC, 186=CG, 187=CT, 188=GG, 189=GT, 190=TT, 191=AA, 192=AC, 193=AG, 194=AT, 195=CC, 196=CG, 197=CT, 198=GG, 199=GT, 200=TT}, 3={1=AA, 2=AC, 3=AG, 4=AT, 5=CC, 6=CG, 7=CT, 8=GG, 9=GT, 10=TT, 11=AA, 12=AC, 13=AG, 14=AT, 15=CC, 16=CG, 17=CT, 18=GG, 19=GT, 20=TT, 21=AA, 22=AC, 23=AG, 24=AT, 25=CC, 26=CG, 27=CT, 28=GG, 29=GT, 30=TT, 31=AA, 32=AC, 33=AG, 34=AT, 35=CC, 36=CG, 37=CT, 38=GG, 39=GT, 40=TT, 41=AA, 42=AC, 43=AG, 44=AT, 45=CC, 46=CG, 47=CT, 48=GG, 49=GT, 50=TT, 51=AA, 52=AC, 53=AG, 54=AT, 55=CC, 56=CG, 57=CT, 58=GG, 59=GT, 60=TT, 61=AA, 62=AC, 63=AG, 64=AT, 65=CC, 66=CG, 67=CT, 68=GG, 69=GT, 70=TT, 71=AA, 72=AC, 73=AG, 74=AT, 75=CC, 76=CG, 77=CT, 78=GG, 79=GT, 80=TT, 81=AA, 82=AC, 83=AG, 84=AT, 85=CC, 86=CG, 87=CT, 88=GG, 89=GT, 90=TT, 91=AA, 92=AC, 93=AG, 94=AT, 95=CC, 96=CG, 97=CT, 98=GG, 99=GT, 100=TT, 101=AA, 102=AC, 103=AG, 104=AT, 105=CC, 106=CG, 107=CT, 108=GG, 109=GT, 110=TT, 111=AA, 112=AC, 113=AG, 114=AT, 115=CC, 116=CG, 117=CT, 118=GG, 119=GT, 120=TT, 121=AA, 122=AC, 123=AG, 124=AT, 125=CC, 126=CG, 127=CT, 128=GG, 129=GT, 130=TT, 131=AA, 132=AC, 133=AG, 134=AT, 135=CC, 136=CG, 137=CT, 138=GG, 139=GT, 140=TT, 141=AA, 142=AC, 143=AG, 144=AT, 145=CC, 146=CG, 147=CT, 148=GG, 149=GT, 150=TT, 151=AA, 152=AC, 153=AG, 154=AT, 155=CC, 156=CG, 157=CT, 158=GG, 159=GT, 160=TT, 161=AA, 162=AC, 163=AG, 164=AT, 165=CC, 166=CG, 167=CT, 168=GG, 169=GT, 170=TT, 171=AA, 172=AC, 173=AG, 174=AT, 175=CC, 176=CG, 177=CT, 178=GG, 179=GT, 180=TT, 181=AA, 182=AC, 183=AG, 184=AT, 185=CC, 186=CG, 187=CT, 188=GG, 189=GT, 190=TT, 191=AA, 192=AC, 193=AG, 194=AT, 195=CC, 196=CG, 197=CT, 198=GG, 199=GT, 200=TT}}
-
-Contents of LocRsid : 
-{1={1=rs1, 2=rs2, 3=rs3, 4=rs4, 5=rs5, 6=rs6, 7=rs7, 8=rs8, 9=rs9, 10=rs10, 11=rs11, 12=rs12, 13=rs13, 14=rs14, 15=rs15, 16=rs16, 17=rs17, 18=rs18, 19=rs19, 20=rs20, 21=rs21, 22=rs22, 23=rs23, 24=rs24, 25=rs25, 26=rs26, 27=rs27, 28=rs28, 29=rs29, 30=rs30, 31=rs31, 32=rs32, 33=rs33, 34=rs34, 35=rs35, 36=rs36, 37=rs37, 38=rs38, 39=rs39, 40=rs40, 41=rs41, 42=rs42, 43=rs43, 44=rs44, 45=rs45, 46=rs46, 47=rs47, 48=rs48, 49=rs49, 50=rs50, 51=rs51, 52=rs52, 53=rs53, 54=rs54, 55=rs55, 56=rs56, 57=rs57, 58=rs58, 59=rs59, 60=rs60, 61=rs61, 62=rs62, 63=rs63, 64=rs64, 65=rs65, 66=rs66, 67=rs67, 68=rs68, 69=rs69, 70=rs70, 71=rs71, 72=rs72, 73=rs73, 74=rs74, 75=rs75, 76=rs76, 77=rs77, 78=rs78, 79=rs79, 80=rs80, 81=rs81, 82=rs82, 83=rs83, 84=rs84, 85=rs85, 86=rs86, 87=rs87, 88=rs88, 89=rs89, 90=rs90, 91=rs91, 92=rs92, 93=rs93, 94=rs94, 95=rs95, 96=rs96, 97=rs97, 98=rs98, 99=rs99, 100=rs100, 101=rs101, 102=rs102, 103=rs103, 104=rs104, 105=rs105, 106=rs106, 107=rs107, 108=rs108, 109=rs109, 110=rs110, 111=rs111, 112=rs112, 113=rs113, 114=rs114, 115=rs115, 116=rs116, 117=rs117, 118=rs118, 119=rs119, 120=rs120, 121=rs121, 122=rs122, 123=rs123, 124=rs124, 125=rs125, 126=rs126, 127=rs127, 128=rs128, 129=rs129, 130=rs130, 131=rs131, 132=rs132, 133=rs133, 134=rs134, 135=rs135, 136=rs136, 137=rs137, 138=rs138, 139=rs139, 140=rs140, 141=rs141, 142=rs142, 143=rs143, 144=rs144, 145=rs145, 146=rs146, 147=rs147, 148=rs148, 149=rs149, 150=rs150, 151=rs151, 152=rs152, 153=rs153, 154=rs154, 155=rs155, 156=rs156, 157=rs157, 158=rs158, 159=rs159, 160=rs160, 161=rs161, 162=rs162, 163=rs163, 164=rs164, 165=rs165, 166=rs166, 167=rs167, 168=rs168, 169=rs169, 170=rs170, 171=rs171, 172=rs172, 173=rs173, 174=rs174, 175=rs175, 176=rs176, 177=rs177, 178=rs178, 179=rs179, 180=rs180, 181=rs181, 182=rs182, 183=rs183, 184=rs184, 185=rs185, 186=rs186, 187=rs187, 188=rs188, 189=rs189, 190=rs190, 191=rs191, 192=rs192, 193=rs193, 194=rs194, 195=rs195, 196=rs196, 197=rs197, 198=rs198, 199=rs199, 200=rs200}, 2={1=rs1, 2=rs2, 3=rs3, 4=rs4, 5=rs5, 6=rs6, 7=rs7, 8=rs8, 9=rs9, 10=rs10, 11=rs11, 12=rs12, 13=rs13, 14=rs14, 15=rs15, 16=rs16, 17=rs17, 18=rs18, 19=rs19, 20=rs20, 21=rs21, 22=rs22, 23=rs23, 24=rs24, 25=rs25, 26=rs26, 27=rs27, 28=rs28, 29=rs29, 30=rs30, 31=rs31, 32=rs32, 33=rs33, 34=rs34, 35=rs35, 36=rs36, 37=rs37, 38=rs38, 39=rs39, 40=rs40, 41=rs41, 42=rs42, 43=rs43, 44=rs44, 45=rs45, 46=rs46, 47=rs47, 48=rs48, 49=rs49, 50=rs50, 51=rs51, 52=rs52, 53=rs53, 54=rs54, 55=rs55, 56=rs56, 57=rs57, 58=rs58, 59=rs59, 60=rs60, 61=rs61, 62=rs62, 63=rs63, 64=rs64, 65=rs65, 66=rs66, 67=rs67, 68=rs68, 69=rs69, 70=rs70, 71=rs71, 72=rs72, 73=rs73, 74=rs74, 75=rs75, 76=rs76, 77=rs77, 78=rs78, 79=rs79, 80=rs80, 81=rs81, 82=rs82, 83=rs83, 84=rs84, 85=rs85, 86=rs86, 87=rs87, 88=rs88, 89=rs89, 90=rs90, 91=rs91, 92=rs92, 93=rs93, 94=rs94, 95=rs95, 96=rs96, 97=rs97, 98=rs98, 99=rs99, 100=rs100, 101=rs101, 102=rs102, 103=rs103, 104=rs104, 105=rs105, 106=rs106, 107=rs107, 108=rs108, 109=rs109, 110=rs110, 111=rs111, 112=rs112, 113=rs113, 114=rs114, 115=rs115, 116=rs116, 117=rs117, 118=rs118, 119=rs119, 120=rs120, 121=rs121, 122=rs122, 123=rs123, 124=rs124, 125=rs125, 126=rs126, 127=rs127, 128=rs128, 129=rs129, 130=rs130, 131=rs131, 132=rs132, 133=rs133, 134=rs134, 135=rs135, 136=rs136, 137=rs137, 138=rs138, 139=rs139, 140=rs140, 141=rs141, 142=rs142, 143=rs143, 144=rs144, 145=rs145, 146=rs146, 147=rs147, 148=rs148, 149=rs149, 150=rs150, 151=rs151, 152=rs152, 153=rs153, 154=rs154, 155=rs155, 156=rs156, 157=rs157, 158=rs158, 159=rs159, 160=rs160, 161=rs161, 162=rs162, 163=rs163, 164=rs164, 165=rs165, 166=rs166, 167=rs167, 168=rs168, 169=rs169, 170=rs170, 171=rs171, 172=rs172, 173=rs173, 174=rs174, 175=rs175, 176=rs176, 177=rs177, 178=rs178, 179=rs179, 180=rs180, 181=rs181, 182=rs182, 183=rs183, 184=rs184, 185=rs185, 186=rs186, 187=rs187, 188=rs188, 189=rs189, 190=rs190, 191=rs191, 192=rs192, 193=rs193, 194=rs194, 195=rs195, 196=rs196, 197=rs197, 198=rs198, 199=rs199, 200=rs200}, 3={1=rs1, 2=rs2, 3=rs3, 4=rs4, 5=rs5, 6=rs6, 7=rs7, 8=rs8, 9=rs9, 10=rs10, 11=rs11, 12=rs12, 13=rs13, 14=rs14, 15=rs15, 16=rs16, 17=rs17, 18=rs18, 19=rs19, 20=rs20, 21=rs21, 22=rs22, 23=rs23, 24=rs24, 25=rs25, 26=rs26, 27=rs27, 28=rs28, 29=rs29, 30=rs30, 31=rs31, 32=rs32, 33=rs33, 34=rs34, 35=rs35, 36=rs36, 37=rs37, 38=rs38, 39=rs39, 40=rs40, 41=rs41, 42=rs42, 43=rs43, 44=rs44, 45=rs45, 46=rs46, 47=rs47, 48=rs48, 49=rs49, 50=rs50, 51=rs51, 52=rs52, 53=rs53, 54=rs54, 55=rs55, 56=rs56, 57=rs57, 58=rs58, 59=rs59, 60=rs60, 61=rs61, 62=rs62, 63=rs63, 64=rs64, 65=rs65, 66=rs66, 67=rs67, 68=rs68, 69=rs69, 70=rs70, 71=rs71, 72=rs72, 73=rs73, 74=rs74, 75=rs75, 76=rs76, 77=rs77, 78=rs78, 79=rs79, 80=rs80, 81=rs81, 82=rs82, 83=rs83, 84=rs84, 85=rs85, 86=rs86, 87=rs87, 88=rs88, 89=rs89, 90=rs90, 91=rs91, 92=rs92, 93=rs93, 94=rs94, 95=rs95, 96=rs96, 97=rs97, 98=rs98, 99=rs99, 100=rs100, 101=rs101, 102=rs102, 103=rs103, 104=rs104, 105=rs105, 106=rs106, 107=rs107, 108=rs108, 109=rs109, 110=rs110, 111=rs111, 112=rs112, 113=rs113, 114=rs114, 115=rs115, 116=rs116, 117=rs117, 118=rs118, 119=rs119, 120=rs120, 121=rs121, 122=rs122, 123=rs123, 124=rs124, 125=rs125, 126=rs126, 127=rs127, 128=rs128, 129=rs129, 130=rs130, 131=rs131, 132=rs132, 133=rs133, 134=rs134, 135=rs135, 136=rs136, 137=rs137, 138=rs138, 139=rs139, 140=rs140, 141=rs141, 142=rs142, 143=rs143, 144=rs144, 145=rs145, 146=rs146, 147=rs147, 148=rs148, 149=rs149, 150=rs150, 151=rs151, 152=rs152, 153=rs153, 154=rs154, 155=rs155, 156=rs156, 157=rs157, 158=rs158, 159=rs159, 160=rs160, 161=rs161, 162=rs162, 163=rs163, 164=rs164, 165=rs165, 166=rs166, 167=rs167, 168=rs168, 169=rs169, 170=rs170, 171=rs171, 172=rs172, 173=rs173, 174=rs174, 175=rs175, 176=rs176, 177=rs177, 178=rs178, 179=rs179, 180=rs180, 181=rs181, 182=rs182, 183=rs183, 184=rs184, 185=rs185, 186=rs186, 187=rs187, 188=rs188, 189=rs189, 190=rs190, 191=rs191, 192=rs192, 193=rs193, 194=rs194, 195=rs195, 196=rs196, 197=rs197, 198=rs198, 199=rs199, 200=rs200}}
-
- Chromosome : 1 || Start : 1 || RSID : rs1 || End : 40 || RSID : rs40 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 41 || RSID : rs41 || End : 80 || RSID : rs80 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 81 || RSID : rs81 || End : 120 || RSID : rs120 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 121 || RSID : rs121 || End : 160 || RSID : rs160 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 1 || Start : 161 || RSID : rs161 || End : 200 || RSID : rs200 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 1 || RSID : rs1 || End : 40 || RSID : rs40 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 41 || RSID : rs41 || End : 80 || RSID : rs80 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 81 || RSID : rs81 || End : 120 || RSID : rs120 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 121 || RSID : rs121 || End : 160 || RSID : rs160 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 2 || Start : 161 || RSID : rs161 || End : 200 || RSID : rs200 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 1 || RSID : rs1 || End : 40 || RSID : rs40 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 41 || RSID : rs41 || End : 80 || RSID : rs80 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 81 || RSID : rs81 || End : 120 || RSID : rs120 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 121 || RSID : rs121 || End : 160 || RSID : rs160 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Chromosome : 3 || Start : 161 || RSID : rs161 || End : 200 || RSID : rs200 || String of Alleles : AACCGGTTAACCGGTTAACCGGTTAACCGGTT || Hashed Value : d55ffeb409eacd80f4fecd04175545645c8a73f10bf101dcfe2678ea06cdc8c8
-
- Frames of size T1 : 40
-
-Location Details : 1#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-
-				 ***** DNA Match Results ***** 
-
-Location Details : 1#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 1#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 2#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#1#rs1#40#rs40 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#41#rs41#80#rs80 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#81#rs81#120#rs120 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#121#rs121#160#rs160 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
-
-Location Details : 3#161#rs161#200#rs200 || Hashed Text :  3f6f962d789348df19cc9a6fef24f4dc82d541658a2fc64fe8ce64efdf1f3d53
+No. of Spc char removed : 2427
+No. of Spc char removed : 954
+
+
+
+			****FRAME MATCH RESULTS****
+
+ At Chromosome 1
+		 No. of  Alice's Frames are 109
+		 No. of   Bob's  Frames are 109
+		 No. of matching Frames are 105
+
+ At Chromosome 2
+		 No. of  Alice's Frames are 110
+		 No. of   Bob's  Frames are 110
+		 No. of matching Frames are 104
+
+ At Chromosome 10
+		 No. of  Alice's Frames are 71
+		 No. of   Bob's  Frames are 71
+		 No. of matching Frames are 67
+
+ At Chromosome 11
+		 No. of  Alice's Frames are 68
+		 No. of   Bob's  Frames are 68
+		 No. of matching Frames are 61
+
+ At Chromosome 12
+		 No. of  Alice's Frames are 67
+		 No. of   Bob's  Frames are 67
+		 No. of matching Frames are 63
+
+ At Chromosome 13
+		 No. of  Alice's Frames are 51
+		 No. of   Bob's  Frames are 51
+		 No. of matching Frames are 49
+
+ At Chromosome 14
+		 No. of  Alice's Frames are 43
+		 No. of   Bob's  Frames are 43
+		 No. of matching Frames are 39
+
+ At Chromosome 15
+		 No. of  Alice's Frames are 40
+		 No. of   Bob's  Frames are 40
+		 No. of matching Frames are 37
+
+ At Chromosome 16
+		 No. of  Alice's Frames are 42
+		 No. of   Bob's  Frames are 42
+		 No. of matching Frames are 38
+
+ At Chromosome 17
+		 No. of  Alice's Frames are 38
+		 No. of   Bob's  Frames are 38
+		 No. of matching Frames are 36
+
+ At Chromosome 18
+		 No. of  Alice's Frames are 39
+		 No. of   Bob's  Frames are 39
+		 No. of matching Frames are 36
+
+ At Chromosome 19
+		 No. of  Alice's Frames are 26
+		 No. of   Bob's  Frames are 26
+		 No. of matching Frames are 25
+
+ At Chromosome 20
+		 No. of  Alice's Frames are 34
+		 No. of   Bob's  Frames are 34
+		 No. of matching Frames are 34
+
+ At Chromosome 21
+		 No. of  Alice's Frames are 19
+		 No. of   Bob's  Frames are 19
+		 No. of matching Frames are 18
+
+ At Chromosome 22
+		 No. of  Alice's Frames are 20
+		 No. of   Bob's  Frames are 20
+		 No. of matching Frames are 18
