@@ -45,38 +45,15 @@ public class ConsumerDataPrivacyHBA {
 		t1=700;
 	}
 	
+	//Method to find if a location is present and is homozygous or not.
 	public boolean findLocationInMaps(int chromosome, int location, Map <Integer, SortedMap <Integer,String>> gene) {		
-		//String value=(gene.get(chromosome).get(location));
 		return  (isHomozygous((gene.get(chromosome).get(location)))) ;
 	}
 	
-	public void showSpecial() {
-		
-		int c=0;
-		System.out.println("Start");
-		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
-			int chromo=entry.getKey();
-			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
-			Set<Entry<Integer, String>> sm =temp.entrySet();
-			Iterator<Entry<Integer, String>> i=sm.iterator();
-			while (i.hasNext()) 
-	        { 
-				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
-				int key=m.getKey();
-				String value=m.getValue();
-				if (value.contentEquals("--")) {
-					c++;
-					System.out.println("\n Count : "+c+" || Chromosome : "+chromo+" || Location : "+key+" || Gene : "+value);
-				}
-	        }
-		}
-		System.out.println("END");
-	}
 	
+	//Method to remove Special Character "--" as a Genotype in the DataFiles
 	public void removeSpecial(Map<Integer, SortedMap <Integer,String>> party) {
-		//int []a=new int [10000000]; 
 		int c=0;
-		
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
 			int chromo=entry.getKey();
 			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
@@ -89,14 +66,14 @@ public class ConsumerDataPrivacyHBA {
 				String value=m.getValue();
 				if (value.contentEquals("--")) {
 					c++;
-					i.remove();
-					String s1=party.get(chromo).remove(key);
+					i.remove();		//remove from current object
+					String s1=party.get(chromo).remove(key);		//remove from the other party object
 					//System.out.println("\n Count : "+c+" || Chromosome : "+chromo+" || Location : "+key+" || Gene : "+value);
 				}
 	        }
 			
 		}
-		System.out.println("No. of Spc char remooved : "+c);
+		System.out.println("No. of Spc char removed : "+c);
 	}
 	
 	
@@ -120,18 +97,20 @@ public class ConsumerDataPrivacyHBA {
 				chromosome=(entry.getKey());
 				location=(Integer) m.getKey();
 				
-				if (counter==0) {		// Beginning of Frame to capture start location and initialize the substing to empty
+				// Beginning of Frame to capture start location and initialize the substing to empty
+				if (counter==0) {		
 					start=(Integer) m.getKey();
 					substring.delete(0, substring.length());
 				}  
 	            counter++;				// for each location increasing the counter          
 	            String value = (String) m.getValue(); 		// capture the genotype value
 	            
-	         // form a substring only if its homozygous and the locations match in both parties
+	            // form a substring only if its homozygous and the locations match in both parties
 	            if (isHomozygous(value)  && findLocationInMaps(chromosome,location,gene)) // && findLocationInMaps(chromosome,location,gene)					
 	            	substring.append(value);
 	            		
-	            if (counter==t1) {			//end of frame, capture end location and rsid to form the Frame Linked hashmap 
+	          //end of frame, capture end location and rsid to form the Frame Linked hashmap 
+	            if (counter==t1) {			
 					end=(Integer) m.getKey();
 					counter=0;                    
 					String startRsid=findRsid(chromosome,start);
@@ -139,6 +118,7 @@ public class ConsumerDataPrivacyHBA {
 
                     // OFK: eventual security issue: we don't want to use frames whose substrings are too short (have to set threshold)
                     // because someone could try to determine the substring from the SHA by brute force
+					// Zee: Will work on that(T1 is set for 700)
 					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
 					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring.toString(),nonce));
 					substring.delete(0, substring.length());
@@ -151,7 +131,7 @@ public class ConsumerDataPrivacyHBA {
 	 
 	
 
-	
+	//Data File Parser
 	public void readFile(String location) {
 				
 		String line ="";
@@ -183,25 +163,21 @@ public class ConsumerDataPrivacyHBA {
 	}	
 	}
 	
+	//Method to check is an allele is Homozygous or not
 	public boolean isHomozygous(String allele) {
 		return (allele.charAt(0)==allele.charAt(1));
 	}
 	
 	//Method to find RSID given the chromosome and location
     // OFK: why not something like locRsid.get(""+key).get(location) to gain full benefit of top-level Map
-    
+    // Zee : Fixed
 	public String findRsid(int key, int location) {
-		/*
-		 * for(Map.Entry<String, SortedMap<Integer, String>> entry : locRsid.entrySet())
-		 * { if (Integer.parseInt(entry.getKey())==key) { SortedMap<Integer, String>
-		 * temp = entry.getValue(); return temp.get(location); } }
-		 */
 		return locRsid.get(key).get(location);
 	}
 	
 	//Method to find Genotype given the chromosome and location
     // OFK: same issue as findRsid
-    
+    // Zee: Fixed
 	public String findGenotype(int key, int location) {
 		/*
 		 * for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet())
@@ -218,6 +194,7 @@ public class ConsumerDataPrivacyHBA {
 			  }   
 	}
 	
+	//Method to check if the Hashes from the frames match
 	public void hashMatch(LinkedHashMap <String, String> party) {
 		
 		for(Map.Entry<String, String> m:level1Frames.entrySet()){
@@ -236,8 +213,8 @@ public class ConsumerDataPrivacyHBA {
 		displayFrames(match);
 	}
 	
-	
-public void locMatch(LinkedHashMap <String, String> party) {
+	//Method to check if the Frame boundaries match or not between parties
+	public void locMatch(LinkedHashMap <String, String> party) {
 	int count=0;	
 	System.out.println("\n Matches in Locations\n\n");
 		for(Map.Entry<String, String> m:level1Frames.entrySet()){
@@ -266,14 +243,17 @@ public void locMatch(LinkedHashMap <String, String> party) {
 		return my_nonce= rand.nextInt((32671234 - 100000) + 1) + 100000;
 	}
 	
+	//Method to send Hash of random number to the other party
 	public String sendHash() {
 		return(hashOfMyNonce=getSHA(String.valueOf(generateRandom())));
 	}
 	
+	//Method to verify if Hash of Random matches with the random number sent by other party
 	public boolean verifyHashNonce() {
 		return hashOfPartyNonce.contentEquals(getSHA(String.valueOf(party_nonce)));
 	}
 	
+	//Method to send Random number to the other party
 	public int sendRandom() {
 		return my_nonce;
 	}
@@ -298,17 +278,19 @@ public void locMatch(LinkedHashMap <String, String> party) {
 		hashOfPartyNonce=s;
 	}
 	
+	//Display the NONCE fields
 	public void displayNonce() {
 		System.out.println("\n My Data		: "+my_nonce+" :: "+hashOfMyNonce);
 		System.out.println("\n Party Data	: "+party_nonce+" :: "+hashOfPartyNonce);
 	}
 	
+	//Method to Calculate the Ultimate NONCE
 	public void caluclateNonce() {
 		nonce=my_nonce^party_nonce;
 		System.out.println("\n Nonce : " +nonce);
 	}
 	
-	
+	//Method to generate Hash with nonce
 	public  String getSHAWitnNonce(String input, int nonce1 ){ 
         try { 
   
@@ -316,6 +298,7 @@ public void locMatch(LinkedHashMap <String, String> party) {
             MessageDigest md = MessageDigest.getInstance("SHA-256"); 
   
             
+            //update the digest with nonce
             md.update(String.valueOf(nonce1).getBytes());
             // digest() method called 
             // to calculate message digest of an input 
@@ -344,7 +327,7 @@ public void locMatch(LinkedHashMap <String, String> party) {
         } 
     } 
 	
-	
+	//Method to generate Hash w/o nonce
 	public  String getSHA(String input ){ 
         try { 
   
@@ -441,7 +424,7 @@ public void readFromBob() {
 }
 	
 }*/
-	
+	//Junk
 	public void deleteLocationFromMaps(int chromosome, int location) {
 		
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locRsid.entrySet()){ 
@@ -460,6 +443,7 @@ public void readFromBob() {
 			}
 	}
 	
+	//Junk
 	public void locationMatch(Map <Integer, SortedMap <Integer,String>> gene) {
 		int count=0, location;
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
@@ -479,6 +463,31 @@ public void readFromBob() {
 	        }
 		}
 	}
+	
+	
+	//Junk Method to show special characters in the DataFiles
+		public void showSpecial() {
+			
+			int c=0;
+			System.out.println("Start");
+			for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
+				int chromo=entry.getKey();
+				SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
+				Set<Entry<Integer, String>> sm =temp.entrySet();
+				Iterator<Entry<Integer, String>> i=sm.iterator();
+				while (i.hasNext()) 
+		        { 
+					Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
+					int key=m.getKey();
+					String value=m.getValue();
+					if (value.contentEquals("--")) {
+						c++;
+						System.out.println("\n Count : "+c+" || Chromosome : "+chromo+" || Location : "+key+" || Gene : "+value);
+					}
+		        }
+			}
+			System.out.println("END");
+		}
 	
 }
 
