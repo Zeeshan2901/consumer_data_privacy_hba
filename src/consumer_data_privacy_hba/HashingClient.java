@@ -76,8 +76,8 @@ public class HashingClient {
 		
 		bob.locMatch(alice.level1Frames);
 		
-		alice.showSpecial();
-		bob.showSpecial();
+		//alice.showSpecial();
+		//bob.showSpecial();
 		
 
 	}
