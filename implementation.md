@@ -1,5 +1,7 @@
 
--- Nonce Creation 
+--> Nonce Creation 
+
+
 -->Alice and Bob generates random number.
 
 -->Alice and Bob both send the hash of the random number to each other.
@@ -15,7 +17,7 @@
 --Initial Data Preprocessing
 
 -->Implemented a simple parser to input the data from Alice and Bob's datafiles into 2 Hashmaps .
-	-->Inputs only chromosomes from 1 to 22
+-->Inputs only chromosomes from 1 to 22
 
 	Map <String, SortedMap <Integer,String>> locGene;	
 	// Stores Chromosome as Key and <Location,Genotype> in the SortedMap
@@ -30,7 +32,8 @@
 
 
 -->Divide each chromosomes into number of frames of size t1. 
-	-->No overlapping implemented yet.
+
+-->No overlapping implemented yet.
 
 -->level1Frames are stored in a Linked Hashmap to preserve the order of insertion of frames.
 
@@ -40,6 +43,7 @@
 	LinkedHashMap <Integer, SortedSet<FrameData>> level1FRAMES;
 
 -->Only Homozygtes and locations which are common in both files are kept in the substring to calculate the hashcodes.
+
 -->"--" Genotype are removed from datafiles and not considered for matching
 
 -->Hashing method written to hash the substring using SHA-256 and nonce.
@@ -50,7 +54,7 @@
 	
 	
 -->DNA matching method is written to match two level1Frames DS.
-	-->It compares the custom objects to match Frames.
+-->It compares the custom objects to match Frames.
 	
 	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> party)
 	
