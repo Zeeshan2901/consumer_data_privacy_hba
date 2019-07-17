@@ -58,12 +58,12 @@ public class HashingClient {
 		//bob.locationMatch(alice.locGene);
 		//alice.locationMatch(bob.locGene);
 		
-		System.out.println("\n\n\t\t\t\t ***** BOB's Data ***** ");
+		//System.out.println("\n\n\t\t\t\t ***** BOB's Data ***** ");
 		//System.out.println("\nContents of LocGene : \n" +bob.locGene);
 		//System.out.println("\nContents of LocRsid : \n" +bob.locRsid);
 		bob.implementFrames(alice.locGene);
 		
-		System.out.println("\n\n\t\t\t\t ***** ALICE's Data ***** ");
+		//System.out.println("\n\n\t\t\t\t ***** ALICE's Data ***** ");
 		//System.out.println("\nContents of LocGene : \n" +alice.locGene);
 		//System.out.println("\nContents of LocRsid : \n" +alice.locRsid);
 		alice.implementFrames(bob.locGene);
@@ -71,11 +71,12 @@ public class HashingClient {
 		
 		
 		
-		System.out.println("\n\n\t\t\t\t ***** DNA Match Results ***** ");
-		bob.hashMatch(alice.level1Frames);
+		//System.out.println("\n\n\t\t\t\t ***** DNA Match Results ***** ");
+		//bob.hashMatch(alice.level1Frames);
 		
-		bob.locMatch(alice.level1Frames);
+		//bob.locMatch(alice.level1Frames);
 		
+		bob.DNAMatchUsingCustomObjects(alice.level1FRAMES);
 		//alice.showSpecial();
 		//bob.showSpecial();
 		
