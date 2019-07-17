@@ -46,9 +46,8 @@ public class ConsumerDataPrivacyHBA {
 	}
 	
 	public boolean findLocationInMaps(int chromosome, int location, Map <Integer, SortedMap <Integer,String>> gene) {		
-		String value=(gene.get(chromosome).get(location));
-		//System.out.println("\n\nValue : "+value);
-		return  (isHomozygous(value)) ;
+		//String value=(gene.get(chromosome).get(location));
+		return  (isHomozygous((gene.get(chromosome).get(location)))) ;
 	}
 	
 	public void showSpecial() {
