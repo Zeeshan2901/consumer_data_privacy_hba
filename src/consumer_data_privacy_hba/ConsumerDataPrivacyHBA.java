@@ -119,14 +119,14 @@ public class ConsumerDataPrivacyHBA {
                     // OFK: eventual security issue: we don't want to use frames whose substrings are too short (have to set threshold)
                     // because someone could try to determine the substring from the SHA by brute force
 					// Zee: Will work on that(T1 is set for 700)
-					System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
+					//System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
 					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring.toString(),nonce));
 					substring.delete(0, substring.length());
 				}
 	        } 
 		}	
-		System.out.println("\n Frames of size T1 : "+t1);
-		displayFrames(level1Frames);
+		//System.out.println("\n Frames of size T1 : "+t1);
+		//displayFrames(level1Frames);
 	}
 	 
 	
@@ -228,13 +228,13 @@ public class ConsumerDataPrivacyHBA {
 		}	
 		}
 		
-		System.out.println("\nSize of T1   Frames : " +t1);
-		System.out.println("\nSize of Alice's Frames : " +level1Frames.size());
-		System.out.println("\nSize of Bob's   Frames : " +party.size());
-		System.out.println("\nSize of Match   Frames : " +match.size());
-		System.out.println("\nNo. of Frames matches b/w Alice and Bob : " +count);
-		System.out.println("\nSize of locRsid : " +locRsid.size());
-		System.out.println("\nSize of locGene : " +locGene.size());
+		System.out.println("\n Size of T1   Frame : " +t1);
+		System.out.println("\n No. of Alice's Frames : " +level1Frames.size());
+		System.out.println("\n No. of Bob's   Frames : " +party.size());
+		System.out.println("\n No. of Match   Frames : " +match.size());
+		System.out.println("\n No. of Frames matches b/w Alice and Bob : " +count);
+		System.out.println("\n Size of locRsid : " +locRsid.size());
+		System.out.println("\n Size of locGene : " +locGene.size());
 	}
 	
 	//Method to generate a Random number
