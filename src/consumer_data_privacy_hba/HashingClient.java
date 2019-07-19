@@ -17,20 +17,20 @@ public class HashingClient {
 		alice.hashOfPartyNonce=bob.sendHash();
 		
 		
-		System.out.println("\n HASH sent by Alice to BOB : " +bob.hashOfPartyNonce);
-		System.out.println("\n HASH sent by Bob to Alice : " +alice.hashOfPartyNonce);
+		//System.out.println("\n HASH sent by Alice to BOB : " +bob.hashOfPartyNonce);
+		//System.out.println("\n HASH sent by Bob to Alice : " +alice.hashOfPartyNonce);
 		
 		bob.party_nonce=alice.sendRandom();
 		alice.party_nonce=bob.sendRandom();
 		
-		System.out.println("\n Random Number sent by Alice to BOB : " +bob.party_nonce);
-		System.out.println("\n Random Number sent by Bob to Alice : " +alice.party_nonce);
+		//System.out.println("\n Random Number sent by Alice to BOB : " +bob.party_nonce);
+		//System.out.println("\n Random Number sent by Bob to Alice : " +alice.party_nonce);
 		
-		System.out.println("\n ALICE's Data:");
-		alice.displayNonce();
+		//System.out.println("\n ALICE's Data:");
+		//alice.displayNonce();
 		
-		System.out.println("\n BOB's Data:");
-		bob.displayNonce();
+		//System.out.println("\n BOB's Data:");
+		//bob.displayNonce();
 		
 		
 		if (alice.verifyHashNonce())
@@ -79,6 +79,8 @@ public class HashingClient {
 		bob.DNAMatchUsingCustomObjects(alice.level1FRAMES);
 		//alice.showSpecial();
 		//bob.showSpecial();
+		
+		//bob.displaySet(bob.matchingFrames);
 		
 
 	}

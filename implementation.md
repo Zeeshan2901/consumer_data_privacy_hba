@@ -1,4 +1,5 @@
 
+-- Nonce Creation 
 -->Alice and Bob generates random number.
 
 -->Alice and Bob both send the hash of the random number to each other.
@@ -11,28 +12,35 @@
 
 
 
--->Initial Data Preprocessing
+--Initial Data Preprocessing
 
 -->Implemented a simple parser to input the data from Alice and Bob's datafiles into 2 Hashmaps .
+	-->Inputs only chromosomes from 1 to 22
 
-	Map <String, SortedMap <Integer,String>> locGene;	// Stores Chromosome as Key and <Location,Genotype> in the SortedMap
-	Map <String, SortedMap <Integer,String>> locRsid;	// Stores Chromosome as Key and <Location,RSID> in the SortedMap
+	Map <String, SortedMap <Integer,String>> locGene;	
+	// Stores Chromosome as Key and <Location,Genotype> in the SortedMap
+	Map <String, SortedMap <Integer,String>> locRsid;
+	// Stores Chromosome as Key and <Location,RSID> in the SortedMap
 	
--->T1 value is fixed and is initialized in constructor.
+-->T1 value is fixed and is initialized in constructor (700 as of now).
 
 
 
-***Alice and Bob's Datafiles are identical to each other.
+***Using Manuel Corpas data for testing.
 
 
--->Divide each chromosomes into number of frames of size t1.
+-->Divide each chromosomes into number of frames of size t1. 
+	-->No overlapping implemented yet.
 
 -->level1Frames are stored in a Linked Hashmap to preserve the order of insertion of frames.
 
-	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ 															   locations and RSIDs,HashedValue>
-															// Using Linked Hashmap so that the order of creating Frames is preserved.
+	//Frame fields are stored in a LinkedHashMap <Integer, SortedSet<FrameData>> 
+	//where the Key is the integer and
+	//value is Sorted Set of Frame Data objects (custom objects)
+	LinkedHashMap <Integer, SortedSet<FrameData>> level1FRAMES;
 
--->Only Homozygtes are kept in the substring to calculate the hashcodes.
+-->Only Homozygtes and locations which are common in both files are kept in the substring to calculate the hashcodes.
+-->"--" Genotype are removed from datafiles and not considered for matching
 
 -->Hashing method written to hash the substring using SHA-256 and nonce.
 
@@ -41,6 +49,12 @@
 
 	
 	
--->DNA matching method (very primitive one) written to match two level1Frames DS.
+-->DNA matching method is written to match two level1Frames DS.
+	-->It compares the custom objects to match Frames.
 	
-	public void DNAMatch(LinkedHashMap <String, String> party)
+	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> party)
+	
+	
+-->The Frame structure can be displayed using the method
+
+	public void displaySet(LinkedHashMap <Integer, SortedSet<FrameData>> map)
