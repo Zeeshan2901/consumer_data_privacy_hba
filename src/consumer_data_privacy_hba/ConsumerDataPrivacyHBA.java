@@ -121,7 +121,7 @@ public class ConsumerDataPrivacyHBA {
 		System.out.println("\n At Chromosome "+chromosome);
 		System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
 		System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
-		System.out.println("\t\t No. of matching Frames are "+count+"");
+		System.out.println("\t\t No. of matching Frames are "+count);
 		}
 		
 	}
@@ -198,7 +198,7 @@ public class ConsumerDataPrivacyHBA {
 	 
 	
 	public boolean isNumeric(String s) {
-		return (s.charAt(0)=='1' || s.charAt(0)=='2') ? true:false;
+		return (Character.isDigit(s.charAt(0))) ? true:false;
 			
 	}
 
