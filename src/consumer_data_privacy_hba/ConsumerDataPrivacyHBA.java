@@ -260,55 +260,7 @@ public class ConsumerDataPrivacyHBA {
 		return locGene.get(key).get(location);
 	}
 	
-	//Method to display the Frame Structure
-	public void displayFrames (LinkedHashMap <String, String> frames) {
-		for(Map.Entry<String, String> m:frames.entrySet()){  
-			   System.out.println("\nLocation Details : " +m.getKey()+" || Hashed Text :  "+m.getValue());  
-			  }   
-	}
 	
-	//Method to check if the Hashes from the frames match
-	public void hashMatch(LinkedHashMap <String, String> party) {
-		
-		for(Map.Entry<String, String> m:level1Frames.entrySet()){
-			String key1 = m.getKey();
-			for(Map.Entry<String, String> p:party.entrySet()){
-				String key2=p.getKey();
-				if (key1.contentEquals(key2)) {
-					String value1 = m.getValue();
-					String value2 = p.getValue();
-					if (value1.contentEquals(value2))
-						match.put(key1,value1);
-				}
-			
-		}	
-		}
-		displayFrames(match);
-	}
-	
-	//Method to check if the Frame boundaries match or not between parties
-	public void locMatch(LinkedHashMap <String, String> party) {
-	int count=0;	
-	System.out.println("\n Matches in Locations\n\n");
-		for(Map.Entry<String, String> m:level1Frames.entrySet()){
-			String key1 = m.getKey();
-			for(Map.Entry<String, String> p:party.entrySet()){
-				String key2=p.getKey();
-				if (key1.contentEquals(key2)) {
-					System.out.println("Location : " +key1);
-					count++;
-				}
-		}	
-		}
-		
-		System.out.println("\n Size of T1   Frame : " +t1);
-		System.out.println("\n No. of Alice's Frames : " +level1Frames.size());
-		System.out.println("\n No. of Bob's   Frames : " +party.size());
-		System.out.println("\n No. of Match   Frames : " +match.size());
-		System.out.println("\n No. of Frames matches b/w Alice and Bob : " +count);
-		System.out.println("\n Size of locRsid : " +locRsid.size());
-		System.out.println("\n Size of locGene : " +locGene.size());
-	}
 	
 	//Method to generate a Random number
 	public int generateRandom() {
@@ -497,6 +449,57 @@ public void readFromBob() {
 }
 	
 }*/
+	
+	//Method to display the Frame Structure
+	public void displayFrames (LinkedHashMap <String, String> frames) {
+		for(Map.Entry<String, String> m:frames.entrySet()){  
+			   System.out.println("\nLocation Details : " +m.getKey()+" || Hashed Text :  "+m.getValue());  
+			  }   
+	}
+		
+	//Method to check if the Hashes from the frames match
+	public void hashMatch(LinkedHashMap <String, String> party) {
+		
+		for(Map.Entry<String, String> m:level1Frames.entrySet()){
+			String key1 = m.getKey();
+			for(Map.Entry<String, String> p:party.entrySet()){
+				String key2=p.getKey();
+				if (key1.contentEquals(key2)) {
+					String value1 = m.getValue();
+					String value2 = p.getValue();
+					if (value1.contentEquals(value2))
+						match.put(key1,value1);
+				}
+			
+		}	
+		}
+		displayFrames(match);
+	}
+	
+	//Method to check if the Frame boundaries match or not between parties
+	public void locMatch(LinkedHashMap <String, String> party) {
+	int count=0;	
+	System.out.println("\n Matches in Locations\n\n");
+		for(Map.Entry<String, String> m:level1Frames.entrySet()){
+			String key1 = m.getKey();
+			for(Map.Entry<String, String> p:party.entrySet()){
+				String key2=p.getKey();
+				if (key1.contentEquals(key2)) {
+					System.out.println("Location : " +key1);
+					count++;
+				}
+		}	
+		}
+		
+		System.out.println("\n Size of T1   Frame : " +t1);
+		System.out.println("\n No. of Alice's Frames : " +level1Frames.size());
+		System.out.println("\n No. of Bob's   Frames : " +party.size());
+		System.out.println("\n No. of Match   Frames : " +match.size());
+		System.out.println("\n No. of Frames matches b/w Alice and Bob : " +count);
+		System.out.println("\n Size of locRsid : " +locRsid.size());
+		System.out.println("\n Size of locGene : " +locGene.size());
+	}
+	
 	//Junk
 	public void deleteLocationFromMaps(int chromosome, int location) {
 		
