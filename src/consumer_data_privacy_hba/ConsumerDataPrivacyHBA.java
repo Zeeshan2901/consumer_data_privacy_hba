@@ -14,7 +14,9 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeMap; 
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet; 
 
 
 /**
@@ -30,6 +32,7 @@ public class ConsumerDataPrivacyHBA {
 	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ locations and RSIDs, HashedValue>
 													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
 	LinkedHashMap <String, String> match;
+	LinkedHashMap <Integer, SortedSet<FrameData>> level1FRAMES;
 	String alice, bob;
 	int t1;												//Size of Frame
 	int my_nonce, party_nonce, nonce;
@@ -41,6 +44,7 @@ public class ConsumerDataPrivacyHBA {
 		locGene = new HashMap<Integer, SortedMap <Integer,String>>();
 		locRsid = new HashMap<Integer, SortedMap <Integer,String>>();
 		level1Frames = new LinkedHashMap<String, String>();
+		level1FRAMES= new LinkedHashMap<Integer, SortedSet<FrameData>>();
 		match = new LinkedHashMap<String, String>();
 		t1=700;
 	}
@@ -67,6 +71,7 @@ public class ConsumerDataPrivacyHBA {
 				if (value.contentEquals("--")) {
 					c++;
 					i.remove();		//remove from current object
+					@SuppressWarnings("unused")
 					String s1=party.get(chromo).remove(key);		//remove from the other party object
 					//System.out.println("\n Count : "+c+" || Chromosome : "+chromo+" || Location : "+key+" || Gene : "+value);
 				}
@@ -76,6 +81,63 @@ public class ConsumerDataPrivacyHBA {
 		System.out.println("No. of Spc char removed : "+c);
 	}
 	
+	public boolean someMatch(FrameData my, FrameData party) {
+		return (my.start==party.start && my.end==party.end && my.hashValue.contentEquals(party.hashValue)) ? true : false;		
+	}
+	
+	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> party) {
+		int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
+		
+		System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
+		for(Map.Entry<Integer, SortedSet<FrameData>> entry : level1FRAMES.entrySet()) {
+			count=aliceSize=bobSize=0;
+			chromosome=(entry.getKey());
+			SortedSet<FrameData> set=entry.getValue();
+			Iterator<FrameData> i=set.iterator();
+			aliceSize=set.size();
+			while (i.hasNext()) {
+				FrameData objM=(FrameData)i.next();
+				SortedSet<FrameData> partySet=party.get(chromosome);
+				Iterator<FrameData> it=partySet.iterator();
+				bobSize=partySet.size();
+				//System.out.println("\n At Chromosome "+chromosome+" the no. of Alice's Frames are "+set.size()+" and the no. of Bob's Frames are "+partySet.size());
+				while(it.hasNext()) {
+					FrameData objP=(FrameData)it.next();
+					if (someMatch(objM,objP)) {
+						//objM.display(objM, chromosome);				
+						count++;
+					}
+				}
+			}
+		System.out.println("\n At Chromosome "+chromosome);
+		System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
+		System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
+		System.out.println("\t\t No. of matching Frames are "+count+"");
+		}
+		/*
+		System.out.println("\n Size of T1   Frame : " +t1);
+		System.out.println("\n No. of Alice's Frames : " +level1FRAMES.size());
+		System.out.println("\n No. of Bob's   Frames : " +party.size());
+		System.out.println("\n No. of Match   Frames : " +match.size());
+		System.out.println("\n No. of Frames matches b/w Alice and Bob : " +count);
+		System.out.println("\n Size of locRsid : " +locRsid.size());
+		System.out.println("\n Size of locGene : " +locGene.size());
+		*/
+	}
+	
+	public void displaySet(LinkedHashMap <Integer, SortedSet<FrameData>> map) {
+		
+		for(Map.Entry<Integer, SortedSet<FrameData>> entry : map.entrySet()) {
+			int chromosome=(entry.getKey());
+			SortedSet<FrameData> set=entry.getValue();
+			Iterator<FrameData> i=set.iterator();
+			while (i.hasNext()) {
+				FrameData obj=(FrameData)i.next();
+				obj.display(obj,chromosome);
+			}
+		}
+		
+	}
 	
 	
 	//Method to divide the chromosomes into Frames of size T1
@@ -83,8 +145,10 @@ public class ConsumerDataPrivacyHBA {
 		
 		int chromosome, location;
 		
+		
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {		//outer map iterator to traverse genotype data of each chromosome
-			
+			chromosome=(entry.getKey());
+			SortedSet<FrameData> set = new TreeSet<FrameData>();
 			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
 			Set<Entry<Integer, String>> sm =temp.entrySet();
 			Iterator<Entry<Integer, String>> i=sm.iterator();
@@ -94,7 +158,7 @@ public class ConsumerDataPrivacyHBA {
 	        { 
 				
 				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
-				chromosome=(entry.getKey());
+				
 				location=(Integer) m.getKey();
 				
 				// Beginning of Frame to capture start location and initialize the substing to empty
@@ -121,12 +185,14 @@ public class ConsumerDataPrivacyHBA {
 					// Zee: Will work on that(T1 is set for 700)
 					//System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
 					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring.toString(),nonce));
+					FrameData obj=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce));
+					set.add(obj);
 					substring.delete(0, substring.length());
 				}
 	        } 
+			level1FRAMES.put(chromosome,set);
 		}	
-		//System.out.println("\n Frames of size T1 : "+t1);
-		//displayFrames(level1Frames);
+		//displaySet(level1FRAMES);
 	}
 	 
 	
