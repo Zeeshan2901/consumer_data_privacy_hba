@@ -43,16 +43,16 @@ public class HashingClient {
 		//System.out.println("\n BOB's Data:");
 		//bob.displayNonce();
 		
-		
-		if (alice.verifyHashNonce())
-			System.out.println("\n\t\t ***** BOB is HONEST ***** ");
-		else
-			System.out.println("\n\t\t ***** BOB is DISHONEST ***** ");
-		
-		if (bob.verifyHashNonce())
-			System.out.println("\n\t\t ***** ALICE is HONEST ***** ");
-		else
-			System.out.println("\n\t\t ***** ALICE is DISHONEST ***** ");
+		var x=0;
+		if (alice.verifyHashNonce() && bob.verifyHashNonce())
+			x=1;//System.out.println("\n\t\t ***** Parties are HONEST ***** ");
+		else {
+			if (!alice.verifyHashNonce())
+				System.out.println("\n\t\t ***** Bob is DISHONEST ***** ");
+			if(!bob.verifyHashNonce())
+				System.out.println("\n\t\t ***** ALICE is DISHONEST ***** ");
+		}
+			
 		
 		alice.caluclateNonce();
 		bob.caluclateNonce();
@@ -84,7 +84,7 @@ public class HashingClient {
 		endTime = System.nanoTime();
 		duration=endTime-startTime;
 		
-		System .out.println ("\n SPC CHAR removal :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		System .out.println ("\n -- char removal :"+ TimeUnit.NANOSECONDS.toMillis(duration));
 		//System.out.println("Special Characters -- () ended");
 		//bob.locationMatch(alice.locGene);
 		//alice.locationMatch(bob.locGene);
@@ -116,7 +116,7 @@ public class HashingClient {
 		//bob.locMatch(alice.level1Frames);
 		
 		
-		System.out.println("\n Frame Matching");
+		//System.out.println("\n Frame Matching");
 		startTime = System.nanoTime();
 
 		bob.DNAMatchUsingCustomObjects(alice.level1Frame);

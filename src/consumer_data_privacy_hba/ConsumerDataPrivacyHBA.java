@@ -1,5 +1,6 @@
 package consumer_data_privacy_hba;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger; 
@@ -10,13 +11,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet; 
+import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom; 
 
 
 /**
@@ -41,7 +41,7 @@ public class ConsumerDataPrivacyHBA {
 	//Size of Frame
 	int t1;		
 	//Nonce fields
-	int my_nonce, party_nonce, nonce;
+	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
 	
 	public ConsumerDataPrivacyHBA() {
@@ -64,7 +64,7 @@ public class ConsumerDataPrivacyHBA {
 	
 	//Method to remove Special Character "--" as a Genotype in the DataFiles
 	public void removeSpecial(Map<Integer, SortedMap <Integer,String>> party) {
-		int c=0;
+		//int c=0;
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
 			int chromo=entry.getKey();
 			SortedMap<Integer, String> temp = entry.getValue();
@@ -76,7 +76,7 @@ public class ConsumerDataPrivacyHBA {
 				int key=m.getKey();
 				String value=m.getValue();
 				if (value.contentEquals("--")) {
-					c++;
+					//c++;
 					//remove from current object
 					i.remove();
 					//remove from the other party object
@@ -86,7 +86,7 @@ public class ConsumerDataPrivacyHBA {
 	        }
 			
 		}
-		System.out.println("No. of Spc char removed : "+c);
+		//System.out.println("No. of Spc char removed : "+c);
 	}
 	
 	public boolean someMatch(FrameData my, FrameData party) {
@@ -96,7 +96,7 @@ public class ConsumerDataPrivacyHBA {
 	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> party) {
 		int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
 		
-		System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
+		//System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
 		for(Map.Entry<Integer, SortedSet<FrameData>> entry : level1Frame.entrySet()) {
 			count=aliceSize=bobSize=0;
 			chromosome=(entry.getKey());
@@ -115,14 +115,15 @@ public class ConsumerDataPrivacyHBA {
 						FrameData matchingObject= new FrameData(objA);
 						matchingSet.add(matchingObject);
 						count++;
+						break;
 					}
 				}
 			}
 		matchingFrames.put(chromosome,matchingSet);
-		System.out.println("\n At Chromosome "+chromosome);
-		System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
-		System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
-		System.out.println("\t\t No. of matching Frames are "+count);
+		//System.out.println("\n At Chromosome "+chromosome);
+		//System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
+		//System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
+		//System.out.println("\t\t No. of matching Frames are "+count);
 		}
 		
 	}
@@ -216,11 +217,9 @@ public class ConsumerDataPrivacyHBA {
 		String line ="";
 		try {
 			FileReader fr = new FileReader(location);
-			Scanner sc =new Scanner(fr);
-			while (sc.hasNextLine()) {
-				line=sc.nextLine();
+			BufferedReader bf =new BufferedReader(fr);
+			while ((line = bf.readLine()) != null) {
 				String[] row=line.split("\t");
-				
 				// Read chromosomes only between 1 and 22
 				if (isParsable(row[1])){
 					if ( locGene.containsKey(Integer.parseInt(row[1])) ) {
@@ -237,7 +236,7 @@ public class ConsumerDataPrivacyHBA {
 					}			
 				}
 			}
-			sc.close();
+			bf.close();
 		}catch(IOException e) {
 		System.out.println("Exception in reading at "+location);
 		e.printStackTrace();
@@ -271,9 +270,8 @@ public class ConsumerDataPrivacyHBA {
 	
 	
 	//Method to generate a Random number
-	public int generateRandom() {
-		Random rand = new Random();
-		return my_nonce= rand.nextInt((32671234 - 100000) + 1) + 100000;
+	public long generateRandom() {
+		return my_nonce =ThreadLocalRandom.current().nextLong(100000,32671234);
 	}
 	
 	//Method to send Hash of random number to the other party
@@ -287,7 +285,7 @@ public class ConsumerDataPrivacyHBA {
 	}
 	
 	//Method to send Random number to the other party
-	public int sendRandom() {
+	public long sendRandom() {
 		return my_nonce;
 	}
 
@@ -302,7 +300,7 @@ public class ConsumerDataPrivacyHBA {
 
     
 	//method to store other parties nonce
-	public void getNonce(int n) {
+	public void getNonce(long n) {
 		party_nonce=n;
 	}
 	
@@ -324,7 +322,7 @@ public class ConsumerDataPrivacyHBA {
 	}
 	
 	//Method to generate Hash with nonce
-	public  String getSHAWitnNonce(String input, int nonce1 ){ 
+	public  String getSHAWitnNonce(String input, long nonce1 ){ 
         try { 
   
             // Static getInstance method is called with hashing SHA 
