@@ -1,18 +1,29 @@
 package consumer_data_privacy_hba;
 
+import java.util.concurrent.TimeUnit;
+
 public class HashingClient {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		long startTime,endTime,duration;
+		
+		//System.out.println("Creating objects !!");
+	    startTime = System.nanoTime();
 		ConsumerDataPrivacyHBA bob = new ConsumerDataPrivacyHBA();
 		ConsumerDataPrivacyHBA alice = new ConsumerDataPrivacyHBA();
-
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Object creation :"+ TimeUnit.NANOSECONDS.toMillis(duration));
 		//obj.readFromAlice();
 		//obj.readFromBob();
 		//obj.hashMatch();
 		
 		// Generating Nonce
+		//System.out.println("\n Generating Nonce Started");
+		startTime = System.nanoTime();
 		bob.hashOfPartyNonce=alice.sendHash();
 		alice.hashOfPartyNonce=bob.sendHash();
 		
@@ -46,21 +57,46 @@ public class HashingClient {
 		alice.caluclateNonce();
 		bob.caluclateNonce();
 		
+		//System.out.println("\n Generating Nonce Ended !!");
 		
-		bob.readFile("input/sister.txt");
-		alice.readFile("input/dad.txt");
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Nonce creation :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		//System.out.println("\n Reading Files started");
+		startTime = System.nanoTime();
+		bob.readFile("input/dad.txt");
+		alice.readFile("input/sister.txt");
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n File Read :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		//System.out.println("\n Reading Files Ended");
 		
 		
+		//System.out.println("Special Characters -- () invoked");
+		startTime = System.nanoTime();
 		bob.removeSpecial(alice.locGene);
 		alice.removeSpecial(bob.locGene);
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
 		
-		
+		System .out.println ("\n SPC CHAR removal :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		//System.out.println("Special Characters -- () ended");
 		//bob.locationMatch(alice.locGene);
 		//alice.locationMatch(bob.locGene);
 		
 		//System.out.println("\n\n\t\t\t\t ***** BOB's Data ***** ");
 		//System.out.println("\nContents of LocGene : \n" +bob.locGene);
 		//System.out.println("\nContents of LocRsid : \n" +bob.locRsid);
+		
+		
+		//System.out.println("\n Frames Implementation started");
+		startTime = System.nanoTime();
+
 		bob.implementFrames(alice.locGene);
 		
 		//System.out.println("\n\n\t\t\t\t ***** ALICE's Data ***** ");
@@ -68,15 +104,26 @@ public class HashingClient {
 		//System.out.println("\nContents of LocRsid : \n" +alice.locRsid);
 		alice.implementFrames(bob.locGene);
 		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
 		
-		
+		System .out.println ("\n Frames :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		//System.out.println("\n Frames Implementation Ended!!");
 		
 		//System.out.println("\n\n\t\t\t\t ***** DNA Match Results ***** ");
 		//bob.hashMatch(alice.level1Frames);
 		
 		//bob.locMatch(alice.level1Frames);
 		
-		bob.DNAMatchUsingCustomObjects(alice.level1FRAMES);
+		
+		System.out.println("\n Frame Matching");
+		startTime = System.nanoTime();
+
+		bob.DNAMatchUsingCustomObjects(alice.level1Frame);
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Matching :"+ TimeUnit.NANOSECONDS.toMillis(duration));
 		//alice.showSpecial();
 		//bob.showSpecial();
 		

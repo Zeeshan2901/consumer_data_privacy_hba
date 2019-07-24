@@ -27,19 +27,20 @@ import java.util.TreeSet;
 
 public class ConsumerDataPrivacyHBA {
 	
-	Map <Integer, SortedMap <Integer,String>> locGene;	// Stores Chromosome as Key and <Location,Genotype> in the SM
-	Map <Integer, SortedMap <Integer,String>> locRsid;	// Stores Chromosome as Key and <Location,RSID> in the SM
-	LinkedHashMap <String, String> level1Frames;	 	// Level1 Frame structure <Concatenation of Chromosome + Start + End+ locations and RSIDs, HashedValue>
-													 	// Using Linked Hashmap so that the order of creating Frames is preserved.
-	LinkedHashMap <String, String> match;
+	// Stores Chromosome as Key and <Location,Genotype> in the SM
+	Map <Integer, SortedMap <Integer,String>> locGene;
+	// Stores Chromosome as Key and <Location,RSID> in the SM
+	Map <Integer, SortedMap <Integer,String>> locRsid;
 	
 	//Frame fields are stored in a LinkedHashMap <Integer, SortedSet<FrameData>> 
 	//where the Key is the integer and
 	//value is Sorted Set of Frame Data objects (custom objects)
-	LinkedHashMap <Integer, SortedSet<FrameData>> level1FRAMES;
+	LinkedHashMap <Integer, SortedSet<FrameData>> level1Frame;
 	LinkedHashMap <Integer, SortedSet<FrameData>> matchingFrames;
 	String alice, bob;
-	int t1;												//Size of Frame
+	//Size of Frame
+	int t1;		
+	//Nonce fields
 	int my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
 	
@@ -48,10 +49,10 @@ public class ConsumerDataPrivacyHBA {
 		bob="";
 		locGene = new HashMap<Integer, SortedMap <Integer,String>>();
 		locRsid = new HashMap<Integer, SortedMap <Integer,String>>();
-		level1Frames = new LinkedHashMap<String, String>();
-		level1FRAMES = new LinkedHashMap<Integer, SortedSet<FrameData>>();
+		
+		level1Frame = new LinkedHashMap<Integer, SortedSet<FrameData>>();
 		matchingFrames = new LinkedHashMap<Integer, SortedSet<FrameData>>();
-		match = new LinkedHashMap<String, String>();
+		
 		t1=700;
 	}
 	
@@ -66,7 +67,7 @@ public class ConsumerDataPrivacyHBA {
 		int c=0;
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
 			int chromo=entry.getKey();
-			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
+			SortedMap<Integer, String> temp = entry.getValue();
 			Set<Entry<Integer, String>> sm =temp.entrySet();
 			Iterator<Entry<Integer, String>> i=sm.iterator();
 			while (i.hasNext()) 
@@ -76,9 +77,10 @@ public class ConsumerDataPrivacyHBA {
 				String value=m.getValue();
 				if (value.contentEquals("--")) {
 					c++;
-					i.remove();		//remove from current object
-					@SuppressWarnings("unused")
-					String s1=party.get(chromo).remove(key);		//remove from the other party object
+					//remove from current object
+					i.remove();
+					//remove from the other party object
+					party.get(chromo).remove(key);
 					//System.out.println("\n Count : "+c+" || Chromosome : "+chromo+" || Location : "+key+" || Gene : "+value);
 				}
 	        }
@@ -95,7 +97,7 @@ public class ConsumerDataPrivacyHBA {
 		int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
 		
 		System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
-		for(Map.Entry<Integer, SortedSet<FrameData>> entry : level1FRAMES.entrySet()) {
+		for(Map.Entry<Integer, SortedSet<FrameData>> entry : level1Frame.entrySet()) {
 			count=aliceSize=bobSize=0;
 			chromosome=(entry.getKey());
 			SortedSet<FrameData> matchingSet = new TreeSet<FrameData>();
@@ -107,7 +109,6 @@ public class ConsumerDataPrivacyHBA {
 				SortedSet<FrameData> partySet=party.get(chromosome);
 				Iterator<FrameData> it=partySet.iterator();
 				bobSize=partySet.size();
-				//System.out.println("\n At Chromosome "+chromosome+" the no. of Alice's Frames are "+set.size()+" and the no. of Bob's Frames are "+partySet.size());
 				while(it.hasNext()) {
 					FrameData objB=(FrameData)it.next();
 					if (someMatch(objA,objB)) {
@@ -146,11 +147,12 @@ public class ConsumerDataPrivacyHBA {
 		
 		int chromosome, location;
 		
-		
-		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {		//outer map iterator to traverse genotype data of each chromosome
+		//outer map iterator to traverse genotype data of each chromosome
+		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {		
 			chromosome=(entry.getKey());
 			SortedSet<FrameData> set = new TreeSet<FrameData>();
-			SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
+			// SortedMap Iterator containing location and genotype
+			SortedMap<Integer, String> temp = entry.getValue(); 
 			Set<Entry<Integer, String>> sm =temp.entrySet();
 			Iterator<Entry<Integer, String>> i=sm.iterator();
 			int counter=0,start=0,end=0;
@@ -167,14 +169,16 @@ public class ConsumerDataPrivacyHBA {
 					start=(Integer) m.getKey();
 					substring.delete(0, substring.length());
 				}  
-	            counter++;				// for each location increasing the counter          
-	            String value = (String) m.getValue(); 		// capture the genotype value
+				// for each location increasing the counter
+	            counter++;				   
+	            // capture the genotype value
+	            String value = (String) m.getValue(); 		
 	            
 	            // form a substring only if its homozygous and the locations match in both parties
 	            if (isHomozygous(value)  && findLocationInMaps(chromosome,location,gene)) // && findLocationInMaps(chromosome,location,gene)					
 	            	substring.append(value);
 	            		
-	          //end of frame, capture end location and rsid to form the Frame Linked hashmap 
+	            //end of frame, capture end location and rsid to form the Frame Linked hashmap 
 	            if (counter==t1) {			
 					end=(Integer) m.getKey();
 					counter=0;                    
@@ -185,20 +189,24 @@ public class ConsumerDataPrivacyHBA {
                     // because someone could try to determine the substring from the SHA by brute force
 					// Zee: Will work on that(T1 is set for 700)
 					//System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
-					level1Frames.put(String.valueOf(chromosome)+"#"+String.valueOf(start)+"#"+startRsid+"#"+String.valueOf(end)+"#"+endRsid, getSHAWitnNonce(substring.toString(),nonce));
+					
 					FrameData obj=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce));
 					set.add(obj);
 					substring.delete(0, substring.length());
 				}
 	        } 
-			level1FRAMES.put(chromosome,set);
+			level1Frame.put(chromosome,set);
 		}	
 		//displaySet(level1FRAMES);
 	}
 	 
-	
-	public boolean isNumeric(String s) {
-		return (Character.isDigit(s.charAt(0))) ? true:false;
+	//Method to check if the chromsome is between 1-22, rest are ignored
+	public boolean isParsable(String s) {
+		if  (Character.isDigit(s.charAt(0))) {
+			if(Integer.parseInt(s) <= 22)
+				return true;
+		}
+		return false;
 			
 	}
 
@@ -214,7 +222,7 @@ public class ConsumerDataPrivacyHBA {
 				String[] row=line.split("\t");
 				
 				// Read chromosomes only between 1 and 22
-				if (isNumeric(row[1]) && Integer.parseInt(row[1]) <= 22){
+				if (isParsable(row[1])){
 					if ( locGene.containsKey(Integer.parseInt(row[1])) ) {
 						locGene.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[3]);
 						locRsid.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[0]);
@@ -386,184 +394,7 @@ public class ConsumerDataPrivacyHBA {
         } 
     } 
 	
-	/*
-	 * public void putInClass(String file) {
-	 * 
-	 * Map <String, SNPInfo> dna= new HashMap<String, SNPInfo>(); String line ="";
-	 * try { FileReader fr = new FileReader(file); Scanner sc =new Scanner(fr);
-	 * while (sc.hasNextLine()) { line=sc.nextLine(); String[] row=line.split("\t");
-	 * 
-	 * SNPInfo snpData= new SNPInfo(row[0],row[2],row[3]); if (isHomozygous(row[3]))
-	 * { dna.put(row[1],snpData); } } sc.close();
-	 * System.out.println("\nNew Map: \n"+ dna);
-	 * 
-	 * }catch(IOException e) { System.out.println("Exception in reading at "+file);
-	 * e.printStackTrace(); } }
-	 */
 	
-	 /*public void hashMatch() {
- 	
- 	//System.out.println("\nHashCode Generated by SHA-256 for:"); 
-    //System.out.println("\n Alice: " + alice+ getSHA(alice)); 
-	    //System.out.println("\n Bob  : " + bob + getSHA(bob)); 
-	    
-	    if (alice.equals(bob))
-	    	System.out.println("\n Alice and Bob Matches");
-	    else
-	    	System.out.println("\n Alice and Bob Don't Match");    	
- }
-
-
-
-public void readFromAlice(){
-	try {
-			FileReader fr = new FileReader("input/alice.txt");
-			Scanner sc =new Scanner(fr);
-			while (sc.hasNextLine()) {
-				alice=sc.nextLine();
-			}
-			fr.close();
-			sc.close();
-	}catch(IOException e) {
-		System.out.println("Exception in reading from Alice");
-		e.printStackTrace();
-	}
-	
-}
-
-
-
-public void readFromBob() {
-	
-	try {
-		FileReader fr = new FileReader("input/bob.txt");
-		Scanner sc =new Scanner(fr);
-		while (sc.hasNextLine()) {
-			bob=sc.nextLine();
-		}
-		fr.close();
-		sc.close();
-	}catch(IOException e) {
-	System.out.println("Exception in reading from Bob");
-	e.printStackTrace();
-}
-	
-}*/
-	
-	//Method to display the Frame Structure
-	public void displayFrames (LinkedHashMap <String, String> frames) {
-		for(Map.Entry<String, String> m:frames.entrySet()){  
-			   System.out.println("\nLocation Details : " +m.getKey()+" || Hashed Text :  "+m.getValue());  
-			  }   
-	}
-		
-	//Method to check if the Hashes from the frames match
-	public void hashMatch(LinkedHashMap <String, String> party) {
-		
-		for(Map.Entry<String, String> m:level1Frames.entrySet()){
-			String key1 = m.getKey();
-			for(Map.Entry<String, String> p:party.entrySet()){
-				String key2=p.getKey();
-				if (key1.contentEquals(key2)) {
-					String value1 = m.getValue();
-					String value2 = p.getValue();
-					if (value1.contentEquals(value2))
-						match.put(key1,value1);
-				}
-			
-		}	
-		}
-		displayFrames(match);
-	}
-	
-	//Method to check if the Frame boundaries match or not between parties
-	public void locMatch(LinkedHashMap <String, String> party) {
-	int count=0;	
-	System.out.println("\n Matches in Locations\n\n");
-		for(Map.Entry<String, String> m:level1Frames.entrySet()){
-			String key1 = m.getKey();
-			for(Map.Entry<String, String> p:party.entrySet()){
-				String key2=p.getKey();
-				if (key1.contentEquals(key2)) {
-					System.out.println("Location : " +key1);
-					count++;
-				}
-		}	
-		}
-		
-		System.out.println("\n Size of T1   Frame : " +t1);
-		System.out.println("\n No. of Alice's Frames : " +level1Frames.size());
-		System.out.println("\n No. of Bob's   Frames : " +party.size());
-		System.out.println("\n No. of Match   Frames : " +match.size());
-		System.out.println("\n No. of Frames matches b/w Alice and Bob : " +count);
-		System.out.println("\n Size of locRsid : " +locRsid.size());
-		System.out.println("\n Size of locGene : " +locGene.size());
-	}
-	
-	//Junk
-	public void deleteLocationFromMaps(int chromosome, int location) {
-		
-		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locRsid.entrySet()){ 
-			if ((entry.getKey())==chromosome) { 
-				SortedMap<Integer, String> temp = entry.getValue(); 
-				temp.remove(location);
-				System.out.println("DOne");
-				} 
-			}
-		for(Map.Entry<Integer, SortedMap<Integer, String>> entry1 : locGene.entrySet()){ 
-			if ((entry1.getKey())==chromosome) { 
-				SortedMap<Integer, String> temp1 = entry1.getValue(); 
-				temp1.remove(location);
-				System.out.println("DONE");
-				} 
-			}
-	}
-	
-	//Junk
-	public void locationMatch(Map <Integer, SortedMap <Integer,String>> gene) {
-		int count=0, location;
-		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
-			int chromosome=(entry.getKey());
-			SortedMap<Integer, String> temp = entry.getValue(); 
-			Set<Entry<Integer, String>> sm =temp.entrySet();
-			Iterator<Entry<Integer, String>> i=sm.iterator();
-			while (i.hasNext()) 
-	        { 
-				System.out.println("\n"+count++);
-				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
-				location=(Integer) m.getKey();
-				if (findLocationInMaps(chromosome,location, gene)==false)
-					deleteLocationFromMaps(chromosome,location);
-				System.out.println(locGene);
-				System.out.println(locRsid);
-	        }
-		}
-	}
-	
-	
-	//Junk Method to show special characters in the DataFiles
-		public void showSpecial() {
-			
-			int c=0;
-			System.out.println("Start");
-			for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {
-				int chromo=entry.getKey();
-				SortedMap<Integer, String> temp = entry.getValue(); // SortedMap Iterator containing location and genotype
-				Set<Entry<Integer, String>> sm =temp.entrySet();
-				Iterator<Entry<Integer, String>> i=sm.iterator();
-				while (i.hasNext()) 
-		        { 
-					Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
-					int key=m.getKey();
-					String value=m.getValue();
-					if (value.contentEquals("--")) {
-						c++;
-						System.out.println("\n Count : "+c+" || Chromosome : "+chromo+" || Location : "+key+" || Gene : "+value);
-					}
-		        }
-			}
-			System.out.println("END");
-		}
 	
 }
 
