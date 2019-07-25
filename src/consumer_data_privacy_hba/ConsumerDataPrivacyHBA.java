@@ -34,26 +34,27 @@ public class ConsumerDataPrivacyHBA {
 	
 	//Frame fields are stored in a LinkedHashMap <Integer, SortedSet<FrameData>> 
 	//where the Key is the integer and
-	//value is Sorted Set of Frame Data objects (custom objects)
+	//value is Sorted Set of FrameData objects (custom objects)
 	LinkedHashMap <Integer, SortedSet<FrameData>> level1Frame;
+	LinkedHashMap <Integer, SortedSet<FrameData>> level2Frame;
 	LinkedHashMap <Integer, SortedSet<FrameData>> matchingFrames;
-	String alice, bob;
 	//Size of Frame
-	int t1;		
+	int t1, n;		
 	//Nonce fields
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
 	
 	public ConsumerDataPrivacyHBA() {
-		alice="";
-		bob="";
+		
 		locGene = new HashMap<Integer, SortedMap <Integer,String>>();
 		locRsid = new HashMap<Integer, SortedMap <Integer,String>>();
 		
 		level1Frame = new LinkedHashMap<Integer, SortedSet<FrameData>>();
+		level2Frame = new LinkedHashMap<Integer, SortedSet<FrameData>>();
 		matchingFrames = new LinkedHashMap<Integer, SortedSet<FrameData>>();
 		
 		t1=700;
+		n=2;
 	}
 	
 	//Method to find if a location is present and is homozygous or not.
@@ -93,11 +94,11 @@ public class ConsumerDataPrivacyHBA {
 		return (my.start==party.start && my.end==party.end && my.hashValue.contentEquals(party.hashValue)) ? true : false;		
 	}
 	
-	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> party) {
+	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> current,LinkedHashMap <Integer, SortedSet<FrameData>> party) {
 		int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
 		
-		//System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
-		for(Map.Entry<Integer, SortedSet<FrameData>> entry : level1Frame.entrySet()) {
+		System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
+		for(Map.Entry<Integer, SortedSet<FrameData>> entry : current.entrySet()) {
 			count=aliceSize=bobSize=0;
 			chromosome=(entry.getKey());
 			SortedSet<FrameData> matchingSet = new TreeSet<FrameData>();
@@ -119,11 +120,13 @@ public class ConsumerDataPrivacyHBA {
 					}
 				}
 			}
+		//if (matchingFrames.containsKey(chromosome))	
+			 //matchingFrames.get(chromosome).put();
 		matchingFrames.put(chromosome,matchingSet);
-		//System.out.println("\n At Chromosome "+chromosome);
-		//System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
-		//System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
-		//System.out.println("\t\t No. of matching Frames are "+count);
+		System.out.println("\n At Chromosome "+chromosome);
+		System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
+		System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
+		System.out.println("\t\t No. of matching Frames are "+count);
 		}
 		
 	}
@@ -152,26 +155,28 @@ public class ConsumerDataPrivacyHBA {
 		for(Map.Entry<Integer, SortedMap<Integer, String>> entry : locGene.entrySet()) {		
 			chromosome=(entry.getKey());
 			SortedSet<FrameData> set = new TreeSet<FrameData>();
+			SortedSet<FrameData> l2set = new TreeSet<FrameData>();
 			// SortedMap Iterator containing location and genotype
 			SortedMap<Integer, String> temp = entry.getValue(); 
 			Set<Entry<Integer, String>> sm =temp.entrySet();
 			Iterator<Entry<Integer, String>> i=sm.iterator();
-			int counter=0,start=0,end=0;
+			int counter=0,start=0,end=0, l2Start=0,l2End=0,x=1,y=3;
 			StringBuilder substring= new StringBuilder("");
+			StringBuilder l2Substring =new StringBuilder("");
 			while (i.hasNext()) 
 	        { 
 				
 				Map.Entry<Integer, String> m = (Map.Entry<Integer, String>)i.next();
 				
 				location=(Integer) m.getKey();
-				
+				counter++;
 				// Beginning of Frame to capture start location and initialize the substing to empty
-				if (counter==0) {		
+				if (counter==1 || (counter % t1 ==1)) {		
 					start=(Integer) m.getKey();
 					substring.delete(0, substring.length());
 				}  
 				// for each location increasing the counter
-	            counter++;				   
+	            				   
 	            // capture the genotype value
 	            String value = (String) m.getValue(); 		
 	            
@@ -180,9 +185,9 @@ public class ConsumerDataPrivacyHBA {
 	            	substring.append(value);
 	            		
 	            //end of frame, capture end location and rsid to form the Frame Linked hashmap 
-	            if (counter==t1) {			
+	            if (counter % t1 == 0 && start > 0) {			
 					end=(Integer) m.getKey();
-					counter=0;                    
+					//counter=0;                    
 					String startRsid=findRsid(chromosome,start);
 					String endRsid=findRsid(chromosome,end);
 
@@ -193,12 +198,47 @@ public class ConsumerDataPrivacyHBA {
 					
 					FrameData obj=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce));
 					set.add(obj);
+					start=0;
 					substring.delete(0, substring.length());
 				}
+	            
+	            if (counter == ( x * (t1/n) + 1) ) {
+	            	
+	            	x+=2;
+	            	l2Start=(Integer) m.getKey();
+	            	l2Substring.delete(0, l2Substring.length());
+	            	//System.out.println(l2Start);
+	            }
+	            
+	            
+	            if (counter == (y*(t1/n))) {
+	            	y+=2;
+	            	l2End=(Integer) m.getKey();
+	            	FrameData obj=new FrameData(l2Start,findRsid(chromosome,l2Start),l2End,findRsid(chromosome,l2End),getSHAWitnNonce(l2Substring.toString(),nonce));
+	            	l2set.add(obj);
+	            	
+	            	l2Substring.delete(0, l2Substring.length());
+	            	//System.out.println(l2End);
+	            }
+	            
+	            if (counter>t1/n) {
+	            	if (isHomozygous((String) m.getValue())  && findLocationInMaps(chromosome,location,gene))
+	            		l2Substring.append((String) m.getValue());
+	            	
+	            }
+	            
+	            
+	            
+	            
+	            
 	        } 
 			level1Frame.put(chromosome,set);
-		}	
-		//displaySet(level1FRAMES);
+			level2Frame.put(chromosome,l2set);
+		}
+		//System.out.println("Level1 Frame\n\n");
+		//displaySet(level1Frame);
+		//System.out.println("Level2 Frame\n\n");
+		//displaySet(level2Frame);
 	}
 	 
 	//Method to check if the chromsome is between 1-22, rest are ignored
@@ -249,15 +289,11 @@ public class ConsumerDataPrivacyHBA {
 	}
 	
 	//Method to find RSID given the chromosome and location
-    // OFK: why not something like locRsid.get(""+key).get(location) to gain full benefit of top-level Map
-    // Zee : Fixed
 	public String findRsid(int key, int location) {
 		return locRsid.get(key).get(location);
 	}
 	
 	//Method to find Genotype given the chromosome and location
-    // OFK: same issue as findRsid
-    // Zee: Fixed
 	public String findGenotype(int key, int location) {
 		/*
 		 * for(Map.Entry<String, SortedMap<Integer, String>> entry : locGene.entrySet())
@@ -289,16 +325,6 @@ public class ConsumerDataPrivacyHBA {
 		return my_nonce;
 	}
 
-
-    // since Java ints are only 32 bits, evil Bob could take Alice's declared
-    //  hash-of-nonce and by brute force determine what her nonce-contribution value is going
-    // to be, and thereby be able to determine his own nonce-contribution so as to force
-    // the nonce to a previously-used value.   A naive brute force attack like this would
-    // not work for 64-bit longs, though maybe some more sophisticated approach would.  For
-    // the short term, I recommend that you just make  nonces "long" instead of "int".
-
-
-    
 	//method to store other parties nonce
 	public void getNonce(long n) {
 		party_nonce=n;
@@ -385,8 +411,7 @@ public class ConsumerDataPrivacyHBA {
   
         // For specifying wrong message digest algorithms 
         catch (NoSuchAlgorithmException e) { 
-            System.out.println("Exception thrown"
-                               + " for incorrect algorithm: " + e); 
+            System.out.println("Exception thrown for incorrect algorithm: " + e); 
   
             return null; 
         } 
