@@ -16,7 +16,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.concurrent.ThreadLocalRandom; 
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -43,6 +43,7 @@ public class ConsumerDataPrivacyHBA {
 	//Nonce fields
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
+	
 	
 	public ConsumerDataPrivacyHBA() {
 		
@@ -179,7 +180,6 @@ public class ConsumerDataPrivacyHBA {
 	            				   
 	            // capture the genotype value
 	            String value = (String) m.getValue(); 		
-	            
 	            // form a substring only if its homozygous and the locations match in both parties
 	            if (isHomozygous(value)  && findLocationInMaps(chromosome,location,gene)) // && findLocationInMaps(chromosome,location,gene)					
 	            	substring.append(value);
@@ -250,38 +250,10 @@ public class ConsumerDataPrivacyHBA {
 		return false;
 			
 	}
+	
+	
 
-	//Data File Parser
-	public void readFile(String location) {
-				
-		String line ="";
-		try {
-			FileReader fr = new FileReader(location);
-			BufferedReader bf =new BufferedReader(fr);
-			while ((line = bf.readLine()) != null) {
-				String[] row=line.split("\t");
-				// Read chromosomes only between 1 and 22
-				if (isParsable(row[1])){
-					if ( locGene.containsKey(Integer.parseInt(row[1])) ) {
-						locGene.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[3]);
-						locRsid.get(Integer.parseInt(row[1])).put(Integer.parseInt(row[2]),row[0]);
-					}
-					else{
-						SortedMap <Integer,String> sm=new TreeMap<Integer,String>();
-						SortedMap <Integer,String> sm1=new TreeMap<Integer,String>();
-						sm.put(Integer.parseInt(row[2]),row[3]);
-						sm1.put(Integer.parseInt(row[2]),row[0]);
-						locGene.put(Integer.parseInt(row[1]),sm);	
-						locRsid.put(Integer.parseInt(row[1]),sm1);
-					}			
-				}
-			}
-			bf.close();
-		}catch(IOException e) {
-		System.out.println("Exception in reading at "+location);
-		e.printStackTrace();
-	}	
-	}
+	
 	
 	//Method to check is an allele is Homozygous or not
 	public boolean isHomozygous(String allele) {
@@ -417,6 +389,79 @@ public class ConsumerDataPrivacyHBA {
         } 
     } 
 	
+	
+	
+	
+	
+	public void readFile(String location) throws IOException{
+		//int count =0;
+		String s="";
+		FileReader fr = new FileReader(location);
+        BufferedReader bf = new BufferedReader(fr);
+        while ( (s= bf.readLine()) != null) {
+        	
+        	int index = 0;
+            int len = s.length();
+            
+            for(; (index  < len) && (s.charAt(index) != '\t'); index++) {}
+            String rsid= s.substring(0, index);
+            
+            index++;
+            
+            char c;
+            c = s.charAt(index);
+            int chromosome = c & 0xF;
+            index++;
+            c = s.charAt(index);
+            if(c != '\t') {
+            	chromosome = (chromosome << 3) + (chromosome << 1) + (c & 0xF);
+                index++;
+            }
+            
+          
+            
+            if((chromosome > 22) || (chromosome <=0)) {
+            	bf.close();
+            	//System.out.println("Number of rows : "+count );
+            	return;
+            	}
+            
+            index++;
+            
+            int loc = 0;
+            for(;index  < len; index++) {
+                c = s.charAt(index);
+                if(c != '\t') {
+                	loc = (loc << 3) + (loc << 1) + (c & 0xF);
+                } else {
+                    break;
+                }
+            }
+           
+            String genotype=s.substring(len-2,len);
+            
+            if ( locGene.containsKey(chromosome) ) {
+				locGene.get(chromosome).put(loc,genotype);
+				locRsid.get(chromosome).put(loc,rsid);
+			}
+            else{
+				SortedMap <Integer,String> sm=new TreeMap<Integer,String>();
+				SortedMap <Integer,String> sm1=new TreeMap<Integer,String>();
+				sm.put(loc,genotype);
+				sm1.put(loc,rsid);
+				locGene.put(chromosome,sm);	
+				locRsid.put(chromosome,sm1);
+			}
+            //count++;
+            
+            
+            
+        }
+        
+        
+        bf.close();
+        //System.out.println("Number of rows : "+count );
+        }
 	
 	
 }

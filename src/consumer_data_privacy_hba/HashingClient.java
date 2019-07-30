@@ -1,10 +1,11 @@
 package consumer_data_privacy_hba;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class HashingClient {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
 		long startTime,endTime,duration;
@@ -43,9 +44,8 @@ public class HashingClient {
 		//System.out.println("\n BOB's Data:");
 		//bob.displayNonce();
 		
-		var x=0;
 		if (alice.verifyHashNonce() && bob.verifyHashNonce())
-			x=1;//System.out.println("\n\t\t ***** Parties are HONEST ***** ");
+			System.out.print("");
 		else {
 			if (!alice.verifyHashNonce())
 				System.out.println("\n\t\t ***** Bob is DISHONEST ***** ");
@@ -66,8 +66,8 @@ public class HashingClient {
 		
 		//System.out.println("\n Reading Files started");
 		startTime = System.nanoTime();
-		bob.readFile("input/dad.txt");
-		alice.readFile("input/sister.txt");
+		bob.readFile("input/dad_all.txt");
+		alice.readFile("input/sister_all.txt");
 		
 		endTime = System.nanoTime();
 		duration=endTime-startTime;
@@ -131,6 +131,7 @@ public class HashingClient {
 		//bob.displaySet(bob.matchingFrames);
 		
 		//bob.displaySet(bob.matchingFrames);
+		
 		
 
 	}

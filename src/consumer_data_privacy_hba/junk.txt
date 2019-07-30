@@ -1,3 +1,5 @@
+
+
 	// since Java ints are only 32 bits, evil Bob could take Alice's declared
     //  hash-of-nonce and by brute force determine what her nonce-contribution value is going
     // to be, and thereby be able to determine his own nonce-contribution so as to force
@@ -248,6 +250,96 @@ public void readFromBob() {
 		
 		
 		
+	//Data File Parser
+	public void readFile(String location) {
+		String line ="";
+		int chr=-1,loc;
+		int previous=0;
+		try {
+			FileReader fr = new FileReader(location);
+			BufferedReader bf =new BufferedReader(fr);
+			while ((line = bf.readLine()) != null) {
+				String[] row=line.split("\t");
+				// Read chromosomes only between 1 and 22
+				if (Character.isDigit(row[1].charAt(0))) 
+					chr=Integer.parseInt(row[1]);
+				else {
+					bf.close();
+					return ;
+				}
+				
+				loc=Integer.parseInt(row[2]);
+				
+				//for first entry of  chromosomes
+				if ( chr > previous ) { 
+					SortedMap <Integer,String> sm =new TreeMap<Integer,String>();
+					SortedMap <Integer,String> sm1=new TreeMap<Integer,String>();
+					sm.put(loc,row[3]);
+					sm1.put(loc,row[0]);
+					locGene.put(chr,sm);	
+					locRsid.put(chr,sm1);	
+					previous=chr;
+					}
+				//for existing ones
+				else{
+					locGene.get(chr).put(loc,row[3]);
+					locRsid.get(chr).put(loc,row[0]);
+				}			
+				
+			}
+			bf.close();
+		}catch(IOException e) {
+		System.out.println("Exception in reading at "+location);
+		e.printStackTrace();
+		}	
+	}
+	
+	
+	
+	
+	
+	
+	
+	public boolean readAnotherFile(String location) {
+		String line ="";
+		int chr=-1,loc;
+		int previous=0;
+		try {
+			FileReader fr = new FileReader(location);
+			BufferedReader bf =new BufferedReader(fr);
+			while ((line = bf.readLine()) != null) {
+				String[] row=line.split("\t");
+				if (Character.isDigit(row[1].charAt(0))) 
+					chr=Integer.parseInt(row[1]);
+				else {
+					bf.close();
+					return true;
+				}
+				
+				loc=Integer.parseInt(row[2]);
+				
+				if ( chr > previous ) { 
+					al.add(row[1]);
+					al.add(row[2]);
+					al.add(row[0]);
+					previous=chr;
+					}
+				//for existing ones
+				else{
+					al.add(row[1]);
+					al.add(row[2]);
+					al.add(row[0]);
+				}
+			
+			}
+			bf.close();
+			return true;
+		}catch(IOException e) {
+			System.out.println("Exception in reading at "+location);
+			e.printStackTrace();
+			}
+		return true;
+	}
 		
 		
 		
