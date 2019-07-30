@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger; 
 import java.security.MessageDigest; 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -462,6 +463,22 @@ public class ConsumerDataPrivacyHBA {
         bf.close();
         //System.out.println("Number of rows : "+count );
         }
+	
+	
+	
+	
+	public void read(String location) throws IOException{
+		ArrayList<String> al=new ArrayList<String>();
+		String line="";
+		FileReader fr = new FileReader(location);
+		BufferedReader bf =new BufferedReader(fr);
+		while ((line = bf.readLine()) != null) {
+			al.add(line);
+		}
+		bf.close();
+		System.out.println(al);
+	}
+	
 	
 	
 }

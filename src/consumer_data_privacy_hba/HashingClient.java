@@ -132,6 +132,17 @@ public class HashingClient {
 		
 		//bob.displaySet(bob.matchingFrames);
 		
+		ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
+		ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
+		
+		startTime = System.nanoTime();
+		b.read("input/dad_all.txt");
+		a.read("input/sister_all.txt");
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n File Read Simple :"+ TimeUnit.NANOSECONDS.toMillis(duration));
 		
 
 	}
