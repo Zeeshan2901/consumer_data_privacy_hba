@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest; 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,6 +19,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 
 /**
@@ -26,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 
-public class ConsumerDataPrivacyHBA {
+public class ConsumerDataPrivacyHBA<genes> {
 	
 	// Stores Chromosome as Key and <Location,Genotype> in the SM
 	Map <Integer, SortedMap <Integer,String>> locGene;
@@ -45,6 +47,10 @@ public class ConsumerDataPrivacyHBA {
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
 	
+	final static int CHROMOSOME_COUNT =22;
+	
+	ArrayList<GenotypedData>[] genes;
+	
 	
 	public ConsumerDataPrivacyHBA() {
 		
@@ -57,7 +63,74 @@ public class ConsumerDataPrivacyHBA {
 		
 		t1=700;
 		n=2;
+		
+		
+		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
+		for (int i=1; i<=CHROMOSOME_COUNT; i++) 
+			genes[i]= new ArrayList<GenotypedData>();
+			
+		
 	}
+	
+	
+	public void csvParser(String location) throws IOException{
+		
+		String s="";
+		FileReader fr = new FileReader(location);
+        BufferedReader bf = new BufferedReader(fr);
+        while ( (s= bf.readLine()) != null) {
+        	GenotypedData obj =new GenotypedData();
+        	int index = 0;
+            int len = s.length();
+            
+            for(; (index  < len) && (s.charAt(index) != '\t'); index++) {}
+            obj.rsid= s.substring(0, index);
+            
+            index++;
+            
+            char c;
+            c = s.charAt(index);
+            int chromosome = c & 0xF;
+            index++;
+            c = s.charAt(index);
+            if(c != '\t') {
+            	chromosome = (chromosome << 3) + (chromosome << 1) + (c & 0xF);
+                index++;
+            }
+            
+          
+            
+            if((chromosome > CHROMOSOME_COUNT) || (chromosome <=0)) {
+            	bf.close();
+            	return;
+            }
+            
+            ArrayList <GenotypedData> gen =  genes[chromosome]; 
+            index++;
+            
+            int loc = 0;
+            for(;index  < len; index++) {
+                c = s.charAt(index);
+                if(c != '\t') {
+                	loc = (loc << 3) + (loc << 1) + (c & 0xF);
+                } else {
+                    break;
+                }
+            }
+            obj.location=loc;
+
+            //index++;
+            obj.gene1=s.charAt(len-2);
+            obj.gene2=s.charAt(len-1);
+        	gen.add(obj);
+        	
+        	
+        }
+		bf.close();
+		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(genes[x]));
+	}
+	
+	
 	
 	//Method to find if a location is present and is homozygous or not.
 	public boolean findLocationInMaps(int chromosome, int location, Map <Integer, SortedMap <Integer,String>> gene) {		
@@ -478,6 +551,8 @@ public class ConsumerDataPrivacyHBA {
 		bf.close();
 		System.out.println(al);
 	}
+	
+	
 	
 	
 	

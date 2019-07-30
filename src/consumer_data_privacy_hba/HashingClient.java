@@ -12,8 +12,8 @@ public class HashingClient {
 		
 		//System.out.println("Creating objects !!");
 	    startTime = System.nanoTime();
-		ConsumerDataPrivacyHBA bob = new ConsumerDataPrivacyHBA();
-		ConsumerDataPrivacyHBA alice = new ConsumerDataPrivacyHBA();
+		ConsumerDataPrivacyHBA<?> bob = new ConsumerDataPrivacyHBA<Object>();
+		ConsumerDataPrivacyHBA<?> alice = new ConsumerDataPrivacyHBA<Object>();
 		endTime = System.nanoTime();
 		duration=endTime-startTime;
 		
@@ -119,8 +119,8 @@ public class HashingClient {
 		//System.out.println("\n Frame Matching");
 		startTime = System.nanoTime();
 
-		bob.DNAMatchUsingCustomObjects(bob.level1Frame,alice.level1Frame);
-		bob.DNAMatchUsingCustomObjects(bob.level2Frame,alice.level2Frame);
+		//bob.DNAMatchUsingCustomObjects(bob.level1Frame,alice.level1Frame);
+		//bob.DNAMatchUsingCustomObjects(bob.level2Frame,alice.level2Frame);
 		endTime = System.nanoTime();
 		duration=endTime-startTime;
 		
@@ -132,18 +132,21 @@ public class HashingClient {
 		
 		//bob.displaySet(bob.matchingFrames);
 		
-		ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
-		ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
+		ConsumerDataPrivacyHBA<?> a = new ConsumerDataPrivacyHBA<Object>();
+		ConsumerDataPrivacyHBA<?> b = new ConsumerDataPrivacyHBA<Object>();
 		
 		startTime = System.nanoTime();
-		b.read("input/dad_all.txt");
-		a.read("input/sister_all.txt");
+		b.csvParser("input/dad_all.txt");
+		a.csvParser("input/sister_all.txt");
 		
 		endTime = System.nanoTime();
 		duration=endTime-startTime;
 		
 		System .out.println ("\n File Read Simple :"+ TimeUnit.NANOSECONDS.toMillis(duration));
 		
+		for (int i =0 ; i<a.genes.length; i++)
+			System.out.println("Chromosome: "+i+" Data: "+a.genes[i]);
+			
 
 	}
 
