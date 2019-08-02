@@ -41,6 +41,16 @@ public class ConsumerDataPrivacyHBA<genes> {
 	LinkedHashMap <Integer, SortedSet<FrameData>> level1Frame;
 	LinkedHashMap <Integer, SortedSet<FrameData>> level2Frame;
 	LinkedHashMap <Integer, SortedSet<FrameData>> matchingFrames;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//Size of Frame
 	int t1, n;		
 	//Nonce fields
@@ -50,6 +60,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 	final static int CHROMOSOME_COUNT =22;
 	
 	ArrayList<GenotypedData>[] genes;
+	
 	
 	
 	public ConsumerDataPrivacyHBA() {
@@ -64,8 +75,10 @@ public class ConsumerDataPrivacyHBA<genes> {
 		t1=700;
 		n=2;
 		
-		
-		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
+		//int a[]=new int[5];
+		//genes = new ArrayList<GenotypedData>[CHROMOSOME_COUNT+1];
+		//
+		genes  = new ArrayList[CHROMOSOME_COUNT+1]; //
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) 
 			genes[i]= new ArrayList<GenotypedData>();
 			
@@ -73,11 +86,14 @@ public class ConsumerDataPrivacyHBA<genes> {
 	}
 	
 	
+	
+	//CSVParser to parse the csv file and put the data into
+	//ArrayList of desfined objects
 	public void csvParser(String location) throws IOException{
 		
 		String s="";
 		FileReader fr = new FileReader(location);
-        BufferedReader bf = new BufferedReader(fr);
+		BufferedReader bf = new BufferedReader(fr);
         while ( (s= bf.readLine()) != null) {
         	GenotypedData obj =new GenotypedData();
         	int index = 0;
@@ -122,13 +138,166 @@ public class ConsumerDataPrivacyHBA<genes> {
             //index++;
             obj.gene1=s.charAt(len-2);
             obj.gene2=s.charAt(len-1);
-        	gen.add(obj);
+            gen.add(obj);
         	
         	
         }
 		bf.close();
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(genes[x]));
 	}
+	
+	
+	//Method to remove special character -- from Arraylist genes
+	public void removeSpcChars(ArrayList<GenotypedData>[] locGene) {
+		int loc=0;
+		int loc1=0;
+		for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
+			for(int j=0; j< genes[i].size(); j++) {
+				GenotypedData obj= genes[i].get(j);
+				if (obj.gene1=='-'&& obj.gene2=='-') {
+					loc=obj.getLocation();
+					loc1=locGene[i].get(j).getLocation();
+					if (loc==loc1) {
+						locGene[i].remove(j);
+						genes[i].remove(j);
+					}	
+					else{
+						Iterator<GenotypedData> itr=locGene[i].iterator();
+						 while (itr.hasNext()) {
+							 GenotypedData o=(GenotypedData)itr.next();
+							 loc1=o.getLocation();
+							 if (loc==loc1) {
+								 genes[i].remove(j);
+								 itr.remove(); 
+								 break;
+							 }
+						 }
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	//Method to implement Frames
+	public void frame(ArrayList<GenotypedData>[] locGene) {
+		
+		//iterating the outer array for each 22 chromosomes
+		for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
+			StringBuilder substring= new StringBuilder("");
+			int counter =0;
+			int start=0;
+			int end =0;
+			String startRsid="";
+			String endRsid="";
+			SortedSet<FrameData> set = new TreeSet<FrameData>();
+		//iterating through the data of each chromosomes
+			for(int j=0; j<genes[i].size(); j++) {
+				
+				counter++;
+				GenotypedData obj= genes[i].get(j);
+				
+				//System.out.println("\nCurrent Object " +obj);
+				//System.out.println("\nLocGene Object " +locGene[i].get(j));
+				//System.out.println("\n"+ifLocationExistsinOtherParty(i,j,obj,locGene));
+				
+				
+				
+		//capture the start of the frame and empty the genotype string
+				if (counter==1 || (counter % t1 ==1)) {
+					start=obj.getLocation();
+					startRsid=obj.getRSID();
+					substring.delete(0, substring.length());
+				}
+				
+		//form a string only if the genotype is homozygous and the location exists in other party and it is homozygus as well 
+				if (obj.gene1==obj.gene2 && ifLocationExistsinOtherParty(i,j,obj,locGene)) {
+					substring.append(String.valueOf(obj.gene1));
+					substring.append(String.valueOf(obj.gene2));
+				}
+				
+				
+		//capture the end of string 
+		//empty the genotype string
+		//add the frame data object in sortedset
+				if (counter % t1 == 0 && start > 0) {
+					end=obj.location;
+					endRsid=obj.getRSID();
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce));
+					set.add(fr);
+					start=0;
+					substring.delete(0, substring.length());
+				}
+				
+				
+				
+				
+			}
+			
+			level1Frame.put(i,set);
+		}
+		
+	}
+	
+	
+	
+	
+	public boolean ifLocationExistsinOtherParty(int chromosome, int index,GenotypedData obj, ArrayList<GenotypedData>[] locGene) {
+		
+		
+		GenotypedData a= locGene[chromosome].get(index);
+		if (a.location==obj.location && a.rsid.contentEquals(obj.getRSID())) {
+			if (a.gene1==a.gene2)
+				return true;
+			else
+				return false;
+		}
+
+		//This part is not executing yet
+		int l=0;
+		int r= locGene[chromosome].size();
+		
+		while (l<r) {
+			if (l==0 && r== locGene[chromosome].size())
+				System.out.println("It came here");
+			int m= (l+r)/2;
+			GenotypedData o= locGene[chromosome].get(m);
+			if (o.location==obj.location && o.rsid.contentEquals(obj.getRSID())) {
+				if (o.gene1==o.gene2)
+					return true;
+				else
+					return false;
+			}
+			else if (o.location<obj.location)
+				l=m+1;
+			else if (o.location > obj.location)
+				r=m-1;
+			
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

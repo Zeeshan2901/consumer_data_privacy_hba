@@ -32,7 +32,23 @@ public class GenotypedData implements Comparable<GenotypedData>{
 	public String toString() {
 		return "Location:  " + this.location + 
 				", RSID: " + this.rsid +
-				", Genotype: " +this.gene1+this.gene2;
+				", Genotype: " +this.gene1+this.gene2 +" || ";
+	}
+	
+	public int getLocation() {
+		return this.location;
+	}
+	
+	public String getRSID() {
+		return this.rsid;
+	}
+	
+	public char getGene1() {
+		return (this.gene1);
+	}
+	
+	public char getGene2() {
+		return (this.gene2);
 	}
 
 }

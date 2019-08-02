@@ -1,14 +1,108 @@
 package consumer_data_privacy_hba;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 public class HashingClient {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		
 		long startTime,endTime,duration;
+		
+		ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
+		ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
+		
+		startTime = System.nanoTime();
+		b.hashOfPartyNonce=a.sendHash();
+		a.hashOfPartyNonce=b.sendHash();
+		
+		
+		b.party_nonce=a.sendRandom();
+		a.party_nonce=b.sendRandom();
+		
+	
+		
+		if (a.verifyHashNonce() && b.verifyHashNonce())
+			System.out.print("");
+		else {
+			if (!a.verifyHashNonce())
+				System.out.println("\n\t\t ***** Bob is DISHONEST ***** ");
+			if(!b.verifyHashNonce())
+				System.out.println("\n\t\t ***** ALICE is DISHONEST ***** ");
+		}
+			
+		
+		a.caluclateNonce();
+		b.caluclateNonce();
+		
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Nonce :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+
+		
+		startTime = System.nanoTime();
+		b.csvParser("input/dad_all.txt");
+		a.csvParser("input/sister_all.txt");
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n File Read Simple :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		
+		//for (int i =1 ; i<b.genes.length; i++) {
+			//System.out.println("\nChromosome" +i+" has "+b.genes[i].size()+" elements!");
+		//}
+		
+	    startTime = System.nanoTime();
+	    
+	    b.removeSpcChars(a.genes);
+	    a.removeSpcChars(b.genes);
+		
+	    endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Spce Chars Removal :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+	    startTime = System.nanoTime();
+
+		b.frame(a.genes);
+		a.frame(b.genes);
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Frame :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		
+		
+		
+	    startTime = System.nanoTime();
+
+		b.DNAMatchUsingCustomObjects(b.level1Frame,a.level1Frame);
+		//bob.DNAMatchUsingCustomObjects(bob.level2Frame,alice.level2Frame);
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Matching :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		//System.out.println("Creating objects !!");
 	    startTime = System.nanoTime();
@@ -132,20 +226,9 @@ public class HashingClient {
 		
 		//bob.displaySet(bob.matchingFrames);
 		
-		ConsumerDataPrivacyHBA<?> a = new ConsumerDataPrivacyHBA<Object>();
-		ConsumerDataPrivacyHBA<?> b = new ConsumerDataPrivacyHBA<Object>();
 		
-		startTime = System.nanoTime();
-		b.csvParser("input/dad_all.txt");
-		a.csvParser("input/sister_all.txt");
-		
-		endTime = System.nanoTime();
-		duration=endTime-startTime;
-		
-		System .out.println ("\n File Read Simple :"+ TimeUnit.NANOSECONDS.toMillis(duration));
-		
-		for (int i =0 ; i<a.genes.length; i++)
-			System.out.println("Chromosome: "+i+" Data: "+a.genes[i]);
+		//for (int i =0 ; i<a.genes.length; i++)
+			//System.out.println("Chromosome: "+i+" Data: "+a.genes[i]);
 			
 
 	}
