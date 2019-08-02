@@ -213,7 +213,7 @@ public class HashingClient {
 		//System.out.println("\n Frame Matching");
 		startTime = System.nanoTime();
 
-		//bob.DNAMatchUsingCustomObjects(bob.level1Frame,alice.level1Frame);
+		bob.DNAMatchUsingCustomObjects(bob.level1Frame,alice.level1Frame);
 		//bob.DNAMatchUsingCustomObjects(bob.level2Frame,alice.level2Frame);
 		endTime = System.nanoTime();
 		duration=endTime-startTime;

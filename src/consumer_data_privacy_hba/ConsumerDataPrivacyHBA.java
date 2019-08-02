@@ -338,7 +338,8 @@ public class ConsumerDataPrivacyHBA<genes> {
 		return (my.start==party.start && my.end==party.end && my.hashValue.contentEquals(party.hashValue)) ? true : false;		
 	}
 	
-	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> current,LinkedHashMap <Integer, SortedSet<FrameData>> party) {
+	public void DNAMatchUsingCustomObjects(LinkedHashMap <Integer, SortedSet<FrameData>> current,
+			LinkedHashMap <Integer, SortedSet<FrameData>> party) {
 		int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
 		
 		System.out.println("\n\n\n\t\t\t****FRAME MATCH RESULTS****");
@@ -367,10 +368,10 @@ public class ConsumerDataPrivacyHBA<genes> {
 		//if (matchingFrames.containsKey(chromosome))	
 			 //matchingFrames.get(chromosome).put();
 		matchingFrames.put(chromosome,matchingSet);
-		System.out.println("\n At Chromosome "+chromosome);
-		System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
-		System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
-		System.out.println("\t\t No. of matching Frames are "+count);
+		//System.out.println("\n At Chromosome "+chromosome);
+		//System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
+		//System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
+		//System.out.println("\t\t No. of matching Frames are "+count);
 		}
 		
 	}
