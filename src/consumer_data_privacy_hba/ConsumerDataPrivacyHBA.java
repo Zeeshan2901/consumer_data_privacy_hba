@@ -60,7 +60,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 		String s="";
 		FileReader fr = new FileReader(location);
 		BufferedReader bf = new BufferedReader(fr);
-        while ( (s= bf.readLine()) != null) {
+		while ( (s= bf.readLine()) != null) {
         	GenotypedData obj =new GenotypedData();
         	int index = 0;
             int len = s.length();
