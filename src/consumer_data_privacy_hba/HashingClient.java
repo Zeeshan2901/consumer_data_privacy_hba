@@ -1,11 +1,13 @@
 package consumer_data_privacy_hba;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class HashingClient {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, NoSuchProviderException {
 				
 		ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
 		ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
@@ -29,6 +31,7 @@ public class HashingClient {
 		a.caluclateNonce();
 		b.caluclateNonce();
 		
+		a.displayNonce();
 		b.csvParser("input/dad_all.txt");
 		a.csvParser("input/sister_all.txt");
 		

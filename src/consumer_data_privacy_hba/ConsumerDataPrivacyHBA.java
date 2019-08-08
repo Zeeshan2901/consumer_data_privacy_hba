@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.math.BigInteger; 
 import java.security.MessageDigest; 
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 
@@ -25,7 +26,7 @@ import java.util.stream.IntStream;
 public class ConsumerDataPrivacyHBA<genes> {
 	
 	//Size of Frame
-	int t1, n;		
+	int t1, n;
 	//Nonce fields
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
@@ -41,7 +42,6 @@ public class ConsumerDataPrivacyHBA<genes> {
 	public ConsumerDataPrivacyHBA() {		
 		t1=700;
 		n=1;
-
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
 		match  = new ArrayList[CHROMOSOME_COUNT+1];
@@ -55,7 +55,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 	
 	public void frameMatch(ArrayList<FrameData>[] current,
 			ArrayList<FrameData>[]party) {
-			int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
+			int count=0, chromosome=0, aliceSize=0,bobSize=0,Alice=0,Bob=0,Total=0 ;
 			for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
 				count=aliceSize=bobSize=0;
 				chromosome=i;
@@ -78,7 +78,14 @@ public class ConsumerDataPrivacyHBA<genes> {
 				System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
 				System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
 				System.out.println("\t\t No. of matching Frames are "+count);
+				Alice+=aliceSize;
+				Bob+=bobSize;
+				Total+=count;
 			}
+			System.out.println("\n\n\n\t Total No. of  Alice's Frames are "+Alice);
+			System.out.println("\t Total No. of   Bob's  Frames are "+Bob);
+			System.out.println("\t Total No. of matching Frames are "+Total);
+			
 	}
 
 			
@@ -291,12 +298,18 @@ public class ConsumerDataPrivacyHBA<genes> {
 	
 	
 	//Method to generate a Random number
-	public long generateRandom() {
-		return my_nonce =ThreadLocalRandom.current().nextLong(100000,32671234);
+	public long generateRandom() throws NoSuchAlgorithmException, NoSuchProviderException {
+		
+		SecureRandom secureRandomNumber = SecureRandom.getInstance("SHA1PRNG", "SUN");
+		byte[] randomBytes = new byte[128];
+		secureRandomNumber.nextBytes(randomBytes);
+		return my_nonce=secureRandomNumber.nextLong();
+		
+		//my_nonce =ThreadLocalRandom.current().nextLong(-9223372036854775807L,9223372036854775807L)
 	}
 	
 	//Method to send Hash of random number to the other party
-	public String sendHash() {
+	public String sendHash() throws NoSuchAlgorithmException, NoSuchProviderException {
 		return(hashOfMyNonce=getSHA(String.valueOf(generateRandom())));
 	}
 	
