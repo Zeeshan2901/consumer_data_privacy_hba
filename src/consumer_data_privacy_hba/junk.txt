@@ -1,4 +1,29 @@
-
+//level2 frame capturing the start
+				if (counter == ( x * (t1/n) + 1) ) {
+					x+=2;
+	            	l2Start=obj.getLocation();
+	            	l2StartRsid=obj.getRSID();
+	            	l2Substring.delete(0, l2Substring.length());
+				}
+				
+				
+				
+				if (counter >= t1/4) {
+						l2Substring.append(String.valueOf(obj.gene1));
+						l2Substring.append(String.valueOf(obj.gene2));
+					}
+				
+				
+//l2 frame capture the end
+				if (counter == (y*(t1/n)) && l2Start>0) {
+	            	y+=2;
+	            	l2End=obj.getLocation();
+	            	l2EndRsid=obj.getRSID();
+	            	FrameData obj1=new FrameData(l2Start,l2EndRsid,l2End,l2EndRsid,getSHAWitnNonce(l2Substring.toString(),nonce));
+	            	set.add(obj1);	            	
+	            	l2Substring.delete(0, l2Substring.length());
+	            	l2Start=0;
+	            }
 
 	// since Java ints are only 32 bits, evil Bob could take Alice's declared
     //  hash-of-nonce and by brute force determine what her nonce-contribution value is going
@@ -878,7 +903,158 @@ public class ConsumerDataPrivacyHBA {
 
 
 
+		Main File
 		
+		
+		 startTime = System.nanoTime();
+
+		b.DNAMatchUsingCustomObjects(b.level1Frame,a.level1Frame);
+		//bob.DNAMatchUsingCustomObjects(bob.level2Frame,alice.level2Frame);
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Matching :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		
+		
+		
+		
+		
+		/*
+		
+		
+		
+		
+		
+		
+		
+		//System.out.println("Creating objects !!");
+	    startTime = System.nanoTime();
+		ConsumerDataPrivacyHBA<?> bob = new ConsumerDataPrivacyHBA<Object>();
+		ConsumerDataPrivacyHBA<?> alice = new ConsumerDataPrivacyHBA<Object>();
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Object creation :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		//obj.readFromAlice();
+		//obj.readFromBob();
+		//obj.hashMatch();
+		
+		// Generating Nonce
+		//System.out.println("\n Generating Nonce Started");
+		startTime = System.nanoTime();
+		bob.hashOfPartyNonce=alice.sendHash();
+		alice.hashOfPartyNonce=bob.sendHash();
+		
+		
+		//System.out.println("\n HASH sent by Alice to BOB : " +bob.hashOfPartyNonce);
+		//System.out.println("\n HASH sent by Bob to Alice : " +alice.hashOfPartyNonce);
+		
+		bob.party_nonce=alice.sendRandom();
+		alice.party_nonce=bob.sendRandom();
+		
+		//System.out.println("\n Random Number sent by Alice to BOB : " +bob.party_nonce);
+		//System.out.println("\n Random Number sent by Bob to Alice : " +alice.party_nonce);
+		
+		//System.out.println("\n ALICE's Data:");
+		//alice.displayNonce();
+		
+		//System.out.println("\n BOB's Data:");
+		//bob.displayNonce();
+		
+		if (alice.verifyHashNonce() && bob.verifyHashNonce())
+			System.out.print("");
+		else {
+			if (!alice.verifyHashNonce())
+				System.out.println("\n\t\t ***** Bob is DISHONEST ***** ");
+			if(!bob.verifyHashNonce())
+				System.out.println("\n\t\t ***** ALICE is DISHONEST ***** ");
+		}
+			
+		
+		alice.caluclateNonce();
+		bob.caluclateNonce();
+		
+		//System.out.println("\n Generating Nonce Ended !!");
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Nonce creation :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		//System.out.println("\n Reading Files started");
+		startTime = System.nanoTime();
+		bob.readFile("input/dad_all.txt");
+		alice.readFile("input/sister_all.txt");
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n File Read :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		
+		//System.out.println("\n Reading Files Ended");
+		
+		
+		//System.out.println("Special Characters -- () invoked");
+		startTime = System.nanoTime();
+		bob.removeSpecial(alice.locGene);
+		alice.removeSpecial(bob.locGene);
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n -- char removal :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		//System.out.println("Special Characters -- () ended");
+		//bob.locationMatch(alice.locGene);
+		//alice.locationMatch(bob.locGene);
+		
+		//System.out.println("\n\n\t\t\t\t ***** BOB's Data ***** ");
+		//System.out.println("\nContents of LocGene : \n" +bob.locGene);
+		//System.out.println("\nContents of LocRsid : \n" +bob.locRsid);
+		
+		
+		//System.out.println("\n Frames Implementation started");
+		startTime = System.nanoTime();
+
+		bob.implementFrames(alice.locGene);
+		
+		//System.out.println("\n\n\t\t\t\t ***** ALICE's Data ***** ");
+		//System.out.println("\nContents of LocGene : \n" +alice.locGene);
+		//System.out.println("\nContents of LocRsid : \n" +alice.locRsid);
+		alice.implementFrames(bob.locGene);
+		
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Frames :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		//System.out.println("\n Frames Implementation Ended!!");
+		
+		//System.out.println("\n\n\t\t\t\t ***** DNA Match Results ***** ");
+		//bob.hashMatch(alice.level1Frames);
+		
+		//bob.locMatch(alice.level1Frames);
+		
+		
+		//System.out.println("\n Frame Matching");
+		startTime = System.nanoTime();
+
+		bob.DNAMatchUsingCustomObjects(bob.level1Frame,alice.level1Frame);
+		//bob.DNAMatchUsingCustomObjects(bob.level2Frame,alice.level2Frame);
+		endTime = System.nanoTime();
+		duration=endTime-startTime;
+		
+		System .out.println ("\n Matching :"+ TimeUnit.NANOSECONDS.toMillis(duration));
+		//alice.showSpecial();
+		//bob.showSpecial();
+		
+		//b.displaySet(bob.matchingFrames);
+		
+		//bob.displaySet(bob.matchingFrames);
+		
+		
+		//for (int i =0 ; i<a.genes.length; i++)
+			//System.out.println("Chromosome: "+i+" Data: "+a.genes[i]);
+			
+	*/
 		
 		
 		
