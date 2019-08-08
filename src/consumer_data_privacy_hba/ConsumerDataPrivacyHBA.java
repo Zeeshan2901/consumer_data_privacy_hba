@@ -34,23 +34,54 @@ public class ConsumerDataPrivacyHBA<genes> {
 	
 	ArrayList<GenotypedData>[] genes;
 	ArrayList<FrameData>[] frames;
+	ArrayList<FrameData>[] match;
 	
 	
 	
 	public ConsumerDataPrivacyHBA() {		
 		t1=700;
-		n=4;
+		n=1;
 
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
+		match  = new ArrayList[CHROMOSOME_COUNT+1];
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();
 			frames[i]= new ArrayList<FrameData>();
+			match[i]= new ArrayList<FrameData>();
 		}
 	}
 	
 	
-	
+	public void frameMatch(ArrayList<FrameData>[] current,
+			ArrayList<FrameData>[]party) {
+			int count=0, chromosome=0, aliceSize=0,bobSize=0 ;
+			for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
+				count=aliceSize=bobSize=0;
+				chromosome=i;
+				for(int j=0; j< current[i].size(); j++) {
+					FrameData cur=current[i].get(j);
+					aliceSize=current[i].size();
+					for(int k=0; k<party[i].size();k++) {
+						FrameData par=party[i].get(k);
+						bobSize=party[i].size();
+						if (someMatch(cur,par)) {
+							FrameData matchingObject= new FrameData(cur);
+							ArrayList <FrameData> gen =  match[i];
+							gen.add(matchingObject);
+							count++;
+							break;
+						}
+					}
+				}
+				System.out.println("\n At Chromosome "+chromosome);
+				System.out.println("\t\t No. of  Alice's Frames are "+aliceSize);
+				System.out.println("\t\t No. of   Bob's  Frames are "+bobSize);
+				System.out.println("\t\t No. of matching Frames are "+count);
+			}
+	}
+
+			
 	
 	
 	//CSVParser to parse the csv file and put the data into
@@ -150,7 +181,8 @@ public class ConsumerDataPrivacyHBA<genes> {
 	public void frame(int offset,ArrayList<GenotypedData>[] locGene) {
 		//iterating the outer array for each 22 chromosomes
 		for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
-			StringBuilder substring= new StringBuilder("");
+			StringBuilder evenSubstring= new StringBuilder("");
+			StringBuilder oddSubstring= new StringBuilder("");
 			int counter =0;
 			int start=0;
 			int end =0;
@@ -164,12 +196,20 @@ public class ConsumerDataPrivacyHBA<genes> {
 				if (counter==1 || (counter % t1 ==1)) {
 					start=obj.getLocation();
 					startRsid=obj.getRSID();
-					substring.delete(0, substring.length());
+					oddSubstring.delete(0, oddSubstring.length());
+					evenSubstring.delete(0, evenSubstring.length());
 				}	
 		//form a string only if the genotype is homozygous and the location exists in other party and it is homozygus as well 
 				if (obj.gene1==obj.gene2 && ifLocationExistsinOtherParty(i,j,obj,locGene)) {
-					substring.append(String.valueOf(obj.gene1));
-					substring.append(String.valueOf(obj.gene2));
+					if(counter%2==0) {
+						evenSubstring.append(String.valueOf(obj.gene1));
+						evenSubstring.append(String.valueOf(obj.gene2));
+					}
+					else {
+						oddSubstring.append(String.valueOf(obj.gene1));
+						oddSubstring.append(String.valueOf(obj.gene2));
+						
+					}
 					
 				}
 		//capture the end of string 
@@ -179,10 +219,11 @@ public class ConsumerDataPrivacyHBA<genes> {
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
 					gen.add(fr);
 					start=0;
-					substring.delete(0, substring.length());
+					oddSubstring.delete(0, oddSubstring.length());
+					evenSubstring.delete(0, evenSubstring.length());
 				}				
 			}		
 		}		
@@ -229,7 +270,10 @@ public class ConsumerDataPrivacyHBA<genes> {
 	
 	
 	public boolean someMatch(FrameData my, FrameData party) {
-		return (my.start==party.start && my.end==party.end && my.hashValue.contentEquals(party.hashValue)) ? true : false;		
+		return (my.start==party.start && my.end==party.end && 
+				(my.oddHashValue.contentEquals(party.oddHashValue) 
+						|| my.evenHashValue.contentEquals(party.evenHashValue) 
+						) ) ? true : false;		
 	}
 	
 	
