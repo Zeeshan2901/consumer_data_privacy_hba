@@ -33,7 +33,7 @@ public class HashingClient {
 		
 		a.displayNonce();
 		b.csvParser("input/dad_all.txt");
-		a.csvParser("input/sister_all.txt");
+		a.csvParser("input/son_all.txt");
 		
 	    b.removeSpcChars(a.genes);
 	    a.removeSpcChars(b.genes);

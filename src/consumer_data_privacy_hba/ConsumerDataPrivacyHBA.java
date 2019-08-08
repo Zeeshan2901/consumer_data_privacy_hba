@@ -31,6 +31,8 @@ public class ConsumerDataPrivacyHBA<genes> {
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
 	
+	char [] permissible= {'A','C','G','T'};
+	
 	final static int CHROMOSOME_COUNT =22;
 	
 	ArrayList<GenotypedData>[] genes;
@@ -155,15 +157,23 @@ public class ConsumerDataPrivacyHBA<genes> {
 	public void removeSpcChars(ArrayList<GenotypedData>[] locGene) {
 		int loc=0;
 		int loc1=0;
+		boolean removeFlag;
+		//removes the -- character or II,DD,DI values of Genotypes from the user and the corresponding 
+		//location from the party as well.
 		for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
 			for(int j=0; j< genes[i].size(); j++) {
 				GenotypedData obj= genes[i].get(j);
-				if (obj.gene1=='-'&& obj.gene2=='-') {
-					loc=obj.getLocation();
-					loc1=locGene[i].get(j).getLocation();
-					if (loc==loc1) {
-						locGene[i].remove(j);
-						genes[i].remove(j);
+				removeFlag=false;
+				if ( obj.gene1=='-'&& obj.gene2=='-'  ) {
+					//|| !isPermissible(obj.gene1,obj.gene2)
+					if (j < locGene[i].size()) {
+						loc=obj.getLocation();
+						loc1=locGene[i].get(j).getLocation();
+						if (loc==loc1) {
+							locGene[i].remove(j);
+							genes[i].remove(j);
+							removeFlag=true;
+						}
 					}	
 					else{
 						Iterator<GenotypedData> itr=locGene[i].iterator();
@@ -173,13 +183,32 @@ public class ConsumerDataPrivacyHBA<genes> {
 							 if (loc==loc1) {
 								 genes[i].remove(j);
 								 itr.remove(); 
+								 removeFlag=true;
 								 break;
 							 }
 						 }
 					}
+					if (removeFlag==false)
+						genes[i].remove(j);
 				}
 			}
 		}
+		
+		
+		
+	}
+	
+	public boolean isPermissible (char a, char b) {
+		char [] permissible= {'A','C','G','T'};
+		int x=0,y=0;
+		for (int i=0; i< permissible.length;i++) {
+			if (a==permissible[i])
+				x=1;
+			if (b==permissible[i])
+				y=1;
+			if ((x+y)==2) return true ;
+		}
+		return false;
 	}
 	
 	
@@ -243,6 +272,22 @@ public class ConsumerDataPrivacyHBA<genes> {
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(frames[x]));
 	}
 	
+	public boolean isHomozygous(char a, char b) {
+		char [] permissible= {'A','C','G','T'};
+		int x=0,y=0;
+		if (a==b) {
+			for (int i : permissible) {
+				if (a==permissible[i])
+					x=1;
+				if (b==permissible[i])
+					y=1;
+				if ((x+y)==2) return true ;
+			}
+			
+		}
+		return false;			
+	}
+	
 	
 	public boolean ifLocationExistsinOtherParty(int chromosome, int index,GenotypedData obj, ArrayList<GenotypedData>[] locGene) {
 		GenotypedData a= locGene[chromosome].get(index);
@@ -257,8 +302,8 @@ public class ConsumerDataPrivacyHBA<genes> {
 		int r= locGene[chromosome].size();
 		
 		while (l<r) {
-			if (l==0 && r== locGene[chromosome].size())
-				System.out.println("It came here");
+			//if (l==0 && r== locGene[chromosome].size())
+				//System.out.println("It came here");
 			int m= (l+r)/2;
 			GenotypedData o= locGene[chromosome].get(m);
 			if (o.location==obj.location && o.rsid.contentEquals(obj.getRSID())) {
