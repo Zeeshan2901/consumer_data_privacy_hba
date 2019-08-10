@@ -164,7 +164,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 			for(int j=0; j< genes[i].size(); j++) {
 				GenotypedData obj= genes[i].get(j);
 				removeFlag=false;
-				if ( obj.gene1=='-'&& obj.gene2=='-'  ) {
+				if ( obj.gene1=='-'&& obj.gene2=='-'  || !isPermissible(obj.gene1,obj.gene2)) {
 					//|| !isPermissible(obj.gene1,obj.gene2)
 					if (j < locGene[i].size()) {
 						loc=obj.getLocation();
@@ -442,6 +442,65 @@ public class ConsumerDataPrivacyHBA<genes> {
             return null; 
         } 
     } 
+	
+	public void matchLocations( ArrayList<GenotypedData>[] party) {
+    	
+		
+		
+		for (int x=1; x<=CHROMOSOME_COUNT;x++) {
+			for(int i=0, j=0; i < genes[x].size() && j < party[x].size(); i++, j++) {
+				GenotypedData cur = genes[x].get(i);
+				GenotypedData par = party[x].get(j);
+				if (cur.location > par.location) {
+					for (int k=j; k < party[x].size(); k++) {
+						GenotypedData obj = party[x].get(k);
+						if(cur.location > obj.location) {
+							party[x].remove(k);
+							k--;
+						}
+						else if (cur.location == obj.location && cur.rsid.contentEquals(obj.rsid)) {
+							j=k;
+							break;
+						}
+						else if (cur.location < obj.location) {
+							j=i;
+							j--;
+							i--;
+							break;
+						}
+					}
+				}
+				else if (cur.location < par.location) {
+					for (int k=i; k < genes[x].size(); k++) {
+						GenotypedData obj = genes[x].get(k);
+						if (obj.location < par.location) {
+							genes[x].remove(k);
+							k--;
+						}
+						else if (obj.location == par.location) {
+							i=k;
+							break;
+						}
+						else if (obj.location > par.location) {
+							i=j;
+							j--;
+							i--;
+							break;
+						}
+					}
+					
+				}
+			}
+			if (genes[x].size() > party[x].size()) 
+				genes[x].subList(party[x].size(), genes[x].size()).clear();
+			else if (party[x].size() > genes[x].size())
+				party[x].subList(genes[x].size(), party[x].size()).clear();
+			
+			
+		}
+		
+		
+    }
 }
 
 

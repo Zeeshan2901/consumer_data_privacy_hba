@@ -3,6 +3,7 @@ package consumer_data_privacy_hba;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
 
 public class HashingClient {
 
@@ -31,13 +32,38 @@ public class HashingClient {
 		a.caluclateNonce();
 		b.caluclateNonce();
 		
-		a.displayNonce();
+		//a.displayNonce();
+		
+		System.out.println("\n1");
 		b.csvParser("input/dad_all.txt");
 		a.csvParser("input/son_all.txt");
+		
+		System.out.println("\n2");
+		
+		ArrayList<GenotypedData>[] temp=new ArrayList[22+1];
+		for (int i=1; i<=22; i++) 
+			temp[i]= new ArrayList<GenotypedData>();
+			
+		
+		b.matchLocations(a.genes);
+		a.matchLocations(b.genes);
+		
+		
+		
+		//a.genes=temp;
+		
+		
+		
+		
+		
+		
+		System.out.println("\n3");
 		
 	    b.removeSpcChars(a.genes);
 	    a.removeSpcChars(b.genes);
 		
+	    System.out.println("\n4");
+	    
 	    b.setFrames(a.genes);
 	    a.setFrames(b.genes);
 	    /*
@@ -47,6 +73,9 @@ public class HashingClient {
 				obj.display(obj, i);
 			}
 		*/
+	    
+	    System.out.println("\n5");
+	    
 		b.frameMatch(b.frames, a.frames);
 		
 		/*

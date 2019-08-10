@@ -22,6 +22,10 @@ public class GenotypedData implements Comparable<GenotypedData>{
 		this.gene1 = obj.gene1;
 		this.gene2 = obj.gene2;
 	}
+	
+	public void display(GenotypedData obj) {
+		System.out.println("\tlocation: "+obj.location+" rsid: "+obj.rsid);	
+	}
 
 	@Override
 	public int compareTo(GenotypedData g) {
