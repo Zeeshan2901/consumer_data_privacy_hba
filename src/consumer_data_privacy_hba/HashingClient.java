@@ -3,7 +3,6 @@ package consumer_data_privacy_hba;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.ArrayList;
 
 public class HashingClient {
 
@@ -32,27 +31,90 @@ public class HashingClient {
 		a.caluclateNonce();
 		b.caluclateNonce();
 		
-		//a.displayNonce();
+		a.displayNonce();
 		
 		System.out.println("\n1");
-		b.csvParser("input/dad_all.txt");
+		b.csvParser("input/sister_all.txt");
 		a.csvParser("input/son_all.txt");
 		
 		System.out.println("\n2");
 		
-		ArrayList<GenotypedData>[] temp=new ArrayList[22+1];
-		for (int i=1; i<=22; i++) 
-			temp[i]= new ArrayList<GenotypedData>();
+		//ArrayList<GenotypedData>[] temp=new ArrayList[22+1];
+		//for (int i=1; i<=22; i++) 
+			//temp[i]= new ArrayList<GenotypedData>();
 			
 		
-		b.matchLocations(a.genes);
-		a.matchLocations(b.genes);
+		//b.matchLocations(a.genes);
+		//a.matchLocations(b.genes);
 		
 		
 		
 		//a.genes=temp;
 		
 		
+		
+		
+		/////////////////////////////////////
+		
+		for (int x=1; x<=22;x++) {
+			for(int i=0, j=0; i < a.genes[x].size() && j < b.genes[x].size(); i++, j++) {
+				GenotypedData cur = (GenotypedData) a.genes[x].get(i);
+				GenotypedData par = (GenotypedData) b.genes[x].get(j);
+				if (cur.location > par.location) {
+					for (int k=j; k < b.genes[x].size(); k++) {
+						GenotypedData obj = (GenotypedData) b.genes[x].get(k);
+						if(cur.location > obj.location) {
+							b.genes[x].remove(k);
+							k--;
+						}
+						else if (cur.location == obj.location && cur.rsid.contentEquals(obj.rsid)) {
+							j=k;
+							break;
+						}
+						else if (cur.location < obj.location) {
+							j=i;
+							j--;
+							i--;
+							break;
+						}
+					}
+				}
+				else if (cur.location < par.location) {
+					for (int k=i; k < a.genes[x].size(); k++) {
+						GenotypedData obj = (GenotypedData) a.genes[x].get(k);
+						if (obj.location < par.location) {
+							a.genes[x].remove(k);
+							k--;
+						}
+						else if (obj.location == par.location) {
+							i=k;
+							break;
+						}
+						else if (obj.location > par.location) {
+							i=j;
+							j--;
+							i--;
+							break;
+						}
+					}
+					
+				}
+			}
+			if (a.genes[x].size() > b.genes[x].size()) 
+				a.genes[x].subList(b.genes[x].size(), a.genes[x].size()).clear();
+			else if (b.genes[x].size() > a.genes[x].size())
+				b.genes[x].subList(a.genes[x].size(), b.genes[x].size()).clear();
+			
+			
+		}
+		
+		
+		////////////////////////////////////
+		
+		for (int i=1;i<=22;i++) {
+			System.out.println("\n Chromosome : "+i+" || Size : "+a.genes[i].size());
+			System.out.println("\n Chromosome : "+i+" || Size : "+b.genes[i].size());
+		}
 		
 		
 		
@@ -65,6 +127,10 @@ public class HashingClient {
 	    System.out.println("\n4");
 	    
 	    b.setFrames(a.genes);
+	    
+	    System.out.println("\n4.1");
+
+	    
 	    a.setFrames(b.genes);
 	    /*
 		for (int i=1;i<=22;i++) 

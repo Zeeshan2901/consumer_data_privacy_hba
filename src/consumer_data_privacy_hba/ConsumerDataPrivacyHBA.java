@@ -215,60 +215,73 @@ public class ConsumerDataPrivacyHBA<genes> {
 	
 	//Method to implement Frames
 	public void frame(int offset,ArrayList<GenotypedData>[] locGene) {
-		//iterating the outer array for each 22 chromosomes
-		for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
-			StringBuilder evenSubstring= new StringBuilder("");
-			StringBuilder oddSubstring= new StringBuilder("");
-			int counter =0;
-			int start=0;
-			int end =0;
-			String startRsid="";
-			String endRsid="";
-		//iterating through the data of each chromosomes
-			for(int j=offset; j<genes[i].size(); j++) {
-				counter++;
-				GenotypedData obj= genes[i].get(j);	
-		//capture the start of the frame and empty the genotype string
-				if (counter==1 || (counter % t1 ==1)) {
-					start=obj.getLocation();
-					startRsid=obj.getRSID();
-					oddSubstring.delete(0, oddSubstring.length());
-					evenSubstring.delete(0, evenSubstring.length());
-				}	
-		//form a string only if the genotype is homozygous and the location exists in other party and it is homozygus as well 
-				if (obj.gene1==obj.gene2 && ifLocationExistsinOtherParty(i,j,obj,locGene)) {
-					if(counter%2==0) {
-						evenSubstring.append(String.valueOf(obj.gene1));
-						evenSubstring.append(String.valueOf(obj.gene2));
-					}
-					else {
-						oddSubstring.append(String.valueOf(obj.gene1));
-						oddSubstring.append(String.valueOf(obj.gene2));
+		try {
+			//iterating the outer array for each 22 chromosomes
+			for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
+				StringBuilder evenSubstring= new StringBuilder("");
+				StringBuilder oddSubstring= new StringBuilder("");
+				int counter =0;
+				int start=0;
+				int end =0;
+				String startRsid="";
+				String endRsid="";
+			//iterating through the data of each chromosomes
+				for(int j=offset; j<genes[i].size(); j++) {
+					counter++;
+					GenotypedData obj= genes[i].get(j);	
+			//capture the start of the frame and empty the genotype string
+					if (counter==1 || (counter % t1 ==1)) {
+						start=obj.getLocation();
+						startRsid=obj.getRSID();
+						oddSubstring.delete(0, oddSubstring.length());
+						evenSubstring.delete(0, evenSubstring.length());
+					}	
+			//form a string only if the genotype is homozygous and the location exists in other party and it is homozygus as well 
+					if (obj.gene1==obj.gene2 && ifLocationExistsinOtherParty(i,j,obj,locGene)) {
+						if(counter%2==0) {
+							evenSubstring.append(String.valueOf(obj.gene1));
+							evenSubstring.append(String.valueOf(obj.gene2));
+						}
+						else {
+							oddSubstring.append(String.valueOf(obj.gene1));
+							oddSubstring.append(String.valueOf(obj.gene2));
+							
+						}
 						
 					}
-					
-				}
-		//capture the end of string 
-		//empty the genotype string
-		//add the frame data object in sortedset
-				if (counter % t1 == 0 && start > 0) {
-					ArrayList <FrameData> gen =  frames[i];
-					end=obj.location;
-					endRsid=obj.getRSID();
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
-					gen.add(fr);
-					start=0;
-					oddSubstring.delete(0, oddSubstring.length());
-					evenSubstring.delete(0, evenSubstring.length());
-				}				
-			}		
-		}		
+			//capture the end of string 
+			//empty the genotype string
+			//add the frame data object in sortedset
+					if (counter % t1 == 0 && start > 0) {
+						ArrayList <FrameData> gen =  frames[i];
+						end=obj.location;
+						endRsid=obj.getRSID();
+						//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+						gen.add(fr);
+						start=0;
+						oddSubstring.delete(0, oddSubstring.length());
+						evenSubstring.delete(0, evenSubstring.length());
+					}				
+				}		
+			}
+		}catch(Exception e) {
+			System.out.println("Exception occured: "+e);
+			e.printStackTrace();
+		}
+				
 	}
 	
 	public void setFrames(ArrayList<GenotypedData>[] locGene) {
-		for (int i =0; i<t1; i+=t1/n) {	
-	    	frame(i,locGene);
-	    }
+		try {
+			for (int i =0; i<t1; i+=t1/n) {	
+		    	frame(i,locGene);
+		    }
+		} catch(Exception e) {
+			System.out.println("Exception occured: "+e);
+			e.printStackTrace();
+		}
+		
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(frames[x]));
 	}
 	
@@ -297,13 +310,13 @@ public class ConsumerDataPrivacyHBA<genes> {
 			else
 				return false;
 		}
-		//This part is not executing yet
+		
+		
+		//Binary Search
 		int l=0;
 		int r= locGene[chromosome].size();
 		
 		while (l<r) {
-			//if (l==0 && r== locGene[chromosome].size())
-				//System.out.println("It came here");
 			int m= (l+r)/2;
 			GenotypedData o= locGene[chromosome].get(m);
 			if (o.location==obj.location && o.rsid.contentEquals(obj.getRSID())) {
@@ -312,9 +325,9 @@ public class ConsumerDataPrivacyHBA<genes> {
 				else
 					return false;
 			}
-			else if (o.location<obj.location)
+			else if (o.location>obj.location)
 				l=m+1;
-			else if (o.location > obj.location)
+			else if (o.location < obj.location)
 				r=m-1;
 		}		
 		return false;
