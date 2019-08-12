@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+
+
 public class HashingClient {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -34,26 +36,16 @@ public class HashingClient {
 		a.displayNonce();
 		
 		System.out.println("\n1");
-		b.csvParser("input/sister_all.txt");
-		a.csvParser("input/son_all.txt");
+		b.csvParser("input/son_all.txt");
+		a.csvParser("input/sister_all.txt");
 		
 		System.out.println("\n2");
 		
-		//ArrayList<GenotypedData>[] temp=new ArrayList[22+1];
-		//for (int i=1; i<=22; i++) 
-			//temp[i]= new ArrayList<GenotypedData>();
-			
-		
-		//b.matchLocations(a.genes);
-		//a.matchLocations(b.genes);
+	
 		
 		
 		
-		//a.genes=temp;
-		
-		
-		
-		
+		//Match Locations Code for both the parties
 		/////////////////////////////////////
 		
 		for (int x=1; x<=22;x++) {
@@ -111,10 +103,10 @@ public class HashingClient {
 		
 		////////////////////////////////////
 		
-		for (int i=1;i<=22;i++) {
-			System.out.println("\n Chromosome : "+i+" || Size : "+a.genes[i].size());
-			System.out.println("\n Chromosome : "+i+" || Size : "+b.genes[i].size());
-		}
+		//for (int i=1;i<=22;i++) {
+		//	System.out.println("\n Chromosome : "+i+" || Size : "+a.genes[i].size());
+		//	System.out.println("\n Chromosome : "+i+" || Size : "+b.genes[i].size());
+		//}
 		
 		
 		
@@ -150,8 +142,8 @@ public class HashingClient {
 				FrameData obj=(FrameData) b.match[i].get(j);
 				obj.display(obj, i);
 			}
-		
 		*/
+		
 	   
 	}
 

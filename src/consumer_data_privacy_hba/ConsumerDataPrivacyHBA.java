@@ -42,7 +42,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 	
 	
 	public ConsumerDataPrivacyHBA() {		
-		t1=700;
+		t1=350;
 		n=1;
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
@@ -178,7 +178,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 					else{
 						Iterator<GenotypedData> itr=locGene[i].iterator();
 						 while (itr.hasNext()) {
-							 GenotypedData o=(GenotypedData)itr.next();
+							 GenotypedData o=itr.next();
 							 loc1=o.getLocation();
 							 if (loc==loc1) {
 								 genes[i].remove(j);
@@ -348,7 +348,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 			SortedSet<FrameData> set=entry.getValue();
 			Iterator<FrameData> i=set.iterator();
 			while (i.hasNext()) {
-				FrameData obj=(FrameData)i.next();
+				FrameData obj=i.next();
 				obj.display(obj,chromosome);
 			}
 		}
@@ -394,7 +394,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 	//Display the NONCE fields
 	public void displayNonce() {
 		System.out.println("\n My Data		: "+my_nonce+" :: "+hashOfMyNonce);
-		System.out.println("\n Party Data	: "+party_nonce+" :: "+hashOfPartyNonce);
+		System.out.println("\n Party Data		: "+party_nonce+" :: "+hashOfPartyNonce);
 	}
 	
 	//Method to Calculate the Ultimate NONCE

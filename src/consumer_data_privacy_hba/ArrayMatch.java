@@ -4,6 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/*
+ * Outputs
+ 
+ 
+ A : [0, 1, 4, 5, 7, 10, 12, 15, 18, 20, 21, 23, 23, 24, 25, 26, 36, 50, 100, 1000, 1100000]
+ B : [0, 1, 2, 3, 4, 6, 7, 8, 9, 12, 13, 14, 15, 18, 19, 20, 22, 22, 22, 22, 24, 36, 89, 100, 110]
+
+ A : [0, 1, 4, 7, 12, 15, 18, 20, 24, 36, 100]
+ B : [0, 1, 4, 7, 12, 15, 18, 20, 24, 36, 100]
+
+ */
+
 public class ArrayMatch {
 
 	public ArrayMatch() {
@@ -15,12 +27,11 @@ public class ArrayMatch {
 		
 		List<Integer> a = new ArrayList<>(List.of(0,1,4,5,7,10,12,15,18,20,21,23,23,24,25,26,36,50,100,1000,1100000));
 		List<Integer> b = new ArrayList<>(List.of(0,1,2,3,4,6,7,8,9,12,13,14,15,18,19,20,22,22,22,22,24,36,89,100,110));
-		//int a[]= {0,1,4,7,8,10,12,15,18,24};
-		//int b[]= {0,1,2,3,4,5,6,7,8,9,13,14,15,18,24};
+
 		int i,j,k;
-		//for (i=0;i<a.size();i++)
+		
 		System.out.print("\n A : "+a);
-		//for (i=0;i<b.length;i++)
+		
 		System.out.print("\n B : "+b);
 		
 		for (i=0,j=0; i<a.size() && j<b.size();i++,j++) {
