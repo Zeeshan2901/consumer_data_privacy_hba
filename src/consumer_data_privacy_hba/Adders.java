@@ -16,7 +16,7 @@ public class Adders {
 		try {
 			fw = new FileWriter("input/Adders.txt");
 		
-		int n=32;
+		int n=2;
 		int x=0, y=0, c=0, wire= 2*n ;
 		int intermediate[] = {0,0,0,0,0,0,0,0};
 		
