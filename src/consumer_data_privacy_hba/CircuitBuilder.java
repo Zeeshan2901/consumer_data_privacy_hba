@@ -1,5 +1,6 @@
 package consumer_data_privacy_hba;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,24 +15,21 @@ public class CircuitBuilder {
 
 	public static void main(String[] args) {
 		
-		buildCircuit(5);
+		//buildCircuit(11);
 		
-		
+		for (int i=0; i< 1024; i++)
+		System.out.println( "Value of " +i+"  Pow :  " +nextPowerOf2(i));
 	}
 	
 	public static int nextPowerOf2 (int num) {
 		
 		if (num <= 0 || num > 65536)
 			return -1;
-		int array[]= {1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536};
-		
-		for (int i=0; i<=16; i++) {
-			if (num==array[i])
-				return array[i];
-			if (num> array[i] && num <array[i+1])
-				return array[i+1];
-		}
-		return -1;
+		if (num > 0 && ((num & (num - 1)) == 0))
+			return num;
+		else 
+			return (int) Math.pow(2, (int) ( (Math.log(num) / Math.log(2)) + 1));
+			
 	}
 	
 	public static void buildCircuit(int snips) {
@@ -44,7 +42,7 @@ public class CircuitBuilder {
 		
 		System .out.println("number of snips : "+snips);
 		System .out.println("circuit size " +circuitSize);
-		FileWriter fw;
+		FileWriter fw,fw1;
 		try {
 			/*
 			 * First 2 lines of circuit to produce the zero output Carry in wire.
@@ -55,6 +53,7 @@ public class CircuitBuilder {
 			wires++;
 			System.out.println(lines);
 			fw = new FileWriter("input/Adders.txt");
+			BufferedWriter bw1  = new BufferedWriter(fw);
 			fw.write(lines);
 			/*
 			 * Creating the circuit for #snips SNP DNA matching Circuit 
@@ -90,10 +89,19 @@ public class CircuitBuilder {
 				b=DNAResult.remove();
 				lines+="2 1 "+ a + " " + b + " " + wires++ + " " + "AND\n" + 
 					   "2 1 "+ a + " " + b + " " + wires++ + " " + "XOR\n";
+				num_gates+=2;
 				fw.write(lines);
 			}
-				
+			fw.flush();
 			fw.close();
+			bw1.close();
+			fw1 = new FileWriter("input/Adders.txt",true);
+			BufferedWriter bw  = new BufferedWriter(fw1);
+			lines=num_gates+ " " +  wires +"\n" +
+					(snips*3) + " " + (snips*3) + " " + circuitSize + "\n\n";
+			fw1.append(lines);
+			fw1.close();
+			bw.close();
 			System.out.println(" Wires " + wires + " Gates " + num_gates);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
