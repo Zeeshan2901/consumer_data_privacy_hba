@@ -15,10 +15,8 @@ public class CircuitBuilder {
 
 	public static void main(String[] args) {
 		
-		//buildCircuit(11);
+		buildCircuit(11);
 		
-		for (int i=0; i< 1024; i++)
-		System.out.println( "Value of " +i+"  Pow :  " +nextPowerOf2(i));
 	}
 	
 	public static int nextPowerOf2 (int num) {
@@ -37,8 +35,12 @@ public class CircuitBuilder {
 		int circuitSize= nextPowerOf2(snips);
 		int i, alice =0, bob= 3*snips , wires=6*snips, num_gates = 2;
 		int pad = wires+1;
+		int cin =pad;
 		
-		Queue<Integer> DNAResult = new LinkedList<>();
+		Queue<Integer> lsb = new LinkedList<>();
+		Queue<Integer> msb = new LinkedList<>();
+		int inter[] = new int[circuitSize];
+		
 		
 		System .out.println("number of snips : "+snips);
 		System .out.println("circuit size " +circuitSize);
@@ -55,10 +57,13 @@ public class CircuitBuilder {
 			fw = new FileWriter("input/Adders.txt");
 			BufferedWriter bw1  = new BufferedWriter(fw);
 			fw.write(lines);
+			
+			
 			/*
 			 * Creating the circuit for #snips SNP DNA matching Circuit 
 			 */
 			for (i =0; i<circuitSize; i++) {
+				System .out.println("circuit size " +i);
 				lines="";
 				if (i< snips) {
 					lines=DNAMatch(alice, bob, wires, false);
@@ -67,7 +72,7 @@ public class CircuitBuilder {
 					wires+=8;
 					num_gates+=8;
 					fw.write(lines);
-					DNAResult.add(wires-1);
+					lsb.add(wires-1);
 					
 				}
 				else {
@@ -75,23 +80,98 @@ public class CircuitBuilder {
 					wires+=8;
 					num_gates+=8;
 					fw.write(lines);
-					DNAResult.add(wires-1);
+					lsb.add(wires-1);
 				}
 			}
 			
 			/*
 			 * Half Adder Circuit
 			 */
-			int a,b;
+			int a,b, index=0;
 			for (i=0; i<circuitSize/2; i++) {
 				lines="";
-				a=DNAResult.remove();
-				b=DNAResult.remove();
+				a=lsb.remove();
+				b=lsb.remove();
 				lines+="2 1 "+ a + " " + b + " " + wires++ + " " + "AND\n" + 
 					   "2 1 "+ a + " " + b + " " + wires++ + " " + "XOR\n";
+				inter[index++]=wires-1;		// Sum output --- lsb
+				inter[index++]=wires-2;		// Carry output --- msb
+				System.out.println("Half Adder Output : " );
+				//msb.add(wires-2);
+				//lsb.add(wires-1);
 				num_gates+=2;
 				fw.write(lines);
+				System.out.println(lines);
 			}
+			
+			if(circuitSize>=4)
+				circuitSize/=4;
+			else {
+				bw1.close();
+				fw.close();
+				return;
+			}
+			System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
+			/*
+			 * Implementing n-bit Adder tree
+			 */
+			int nBitAdder=2,carry=0, newIndex=0;
+			int bet [] = new int[100];
+			while(circuitSize!=0) {
+				index=0;
+				newIndex=0;
+				for (i=0; i<circuitSize; i++) {
+					System.out.println("\t\t\t\tcircuitSize : " +circuitSize);
+					System.out.println("\t\t\t\tcircuitSize : " +i);
+					System.out.println("\t\t\t\tnBitAdder : "+ nBitAdder);
+					System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
+					System.out.println("\t index: " + index);
+					System.out.println("\t newIndex: " + newIndex);
+					//index=0;
+					//newIndex=0;
+					for(int j=0;j<nBitAdder;j++) {
+						System.out.println("\t\t\t\tFULL ADDER : " +j);
+						lines="";
+						lines="2 1 " + inter[index] + " " + inter[index+nBitAdder] + " " + wires++ + " XOR\n";
+						bet[0]=wires-1;
+						lines+="2 1 " + inter[index] + " " + inter[index+nBitAdder] + " " + wires++ + " AND\n";
+						lines+="1 1 " + (wires -1) + " " + wires++ + " INV\n";
+						bet[1]=wires-1;
+						if (j==0)
+							lines+="2 1 " + cin + " " + bet[0] + " " + wires++ + " AND\n";
+						else
+							lines+="2 1 " + carry + " " + bet[0] + " " + wires++ + " AND\n";
+						lines+="1 1 " + (wires -1) + " " + wires++ + " INV\n";
+						lines+="2 1 " + bet[1] + " " + (wires-1) + " " + wires++ + " AND\n";
+						lines+="1 1 " + (wires -1) + " " + wires++ + " INV\n";
+						
+						if (j==0)
+							lines+="2 1 " + cin + " " + bet[0] + " " + wires++ + " XOR\n";
+						else 
+							lines+="2 1 " + carry + " " + bet[0] + " " + wires++ + " XOR\n";
+						index++;
+						inter[newIndex++]= wires-1;
+						carry=wires-2;
+						if (j==nBitAdder-1)
+							inter[newIndex++]=carry;
+						System.out.println(lines);
+						System.out.println("\t carry: " + carry);
+						fw.write(lines);
+						num_gates+=8;
+						System.out.println("\t index: " + index);
+						System.out.println("\t newIndex: " + newIndex);
+					}
+					index+=nBitAdder;
+				}
+				nBitAdder++;
+				circuitSize/=2;
+			}
+			
+			System.out.println("MSB : "+(msb));
+			System.out.println("LSB : "+(lsb));
+			System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
+			
+			
 			fw.flush();
 			fw.close();
 			bw1.close();
@@ -108,9 +188,9 @@ public class CircuitBuilder {
 			e.printStackTrace();
 		}
 		System.out.println("Status of Queue\n");
-		System.out.println(DNAResult.size());
-		while(DNAResult.size()!=0)
-			System.out.println(DNAResult.remove());
+		System.out.println(lsb.size());
+		while(lsb.size()!=0)
+			System.out.println(lsb.remove());
 	}
 
 	
@@ -118,6 +198,7 @@ public class CircuitBuilder {
 		String  line="";
 		int last [] = new int[7];
 		int index=0;
+		
 		if (isPadding == false) {
 			line = "2 1 "+ user1++ + " " + user2++ + " " + wire++ + " AND\n";
 			last[index++]=wire-1;
