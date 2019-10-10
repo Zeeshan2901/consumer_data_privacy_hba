@@ -36,7 +36,7 @@ public class HashingClient {
 		a.displayNonce();
 		
 		System.out.println("\n1");
-		b.csvParser("input/son_all.txt");
+		b.csvParser("input/dad_all.txt");
 		a.csvParser("input/sister_all.txt");
 		
 		System.out.println("\n2");
@@ -135,7 +135,7 @@ public class HashingClient {
 	    System.out.println("\n5");
 	    
 		b.frameMatch(b.frames, a.frames);
-		
+		b.displayExclusionList();
 		/*
 		for (int i=1;i<=22;i++) 
 			for(int j=0; j< b.match[i].size(); j++) {

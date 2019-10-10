@@ -6,16 +6,39 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class CircuitBuilder {
 
 	public CircuitBuilder() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	static String solve( int thresh, int nbits) {
+		String solution="";
+		int i;
+		
+		if (thresh <= 0 || nbits < 1) return "TRUE";
+		// bit positions bigger than threshold's biggest
+		for (i = nbits-1; (i >= 0) && ((thresh & (0x1 << i)) == 0); --i)
+		    solution += i+" OR ";
+		if (i >= 0) {
+		    String s = solve(thresh ^ (0x1 << i), i);
+		    if (s.equals("TRUE"))
+			solution += i;
+		    else
+			solution += (" ( "+i+" AND ( "+s+" ) ) ");
+		}
+		return solution;
+	}
+	    
+    static boolean ifProcessed(Stack<Integer> stack, int element) { 
+        return ( stack.search(element)==-1) ? false: true; 
+    } 
 
 	public static void main(String[] args) {
 		
-		buildCircuit(11);
+		buildCircuit(100);
 		
 	}
 	
@@ -37,8 +60,9 @@ public class CircuitBuilder {
 		int pad = wires+1;
 		int cin =pad;
 		
+		
 		Queue<Integer> lsb = new LinkedList<>();
-		Queue<Integer> msb = new LinkedList<>();
+		//Queue<Integer> msb = new LinkedList<>();
 		int inter[] = new int[circuitSize];
 		
 		
@@ -166,10 +190,26 @@ public class CircuitBuilder {
 				nBitAdder++;
 				circuitSize/=2;
 			}
-			
-			System.out.println("MSB : "+(msb));
+			System.out.println("\t\t\t\tnBitAdder: " +nBitAdder);
+			//System.out.println("MSB : "+(msb));
 			System.out.println("LSB : "+(lsb));
 			System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
+			
+			/*
+			 * >=T2 circuit
+			 */
+			
+			int t2= Math.round( (float)snips/1000);
+			int adderOutput[] = new int[nBitAdder];
+			index=0;
+			for (i=nBitAdder-1; i>=0;i--) {
+				adderOutput[index++]=inter[i];
+			}
+			System.out.println("Values of Snips and t2 : " +snips+"  "+t2 );
+			
+			System.out.println("Values output : " +nBitAdder );
+			System.out.println("\t\t adderOutput: \t"+Arrays.toString(adderOutput));
+			
 			
 			
 			fw.flush();
