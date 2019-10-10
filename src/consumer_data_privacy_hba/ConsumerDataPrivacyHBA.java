@@ -244,7 +244,110 @@ public class ConsumerDataPrivacyHBA<genes> {
 	}
 	
 	
-	
+	public void frameWithcM(int offset,ArrayList<GenotypedData>[] locGene) {
+		try { 
+			//iterating the outer array for each 22 chromosomes
+			for (int i =1 ; i<=CHROMOSOME_COUNT; i++) {
+				StringBuilder evenSubstring= new StringBuilder("");
+				StringBuilder oddSubstring= new StringBuilder("");
+				int counter =0;
+				int start=0;
+				int end =0;
+				String startRsid="";
+				String endRsid="";
+				int even=0;
+				int odd=0;
+				int cMIndex=0;
+			//iterating through the data of each chromosomes
+				for(int j=offset; j<genes[i].size(); j++) {
+					
+					//fetching first location in the centiMorgan
+					GenotypedData o= genes[i].get(j);
+					int loc = o.getLocation();
+					counter=1;
+					if (cM[i].length > (cMIndex+5)) {
+						while (loc > cM[i][cMIndex] && loc < cM[i][cMIndex+5] && j<genes[i].size()) {
+							GenotypedData obj= genes[i].get(j);
+							int loc1 = obj.getLocation();
+							
+							//capture the start of the frame and empty the genotype string
+							if (counter==1 ) {
+								start=obj.getLocation();
+								startRsid=obj.getRSID();
+								oddSubstring.delete(0, oddSubstring.length());
+								evenSubstring.delete(0, evenSubstring.length());
+								even=0;
+								odd=0;
+							}	
+							
+							
+							//form a string only if the genotype is homozygous and the location exists in other party and it is homozygus as well 
+							if (obj.gene1==obj.gene2 && ifLocationExistsinOtherParty(i,j,obj,locGene)) {
+								if(counter%2==0) {
+									evenSubstring.append(String.valueOf(obj.gene1));
+									evenSubstring.append(String.valueOf(obj.gene2));
+									even++;
+								}
+								else {
+									oddSubstring.append(String.valueOf(obj.gene1));
+									oddSubstring.append(String.valueOf(obj.gene2));
+									odd++;
+									
+								}
+								
+							}
+							
+							counter++;
+							loc=loc1;
+							j++;
+						}
+					}
+				System.out.println("For Chromosome "+i+ " Number of alleles between cM "+cMIndex+" and "+ (cMIndex+5) + " is : " +counter);	
+				//capture the end of Frame
+				//check if the length of even and odd substring are greater than the threshold or not
+				int threshold = ((counter * 40)/100)/2;
+				if (even >= threshold && odd >= threshold) {
+					GenotypedData obj= genes[i].get(j-1);
+					ArrayList <FrameData> gen =  frames[i];
+					end=obj.location;
+					endRsid=obj.getRSID();
+					//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+					gen.add(fr);
+					start=0;
+					oddSubstring.delete(0, oddSubstring.length());
+					evenSubstring.delete(0, evenSubstring.length());
+					even=odd=0;
+				}
+				else {
+					ArrayList <FrameData> gen =  exclusionList[i];
+					GenotypedData obj= genes[i].get(j-1);
+					end=obj.location;
+					endRsid=obj.getRSID();
+					System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+					gen.add(fr);
+					start=0;
+					oddSubstring.delete(0, oddSubstring.length());
+					evenSubstring.delete(0, evenSubstring.length());
+					even=odd=0;
+				}
+				cMIndex+=5;
+				
+				if (cM[i].length < (cMIndex+5))
+					break;
+				}
+				
+				
+			}
+			
+			
+			
+		}catch(Exception e) {
+			System.out.println("Exception occured: "+e);
+			e.printStackTrace();
+		}
+	}
 	//Method to implement Frames
 	public void frame(int offset,ArrayList<GenotypedData>[] locGene) {
 		try {
@@ -295,6 +398,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 			//empty the genotype string
 			//add the frame data object in sortedset
 					if (counter % t1 == 0 && start > 0) {
+			//check if the length of even and odd substring are greater than the threshold or not
 						if (even >= threshold && odd >= threshold) {
 							ArrayList <FrameData> gen =  frames[i];
 							end=obj.location;
@@ -311,7 +415,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 							ArrayList <FrameData> gen =  exclusionList[i];
 							end=obj.location;
 							endRsid=obj.getRSID();
-							System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
+							//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
 							FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
 							gen.add(fr);
 							start=0;
@@ -344,7 +448,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 	public void setFrames(ArrayList<GenotypedData>[] locGene) {
 		try {
 			for (int i =0; i<t1; i+=t1/n) {	
-		    	frame(i,locGene);
+				frameWithcM(i,locGene);
 		    }
 		} catch(Exception e) {
 			System.out.println("Exception occured: "+e);
