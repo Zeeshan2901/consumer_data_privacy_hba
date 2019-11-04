@@ -305,7 +305,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 				System.out.println("For Chromosome "+i+ " Number of alleles between cM "+cMIndex+" and "+ (cMIndex+5) + " is : " +counter);	
 				//capture the end of Frame
 				//check if the length of even and odd substring are greater than the threshold or not
-				int threshold = ((counter * 40)/100)/2;
+				int threshold = ((counter * 50)/100)/2;
 				if (even >= threshold && odd >= threshold) {
 					GenotypedData obj= genes[i].get(j-1);
 					ArrayList <FrameData> gen =  frames[i];

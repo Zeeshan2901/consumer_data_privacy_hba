@@ -24,7 +24,7 @@ public class GenotypedData implements Comparable<GenotypedData>{
 	}
 	
 	public void display(GenotypedData obj) {
-		System.out.println("\tlocation: "+obj.location+" rsid: "+obj.rsid);	
+		System.out.println("\tLocation : " + obj.location + " RSID : "+ obj.rsid + " Genotype : " +obj.gene1+obj.gene2);	
 	}
 
 	@Override

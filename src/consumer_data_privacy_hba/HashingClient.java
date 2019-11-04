@@ -36,7 +36,7 @@ public class HashingClient {
 		a.displayNonce();
 		
 		System.out.println("\n1");
-		b.csvParser("input/son_all.txt");
+		b.csvParser("input/sister_all.txt");
 		a.csvParser("input/dad_all.txt");
 		
 		System.out.println("\n2");

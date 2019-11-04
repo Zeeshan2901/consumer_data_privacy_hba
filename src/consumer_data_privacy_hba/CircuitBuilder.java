@@ -36,7 +36,7 @@ public class CircuitBuilder {
 
 	public static void main(String[] args) {
 		
-		buildCircuit(10);
+		buildCircuit(700);
 		
 	}
 	
