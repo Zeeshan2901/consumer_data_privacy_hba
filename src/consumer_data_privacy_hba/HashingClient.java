@@ -103,10 +103,10 @@ public class HashingClient {
 		
 		////////////////////////////////////
 		
-		//for (int i=1;i<=22;i++) {
-		//	System.out.println("\n Chromosome : "+i+" || Size : "+a.genes[i].size());
-		//	System.out.println("\n Chromosome : "+i+" || Size : "+b.genes[i].size());
-		//}
+		for (int i=1;i<=22;i++) {
+			System.out.println("\n Chromosome : "+i+" || Size : "+a.genes[i].size());
+			System.out.println("\n Chromosome : "+i+" || Size : "+b.genes[i].size());
+		}
 		
 		
 		

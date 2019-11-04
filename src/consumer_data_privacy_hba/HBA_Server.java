@@ -140,7 +140,6 @@ public class HBA_Server {
 		try {
 			StringBuilder locs = new StringBuilder("");
 			int counter = 0;
-			String match = "";
 			for (int i = 1; i <= CHROMOSOME_COUNT; i++) {
 				System.out.println("Sending data for chromosome : " + i);
 				locs.delete(0, locs.length());
@@ -160,20 +159,18 @@ public class HBA_Server {
 					}
 				}
 				if (counter > 0 && counter < 5000) {
-					serverOut.writeUTF("continue");
+					serverOut.writeUTF("last");
 					serverOut.write(i);
 					serverOut.writeUTF(locs.toString());
 					locs.delete(0, locs.length());
 					counter = 0;
 					serverIn.readUTF();
-					match = serverIn.readUTF();
-					match = removeLocations(i, match);
+					//match = serverIn.readUTF();
+					//match = removeLocations(i, match);
 				}
 			}
 			String s = "over";
 			serverOut.writeUTF(s);
-			serverOut.write(0);
-			serverOut.writeUTF("All Data Sent");
 			System.out.println("String " + s + " sent");
 			serverIn.readUTF();
 		} catch (IOException i) {
@@ -182,29 +179,69 @@ public class HBA_Server {
 
 		System.out.println("*******All Data Sent");
 
-		/*
-		 * // Client receives all the snips from Server
-		 * 
-		 * try { String line = "", locs1 = ""; int chromosome = 1, nextChromo = 2; int
-		 * lastIndex = 0; do { line = serverIn.readUTF(); chromosome = serverIn.read();
-		 * locs1 = serverIn.readUTF(); if (chromosome == nextChromo) { nextChromo++;
-		 * lastIndex = 0; } // System.out.println(line+" "+chromosome+" "+locs1+" "); if
-		 * (!line.contentEquals("over")) lastIndex = removeLocations(chromosome, locs1,
-		 * lastIndex); serverOut.writeUTF("done"); } while (!line.equals("over")); }
-		 * catch (IOException e) { e.printStackTrace(); }
-		 */
+		
+		 // Client receives all the snips from Server
+		 
+		try {
+        	int count=0;
+        	String line="",locs="",finalChromosomeLocation="";
+            int chromosome=1;
+            while(!line.equals("over")) {
+            	line=serverIn.readUTF();
+            	if (line.contentEquals("continue")) {
+            		chromosome=serverIn.read();
+            		locs=serverIn.readUTF();
+                	finalChromosomeLocation += locs;
+                	serverOut.writeUTF("done");
+            	}
+            	
+            	if (line.contentEquals("last")) {
+            		chromosome=serverIn.read();
+            		locs=serverIn.readUTF();
+                	finalChromosomeLocation += locs;
+                	System.out.println("count :" +count++);
+            		removeLocations(chromosome,finalChromosomeLocation);
+            		//System.out.println(finalChromosomeLocation);
+                	finalChromosomeLocation="";
+            		serverOut.writeUTF("done");
+            		System.out.println("Done");
+            	}
+            	if (line.contentEquals("over")) {
+            		serverOut.writeUTF("done");
+            		break;
+            	}
+            	
+            }
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+       
+        System.out.println("*******All Data Received");
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 		for (int i = 1; i <= 22; i++)
 			System.out.println("Size of Chromosome  " + i + " is " + genes[i].size());
 
-		for (int x = 1; x <= 22; x++)
-			for (int i = 0; i < genes[x].size() - 2; i++) {
-				GenotypedData obj = genes[x].get(i);
-				GenotypedData ob = genes[x].get(i + 1);
-				if (obj.getLocation() == ob.getLocation()) {
-					obj.display(obj);
-					ob.display(ob);
-				}
-			}
+		/*
+		 * for (int x = 1; x <= 22; x++) for (int i = 0; i < genes[x].size() - 2; i++) {
+		 * GenotypedData obj = genes[x].get(i); GenotypedData ob = genes[x].get(i + 1);
+		 * if (obj.getLocation() == ob.getLocation()) { obj.display(obj);
+		 * ob.display(ob); } }
+		 * 
+		 * 
+		 * System.out.println("{"); for (int i=0;i<genes[22].size();i++) { GenotypedData
+		 * obj= genes[22].get(i); System.out.println(obj.getLocation()); }
+		 * System.out.print("}");
+		 */
+		
 
 		// block to close connections
 		try {
@@ -247,7 +284,9 @@ public class HBA_Server {
 		return false;
 	}
 	
-	public String removeLocations(int chromosome, String locs) {
+	
+	
+public void removeLocations(int chromosome, String locs) {
 		
 		int i,j;
 		String[] temp = locs.split(" ");
@@ -256,101 +295,107 @@ public class HBA_Server {
 			locations[i] = Integer.parseInt(temp[i]);
 		
 		
-		int arrayValue=0, objValue=0;
-		String matchedLocs="";
-		i=j=0;
-		while (i<locations.length && j< genes[chromosome].size() ) {
-			 arrayValue=locations[i];
-			 GenotypedData obj=genes[chromosome].get(j);
-			 objValue=obj.getLocation();
-			 
-			 if (arrayValue==objValue) {
-				 matchedLocs += arrayValue + " ";
-				 i++;
-				 j++;
-			 }
-			 
-			 else if (arrayValue < objValue) {
-				 while(arrayValue<objValue) {
-					 arrayValue=locations[i++];
-				 }
-			 }
-			 else if (arrayValue > objValue) {
-				 while(arrayValue > objValue) {
-					 GenotypedData obj1=genes[chromosome].get(j);
-					 objValue=obj1.getLocation();
-					 if (arrayValue > objValue) {
-						 genes[chromosome].remove(j);
-						 j--;
-					 }
-					 else if (arrayValue==objValue) {
-						 matchedLocs += arrayValue + " ";
-						 i++;
-						 j++;
-					 }
-					 else if (arrayValue<objValue) {
-						 while(arrayValue<objValue) {
-							 arrayValue=locations[i++];
-						 }
-					 }
-				 }
-				 
-				 
-			 }
+		
+		ArrayList<GenotypedData>[] genes1= new ArrayList[CHROMOSOME_COUNT+1];
+		for ( i=1; i<=CHROMOSOME_COUNT; i++) 
+			genes1[i]= new ArrayList<GenotypedData>();
+		ArrayList <GenotypedData> gen =  genes1[chromosome]; 
 			
+		for (i =0; i < locations.length;i++) {
+			GenotypedData obj =new GenotypedData();
+			obj.location=locations[i];
+			gen.add(obj);
 		}
+		int match=0;
 		
-		return matchedLocs;
+		System.out.println("Size of Array : " +locations.length);
+		System.out.println("Size of Gen   : " +gen.size());
+		System.out.println("Size of File  : " +genes[chromosome].size());
 		
-		/*
-		 * for ( i=0 , j=0 ; i<locations.length && j< genes[chromosome].size() ;
-		 * i++,j++) { GenotypedData obj = genes[chromosome].get(j);
-		 * loc=obj.getLocation(); if (loc == locations[i]) continue; else if (loc >
-		 * locations[i] ) { int arrayLoc=locations[i]; k=i; while( arrayLoc <= loc && k
-		 * < locations.length) { arrayLoc=locations[k++]; } i=k;
-		 * 
-		 * } else if ( loc < locations[i]) {
-		 * 
-		 * for(k=j; k< genes[chromosome].size(); k++) { GenotypedData ob =
-		 * genes[chromosome].get(k); if (ob.getLocation() < locations[i] ) {
-		 * genes[chromosome].remove(k); k--; } if (ob.getLocation() >= locations[i] ) {
-		 * break; } } j=k;
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
+		for( i=0, j=0; i < gen.size() && j < genes[chromosome].size(); i++, j++) {
+			GenotypedData par = (GenotypedData) genes[chromosome].get(j);
+			GenotypedData cur = (GenotypedData) gen.get(j);
+			//System.out.println("loc: " +locations[i] + "  genes: "+par.getLocation());
+			if (cur.location > par.location) {
+				for (int k=j; k < genes[chromosome].size(); k++) {
+					GenotypedData obj = (GenotypedData) genes[chromosome].get(k);
+					if(cur.location > obj.location) {
+						genes[chromosome].remove(k);
+						k--;
+					}
+					else if (cur.location == obj.location) {
+						j=k;
+						match++;
+						break;
+					}
+					else if (cur.location < obj.location) {
+						j=i;
+						j--;
+						i--;
+						break;
+					}
+				}
+			}
+			else if (cur.location < par.location) {
+				int k=i;
+				for ( k=i; k < gen.size(); k++) {
+					GenotypedData obj = (GenotypedData) gen.get(k);
+					if (obj.location < par.location) {
+						gen.remove(k);
+						k--;
+					}
+					if (obj.location == par.location) {
+						i=k;
+						match++;
+						break;
+					}
+					else if (obj.location > par.location) {
+						i=j;
+						j--;
+						i--;
+						break;
+					}
+				}
+				i=k;
+			}
+		}
+		if (gen.size() > genes[chromosome].size()) 
+			gen.subList(genes[chromosome].size(), gen.size()).clear();
+		else if (genes[chromosome].size() > gen.size())
+			genes[chromosome].subList(gen.size(), genes[chromosome].size()).clear();
+		
+		
+		System.out.println("Size of Array : " +locations.length);
+		System.out.println("Size of Gen   : " +gen.size());
+		System.out.println("Size of File  : " +genes[chromosome].size());
 	}
-
+	
+	
+	
+	
 	/*
-	 * public int removeLocations(int chromosome, String locs, int lastIndex) {
+	 * public void removeLocations(int chromosome, String locs) {
 	 * 
-	 * int i,j,k; int index=0; String[] temp = locs.split(" "); int[] locations =
-	 * new int[temp.length]; for( i = 0; i < temp.length; i++) locations[i] =
+	 * int i,j; String[] temp = locs.split(" "); int[] locations = new
+	 * int[temp.length]; for( i = 0; i < temp.length; i++) locations[i] =
 	 * Integer.parseInt(temp[i]);
 	 * 
 	 * 
-	 * int loc=0;
+	 * int arrayValue=0, objValue=0; //String matchedLocs=""; i=j=0; while
+	 * (i<locations.length && j< genes[chromosome].size() ) {
+	 * arrayValue=locations[i]; GenotypedData obj=genes[chromosome].get(j);
+	 * objValue=obj.getLocation();
 	 * 
-	 * for ( i=0 , j=lastIndex ; i<locations.length && j< genes[chromosome].size() ;
-	 * i++,j++) { GenotypedData obj = genes[chromosome].get(j);
-	 * loc=obj.getLocation(); if (loc == locations[i]) continue; else if (loc >
-	 * locations[i] ) { int arrayLoc=locations[i]; k=i; while( arrayLoc <= loc && k
-	 * < locations.length) { arrayLoc=locations[k++]; } i=k;
+	 * if (arrayValue==objValue) { //matchedLocs += arrayValue + " "; i++; j++; }
 	 * 
-	 * for( k=i ; locations[k] <= loc && k < locations.length ; k++ ) { continue; }
-	 * i=k;
-	 * 
-	 * } else if ( loc < locations[i]) {
-	 * 
-	 * for(k=j; k< genes[chromosome].size(); k++) { GenotypedData ob =
-	 * genes[chromosome].get(k); if (ob.getLocation() < locations[i] ) {
-	 * genes[chromosome].remove(k); k--; } if (ob.getLocation() >= locations[i] ) {
-	 * break; } } j=k;
-	 * 
-	 * }
-	 * 
-	 * } return j--; }
+	 * else if (arrayValue < objValue) { while(arrayValue<objValue) {
+	 * arrayValue=locations[i++]; } } else if (arrayValue > objValue) {
+	 * while(arrayValue > objValue && j< genes[chromosome].size()) { GenotypedData
+	 * obj1=genes[chromosome].get(j); arrayValue=locations[i];
+	 * objValue=obj1.getLocation(); if (arrayValue > objValue) {
+	 * genes[chromosome].remove(j); j--; } else if (arrayValue==objValue) {
+	 * //matchedLocs += arrayValue + " "; i++; j++; } else if (arrayValue<objValue)
+	 * { while(arrayValue<objValue) { arrayValue=locations[i++]; } } j++; } } } }
 	 */
 
 	// Verify if the alleles are Homozygous and in "A,C,G,T" for
@@ -424,7 +469,7 @@ public class HBA_Server {
 			obj.gene1 = s.charAt(len - 2);
 			obj.gene2 = s.charAt(len - 1);
 
-			if (isPermissible(obj.gene1, obj.gene2) && obj.rsid.substring(0, 1).equals("r"))
+			if (isPermissible(obj.gene1, obj.gene2) && obj.rsid.substring(0, 2).equals("rs"))
 				gen.add(obj);
 
 		}
