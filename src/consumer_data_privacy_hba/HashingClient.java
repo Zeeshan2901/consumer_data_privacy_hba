@@ -145,6 +145,13 @@ public class HashingClient {
 		*/
 		
 	   
+		   for (int j=0;j<a.frames[22].size();j++) {
+			   FrameData obj = (FrameData) a.frames[22].get(j);
+				   obj.display(obj, 22);
+			   }
+		   
+		
+		
 	}
 
 }

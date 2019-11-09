@@ -258,6 +258,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 				int even=0;
 				int odd=0;
 				int cMIndex=0;
+				int cmstart=0;
 			//iterating through the data of each chromosomes
 				for(int j=offset; j<genes[i].size(); j++) {
 					
@@ -278,6 +279,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 								evenSubstring.delete(0, evenSubstring.length());
 								even=0;
 								odd=0;
+								cmstart=cMIndex;
 							}	
 							
 							
@@ -305,14 +307,14 @@ public class ConsumerDataPrivacyHBA<genes> {
 				System.out.println("For Chromosome "+i+ " Number of alleles between cM "+cMIndex+" and "+ (cMIndex+5) + " is : " +counter);	
 				//capture the end of Frame
 				//check if the length of even and odd substring are greater than the threshold or not
-				int threshold = ((counter * 50)/100)/2;
+				int threshold = ((counter * 40)/100)/2;
 				if (even >= threshold && odd >= threshold) {
 					GenotypedData obj= genes[i].get(j-1);
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
 					//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce) , cmstart, (cmstart+5));
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -325,7 +327,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 					end=obj.location;
 					endRsid=obj.getRSID();
 					System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce) , cmstart, (cmstart+5));
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -404,7 +406,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 							end=obj.location;
 							endRsid=obj.getRSID();
 							//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-							FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+							FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),0,0);
 							gen.add(fr);
 							start=0;
 							oddSubstring.delete(0, oddSubstring.length());
@@ -416,7 +418,7 @@ public class ConsumerDataPrivacyHBA<genes> {
 							end=obj.location;
 							endRsid=obj.getRSID();
 							//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-							FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce));
+							FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),0,0);
 							gen.add(fr);
 							start=0;
 							oddSubstring.delete(0, oddSubstring.length());
