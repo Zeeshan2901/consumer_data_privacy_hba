@@ -14,61 +14,52 @@ import java.io.*;
 import java.math.BigInteger; 
 
 public class HBA_Client {
+	//Declaring Communication Objects
+	private Socket 			 socket		= null; 
+	private DataInputStream  clientIn	= null; 
+	private DataOutputStream clientOut	= null; 
+	String clientAddress;
+	int port;
 	
-	// initialize socket and input, output streams 
-    private Socket 			 socket		= null; 
-    private DataInputStream  clientIn	= null; 
-    private DataOutputStream clientOut	= null; 
-    
-    private String location;
-    
-    String clientAddress;
-    int port;
-    
-    
-    //Method to create and verify nonce
-   
-    
-    //Size of Frame
-  	int t1, n;
-  	//Nonce fields
-  	long my_nonce, party_nonce, nonce;
-  	String hashOfMyNonce, hashOfPartyNonce;
-  	
-  	
-    
-    final static int CHROMOSOME_COUNT =22;
-    
-    
-    ArrayList<GenotypedData>[] genes;
-    ArrayList<FrameData>[] frames;
-	ArrayList<FrameData>[] exclusionList;
-	ArrayList<GenotypedData>[] readRejects;
-    
-    
-    int [][] cM;
-    
-    
-    public HBA_Client() {
-    	clientAddress="127.0.0.1"; 
-    	port=5000;
-    	
-    	genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
-    	frames = new ArrayList[CHROMOSOME_COUNT+1];
+	//Location of the input File
+	private String location;
+	
+	//Nonce fields
+	long my_nonce, party_nonce, nonce;
+	String hashOfMyNonce, hashOfPartyNonce;
+	
+	//CHROMOSOME Count Constant
+	final static int CHROMOSOME_COUNT =22;
+	
+	//Necessary Data Structures
+	ArrayList<GenotypedData>[] genes;		//holds the data files
+	ArrayList<FrameData>[] frames;			//holds frame data
+	ArrayList<FrameData>[] exclusionList;	//holds excluded frame data
+	ArrayList<GenotypedData>[] readRejects;	//holds rejected input snips
+	
+	//2D centiMogran Array holding the starting positions of each centiMorgan
+	int [][] cM;
+	
+	//Constructor to initialize the variables
+	public HBA_Client() {
+		clientAddress="127.0.0.1"; 
+		port=5000;
+	
+		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
+		frames = new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
 		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
-		
+	
 		location="input/sister_all.txt";
 		
-    	for (int i=1; i<=CHROMOSOME_COUNT; i++) {
-    		genes[i]= new ArrayList<GenotypedData>();
-    		frames[i]= new ArrayList<FrameData>();
+		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
+			genes[i]= new ArrayList<GenotypedData>();
+			frames[i]= new ArrayList<FrameData>();
 			exclusionList[i]= new ArrayList<FrameData>();
 			readRejects[i]= new ArrayList<GenotypedData>();
-    	}
-    	
-    	
-    	cM = new int[23][];
+		}
+		
+		cM = new int[23][];
 		cM[0] = null;
 		cM[1] = new int [] {0,1131729,1418789,1705371,2003293,2296659,2601009,2917698,3229048,3551709,3995287,4219407,4577155,4971506,5445556,5900219,6402122,6894620,7433296,8080807,8648791,9257394,10047394,10751429,11207533,11607090,11960414,12270440,12660212,13106243,13893470,14330882,14713485,15029121,15350476,15747027,16134805,17175686,17727393,18064920,18330151,18583340,18876190,19217154,19661936,20369478,21160158,22040202,22534641,23042351,23798312,24752034,25727438,26538840,27510618,29510455,30197400,30631020,31104690,31528551,32052841,33639081,34397619,35155451,35914308,37194205,37786970,38233936,38644628,39107910,39695950,40406195,41094320,41947062,43258744,44369256,46294316,47635424,48732390,52129241,53458182,54161671,54715326,55330287,56013952,56836145,57454864,57975510,58484464,58993673,59482948,60181582,61331609,61852650,62379025,63132613,63936883,64583312,65386545,66598604,67390405,68035216,68799489,70147602,71618183,74181618,75614252,76634620,77596024,79028230,80153127,81216208,81839074,82509358,83629453,84847730,85841396,86942225,87903873,89210240,90410171,91098871,91881255,93568921,94566832,95478522,96966034,98556749,99558841,100658578,101704933,102567534,104046331,105228300,106274609,107313100,108286632,109585272,110310025,110840416,111356981,112075482,112852009,113837041,115089811,116036725,116754443,117427932,118251850,120047567,142535439,145931852,147550218,150392540,152055641,153253737,154291595,155629930,156664702,157295167,157970016,158701449,159254764,159644846,160017816,160358405,160740316,161277951,162148669,162815806,163252941,163622479,163977468,164429971,165158690,166118944,166976293,167438995,167877085,168417103,169204268,170053426,170969175,172231690,173662207,175375234,176308444,177490290,178982881,180768874,181535076,182217140,182878842,183877775,185191199,186898850,188113894,189411568,192135314,193045347,193963224,195237196,197468341,199433386,200551161,201020561,201407532,201846684,202294201,202869729,203390302,203939894,204586184,205349105,206080524,206848695,207773168,208484215,208993706,209520556,210204376,211388281,212755471,213506506,214133247,214901926,215719741,216255227,216790026,217444206,218234971,219464310,220974017,222195824,223467482,225503526,227178458,228514802,229346329,229987450,230678653,231416800,232114546,232720976,233303102,233774505,234200962,234624209,235058851,235511263,235967285,236327433,236623965,236926621,237232462,237541043,237848233,238267165,238767666,239283795,239679127,240051024,240392100,240672731,240940511,241279885,241719893,242105339,242424755,242726051,243163601,243890573,244272890,244539792,244797058,245060483,245315411,245618870,245945077,246334538,246804984,247474342};
 		cM[2] = new int [] {0,885649,1604531,2251840,2895684,3378023,3791034,4111106,4463078,4808381,5165481,5551324,6214266,6754579,7179512,7516661,7828097,8079192,8327228,8596276,8881935,9237862,9659377,10096259,10438294,10806616,11182553,11559220,11936342,12309121,12749981,13262907,14624157,15390177,15818248,16177073,16538769,16911616,17565683,19006401,19787307,20366223,20873088,21466903,22352577,23232944,24291959,25688222,27040457,28690468,29363613,29971579,30611548,31096545,31630684,33502817,34006226,34501296,35565003,36544228,37104268,37716459,38538546,39782960,41294290,42258971,42900580,43485775,44267891,45094757,45742000,46337558,47011834,47895766,48511511,49296457,51257208,53040565,54084080,55547352,57242533,58653398,59731292,60581454,61985304,64612323,65496522,66195776,66975422,67768062,68582802,69418517,70728931,71339829,71932179,72543297,73404873,74234220,74915789,75588211,76289335,77118074,78028413,78863442,79551229,80216176,80962062,82791350,84900441,85991784,87039238,87974847,96146318,99908123,101322100,102414301,103477532,105507497,106717656,107584407,108485699,109497573,111361823,112448924,113775573,114776684,115524735,116816717,118527210,120186581,121009789,121714972,122294050,122994475,124030604,125277833,126410220,127297908,128320210,129195707,130010808,130769319,131511470,132282488,132998211,133686753,134379034,135078478,136250593,137956378,139124835,140206286,141766689,143241136,144278811,145346586,147854980,149193999,150160586,151123954,152183222,153657968,154875511,155640072,156379016,157473088,158801976,160177699,162122844,163660795,165167669,167158511,168750601,169345112,169767667,170136858,170577102,171240550,172522537,173556649,174216831,174996227,175793719,176710332,177451946,178333691,179346760,180850013,182487666,184053853,185382937,188138555,191038343,192012980,192643158,193444416,195737592,196970790,198364748,199655139,201024685,202274887,204162020,205459288,206227408,206898320,207538488,208219895,209096345,210780555,212328483,213064604,213806283,215346380,216149477,216627184,217023025,217423830,217813736,218220180,218666851,219152889,219725318,220371087,220966202,221430793,221919869,222447047,223006996,223595253,224218922,225337717,226455822,227511659,228135471,228660837,229213157,229942122,230628976,231202525,231806241,232522175,233234075,233708441,234172834,234636072,235082463,235427414,235695113,236009257,236361835,236738570,237508161,238437971,238944138,239325202,239639545,239920463,240180403,240408766,240714221,241098626,241582151,242254697};
@@ -92,9 +83,7 @@ public class HBA_Client {
 		cM[20] = new int [] {0,292926,473572,657014,857705,1058561,1485403,1868544,2228613,2612327,3093221,3868950,4301024,4631253,4912279,5165835,5363969,5542615,5710026,5928997,6198774,6777277,7140542,7476497,7866823,8329857,8742429,9220478,9589642,9861232,10096856,10404513,10949573,11309086,11897415,12542449,13007458,14115933,15121236,15426859,15745120,16122887,16747146,17460421,17981314,18516299,19247229,19550347,19869399,20214152,20750637,22476444,23401586,24546569,31395376,33203720,35923804,36575029,37231268,38639140,39253077,40500258,41089920,41679793,42370533,42823326,43212974,43815483,44935675,45411077,45764825,46150188,46547031,46802928,47292852,48283371,49056840,49581434,49984981,50429686,51302501,51761875,52151300,52509760,52817727,53159660,53754424,54423889,54834063,55101528,55393237,55693956,56086811,56421058,56639238,56926138,57231209,57602511,58028697,58339147,58593321,58827173,59026508,59224997,59415032,59584269,59781064,59992603,60180246,60387571,60652459,60941554,61291092,61685923,62215157};
 		cM[21] = new int [] {0,15017120,15289230,15573653,15880487,16207072,16555253,16928766,17438020,18005187,18485950,18803323,19130800,19450826,19783453,20168667,20725543,21353548,21813721,22232616,22694068,23269418,24452040,24974344,25467241,25973042,27306700,27809441,28155670,28466224,28850268,29345477,30529801,32011080,32753030,33329510,33815124,34315884,34962746,35596002,36097297,36516609,36943494,37343254,37692924,38116721,38855111,39475249,39928171,40369657,40910101,41298314,41556414,41815151,42128875,42451917,42689189,42879403,43058575,43228464,43421244,43718533,44100986,44682777,45302237,45839986,46401312,46888364,47339222,47763294};
 		cM[22] = new int [] {0,17230886,17378089,17529780,17688402,17854613,18029673,18212895,18384517,18597145,18924126,19287025,19772690,20273355,20777656,21301888,21787200,22312185,22724244,23082496,23425013,23800260,24208170,24773248,25274533,25707786,26049534,26354531,26616798,26916438,27161035,27373075,27575745,27760974,27965634,28221691,28752505,30471488,31921646,32728170,33293516,34047210,34841505,35649051,36007393,36628801,36906275,37117819,37294383,37457870,37696902,38467350,39408307,40296265,43225022,44102225,44388337,44602972,44803086,45003255,45219212,45479372,45816269,46284559,47031166,47674260,48008505,48229112,48412197,48572724,48725736,48846648,48991997,49134912,49294065,49456722,49626712,49839539,50076448,50414983,51155059};
-
-    	
-    }
+	}
 
 	
 
@@ -106,7 +95,6 @@ public class HBA_Client {
 	
 	//Executioner Method
 	public void run() throws IOException {
-		
 		//Block to establish the connection 
 		try{ 
 			socket = new Socket(clientAddress, port); 
@@ -128,218 +116,44 @@ public class HBA_Client {
   		} catch(IOException i) { 
 			System.out.println(i); 
 		}
-        
-        
-        //Method Call to Initiate Nonce
-        initiateNonce();
-        //Method Call to Input the Data File
-        inputFile(location);
-        
-        //Block to find common snips
-        //Client receives and sends all the snips from Server
-        try {
-        	int count=0;
-        	String line="",locs="",finalChromosomeLocation="";
-            int chromosome=1;
-            while(!line.equals("over")) {
-            	line=clientIn.readUTF();
-            	if (line.contentEquals("continue")) {
-            		chromosome=clientIn.read();
-            		locs=clientIn.readUTF();
-                	finalChromosomeLocation += locs;
-                	clientOut.writeUTF("done");
-            	}
-            	
-            	if (line.contentEquals("last")) {
-            		chromosome=clientIn.read();
-            		locs=clientIn.readUTF();
-            		System.out.println("Received Data for Chromosome :" +chromosome);
-                	finalChromosomeLocation += locs;
-                	//System.out.println("count :" +count++);
-            		List<Integer> received=removeLocations(chromosome,finalChromosomeLocation);
-                	clientOut.writeUTF("done");
-                	finalChromosomeLocation="";
-                	//System.out.println("Done");
-                	
-                	//Sending chunks to Server
-                	//System.out.println("Received Size :" +received.length);
-                	String temp="";
-                	for (int i=0;i<received.size();i++) {
-                		temp+=received.get(i) + " ";
-                		if (i%5000==0 && i >0) {
-                			clientOut.writeUTF("continue");
-                			//System.out.println("temp Size : "+temp.length());
-                			clientOut.writeUTF(temp);
-                			temp="";
-                		}
-                	}
-                	clientOut.writeUTF("last");
-                	clientOut.writeUTF(temp);
-                	clientOut.writeUTF("complete");
-                	clientIn.readUTF();
-                	System.out.println("Sent Data for Chromosome :" +chromosome);
-            	}
-            	if (line.contentEquals("over")) {
-            		clientOut.writeUTF("done");
-            		break;
-            	}
-            	
-            }
-        } catch (IOException e) {
-        	e.printStackTrace();
-        }
-       
-        System.out.println("*******All Data Received");
-        
-		
-        
-		System.out.println("*******All Data Sent"); 
-        
-        
-        
-        //for (int i =1; i<=22;i++) 
-        	//System.out.println("Size of Chromosome  "+i + " is "+genes[i].size());
-        
-        
-		
-		for (int x=1;x<=CHROMOSOME_COUNT;x++) {
-			System.out.println("Chromosome : " +x);
-			int hetero=0,idn=0,hyphen=0,fuck=0;
-			for (int y=0;y<readRejects[x].size();y++) {
-				GenotypedData xy= readRejects[x].get(y);
-				if (xy.getGene1()!=xy.getGene2())
-					hetero++;
-				if (xy.getRSID().charAt(0)=='i' && isPermissible(xy.gene1,xy.gene2)) 
-					idn++;
-				if (xy.getRSID().charAt(0)=='i' && !isPermissible(xy.gene1,xy.gene2)) {
-					fuck++;
-					//xy.display(xy);
-				}
-				
-				if (xy.getGene1()=='-' || xy.getGene2()=='-')
-					hyphen++;
-			}
-			System.out.println("\tHeterozygotes	: " +hetero);
-			System.out.println("\tHomozygotes	: "+genes[x].size());
-			System.out.println("\tRSID starts with i & acceptable Genotypes	: " +idn);
-			System.out.println("\tRSID starts with i & unacceptable Genotypes	: " +fuck);
-			System.out.println("\tGenotypes with --	: " +hyphen);
-		}
 		
 		
-		//Creating Frames
+		//Method Call to Initiate Nonce
+		initiateNonce();
+		
+		//Method Call to Input the Data File
+		inputFile(location);
+		
+		//Method Call to Find Common SNPs between users
+		findSnips();
+		
+		//Method call to display Read Input File Properties
+		displayInputFileProperties();
+		
+		//Method Call To Create Frames
 		setFrames();
-		int totalFrames=0;
-        System.out.println("\n\nSize of Frames");
-		for (int m=1;m<=CHROMOSOME_COUNT;m++) {
-			System.out.println("Chromosome " +m +" : " +frames[m].size());
-			totalFrames+=frames[m].size();
-		}
-        
-		System.out.println("Total Number of Frames : "+totalFrames);
-        
 		
-		
-		//Receiving Hashcodes
-		
-		List<String> hash = new ArrayList<>();
-		try {
-			int hashSize=clientIn.readInt();
-			System.out.println("Recieved Input for Hash Size : " +hashSize);
-			String lines="";
-			
-			int index=0;
-			while(!lines.equals("DONE") ) {
-				lines=clientIn.readUTF();
-				if (lines.contentEquals("cont") && index<hashSize-1) 
-					hash.add(clientIn.readUTF());
-				else
-					clientIn.readUTF();
-			}
-			
-			System.out.println("Number of Hashes Received : "+hash.size());
-			if (hashSize == hash.size())
-				System.out.println("All Hashes Received !!");
-			else 
-				System.out.println("All Hashes Not Received !!");
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		//Sending Hashcodes
-		try {
-			System.out.println("   " +totalFrames);
-			clientOut.writeInt(totalFrames);
-			Random ran = new Random();
-			for (int i=0;i< totalFrames;i++) {
-				int chr = ran.nextInt(22-1) + 1;
-				int fra = ran.nextInt(frames[chr].size()-1) + 1;
-				FrameData obj=frames[chr].get(fra);
-				if (!obj.sent) {
-					String s= obj.evenHashValue + " " + obj.oddHashValue;
-					obj.sent=true;
-					clientOut.writeUTF("cont");
-					clientOut.writeUTF(s);
-					//System.out.println("index :" +(index++)+ " " +s );
-				}
-			}
-			System.out.println("\n\n\n\n\n\n\n\n");
-			if (allSent()) {
-				clientOut.writeUTF("DONE");
-				clientOut.writeUTF("");
-				System.out.println("All Hashes Sent1");
-			}
-			else {
-				for (int i=1;i<=CHROMOSOME_COUNT;i++)
-					for (int j=0;j<frames[i].size();j++) {
-						FrameData obj= frames[i].get(j);
-						if (!obj.sent)
-						{
-							String s= obj.evenHashValue + " " + obj.oddHashValue;
-							obj.sent=true;
-							clientOut.writeUTF("cont");
-							clientOut.writeUTF(s);
-							//System.out.println("index :" +(index++)+ " " +s );
-						}
-					}
-				if (allSent()) {
-					clientOut.writeUTF("DONE");
-					clientOut.writeUTF("");
-					System.out.println("All Hashes Sent2");
-				}
-				else
-					clientOut.writeUTF("Terminate");
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("All Hashes Sent");
-		
-		
-		///matching
-		
-		matchFrames(hash);
-		matchStats();
-		nonMatches();
-		
-		System.out.println("\n\n\n\n\n");
-		for (int j=0;j<frames[22].size();j++) {
-			   FrameData obj = (FrameData) frames[22].get(j);
-				   obj.display(obj, 22);
-			   }
+		//Method call to display Exlusion List
 		displayExclusionList();
-        // close the connection 
-        try
-        { 
-        	clientIn.close(); 
-        	clientOut.close(); 
-            socket.close(); 
-        } 
-        catch(IOException i) 
-        { 
-            System.out.println(i); 
-        } 
+		
+		//Method Call to receive and send Hashcodes
+		List<String> hash = new ArrayList<>();
+		hash=hashCodes();
+				
+		//matching
+		matchFrames(hash);
+		nonMatches();
+		matchStats();
+		
+		//Block to close the connection 
+		try{ 
+			clientIn.close(); 
+			clientOut.close(); 
+		    socket.close(); 
+		    System.out.println("\tConnection closed !!!");
+		} catch(IOException i) { 
+			System.out.println(i); 
+		} 
 	}
 	
 	public void removeDupLocs() {
@@ -432,22 +246,16 @@ public class HBA_Client {
 
 	// Verify if the alleles are Homozygous and in "A,C,G,T" for 
 	public boolean isPermissible (char a, char b) {
-		
 		if (a!=b)
 			return false;
 		else {
 			char [] permissible= {'A','C','G','T'};
-			int x=0,y=0;
 			for (int i=0; i< permissible.length;i++) {
-				if (a==permissible[i])
-					x=1;
-				if (b==permissible[i])
-					y=1;
+				if (a==permissible[i] && b==permissible[i])
+					return true;
 			}
-			if ((x+y)==2) return true ;
-			else return false;
 		}
-		
+		return false;
 	}
 	
 	public void csvParser(String location) throws IOException{
@@ -500,7 +308,7 @@ public class HBA_Client {
             obj.gene1=s.charAt(len-2);
             obj.gene2=s.charAt(len-1);
             
-            if (isPermissible(obj.gene1,obj.gene2) && obj.rsid.substring(0, 2).equals("rs")) {
+            if (isPermissible(obj.gene1,obj.gene2) ) {
             	ArrayList <GenotypedData> gen =  genes[chromosome];
             	gen.add(obj);
             }
@@ -842,4 +650,159 @@ public class HBA_Client {
 				e.printStackTrace();
 			}		 
 	}
+	
+	public void findSnips() {
+		//Block to find common snips
+		//Client receives and sends all the snips from Server
+		try {
+			String line="",locs="",finalChromosomeLocation="";
+			int chromosome=1;
+			while(!line.equals("over")) {
+				line=clientIn.readUTF();
+				if (line.contentEquals("continue")) {
+						chromosome=clientIn.read();
+						locs=clientIn.readUTF();
+						finalChromosomeLocation += locs;
+						clientOut.writeUTF("done");
+				}
+				if (line.contentEquals("last")) {
+						chromosome=clientIn.read();
+						locs=clientIn.readUTF();
+						System.out.println("Received Data for Chromosome :" +chromosome);
+						finalChromosomeLocation += locs;
+						List<Integer> received=removeLocations(chromosome,finalChromosomeLocation);
+						clientOut.writeUTF("done");
+						finalChromosomeLocation="";			
+						//Sending chunks to Server
+						//System.out.println("Received Size :" +received.length);
+						String temp="";
+						for (int i=0;i<received.size();i++) {
+							temp+=received.get(i) + " ";
+							if (i%5000==0 && i >0) {
+								clientOut.writeUTF("continue");
+								clientOut.writeUTF(temp);
+								temp="";
+							}
+						}
+						clientOut.writeUTF("last");
+						clientOut.writeUTF(temp);
+						clientOut.writeUTF("complete");
+						clientIn.readUTF();
+						System.out.println("Sent Data for Chromosome :" +chromosome);
+				}
+				if (line.contentEquals("over")) {
+					clientOut.writeUTF("done");
+			        break;
+				}
+			}
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }   
+	}
+	
+	
+	public void displayInputFileProperties() {
+		for (int x=1;x<=CHROMOSOME_COUNT;x++) {
+			System.out.println("Chromosome : " +x);
+			int hetero=0,idn=0,hyphen=0,sdn=0;
+			for (int y=0;y<readRejects[x].size();y++) {
+				GenotypedData xy= readRejects[x].get(y);
+				if (xy.getGene1()!=xy.getGene2())
+					hetero++;
+				if (xy.getRSID().charAt(0)=='i' && isPermissible(xy.gene1,xy.gene2)) 
+					idn++;
+				if (xy.getRSID().charAt(0)=='i' && !isPermissible(xy.gene1,xy.gene2)) {
+					sdn++;
+				}
+				
+				if (xy.getGene1()=='-' || xy.getGene2()=='-')
+					hyphen++;
+			}
+			System.out.println("\tHeterozygotes	: " +hetero);
+			System.out.println("\tHomozygotes	: "+genes[x].size());
+			System.out.println("\tRSID starts with i & acceptable Genotypes	: " +idn);
+			System.out.println("\tRSID starts with i & unacceptable Genotypes	: " +sdn);
+			System.out.println("\tGenotypes with --	: " +hyphen);
+		}
+	}
+	
+	public List<String> hashCodes(){
+		int totalFrames=0;
+        System.out.println("\n\nSize of Frames");
+		for (int m=1;m<=CHROMOSOME_COUNT;m++) {
+			System.out.println("Chromosome " +m +" : " +frames[m].size());
+			totalFrames+=frames[m].size();
+		}
+		System.out.println("Total Number of Frames : "+totalFrames);
+    	//Receiving Hashcodes	
+		List<String> hash = new ArrayList<>();
+		try {
+			int hashSize=clientIn.readInt();
+			System.out.println("Recieved Input for Hash Size : " +hashSize);
+			String lines="";
+			
+			int index=0;
+			while(!lines.equals("DONE") ) {
+				lines=clientIn.readUTF();
+				if (lines.contentEquals("cont") && index<hashSize-1) 
+					hash.add(clientIn.readUTF());
+				else
+					clientIn.readUTF();
+			}
+			System.out.println("Number of Hashes Received : "+hash.size());
+			if (hashSize == hash.size())
+				System.out.println("All Hashes Received !!");
+			else 
+				System.out.println("All Hashes Not Received !!");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		//Sending Hashcodes
+		try {
+			System.out.println("   " +totalFrames);
+			clientOut.writeInt(totalFrames);
+			Random ran = new Random();
+			for (int i=0;i< totalFrames;i++) {
+				int chr = ran.nextInt(22-1) + 1;
+				int fra = ran.nextInt(frames[chr].size()-1) + 1;
+				FrameData obj=frames[chr].get(fra);
+				if (!obj.sent) {
+					String s= obj.evenHashValue + " " + obj.oddHashValue;
+					obj.sent=true;
+					clientOut.writeUTF("cont");
+					clientOut.writeUTF(s);
+				}
+			}
+			if (allSent()) {
+				clientOut.writeUTF("DONE");
+				clientOut.writeUTF("");
+			}
+			else {
+				for (int i=1;i<=CHROMOSOME_COUNT;i++)
+					for (int j=0;j<frames[i].size();j++) {
+						FrameData obj= frames[i].get(j);
+						if (!obj.sent)
+						{
+							String s= obj.evenHashValue + " " + obj.oddHashValue;
+							obj.sent=true;
+							clientOut.writeUTF("cont");
+							clientOut.writeUTF(s);
+						}
+					}
+				if (allSent()) {
+					clientOut.writeUTF("DONE");
+					clientOut.writeUTF("");
+				}
+				else
+					clientOut.writeUTF("Terminate");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("All Hashes Sent");
+		return hash;
+	}
+	
+	
+	
 }
