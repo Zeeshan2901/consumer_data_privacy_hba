@@ -8,7 +8,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.IntStream;
 import java.io.*;
 import java.math.BigInteger;
@@ -24,6 +23,9 @@ public class HBA_Server {
 	//Location of the input File
 	private String location;
 
+	//Overlapping variable
+	int overlap;
+	
 	// NONCE fields
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
@@ -43,8 +45,10 @@ public class HBA_Server {
 	//Constructor to initialize the variables
 	public HBA_Server() {
 		port = 5000;
-		location="input/dad_all.txt";
+		location="input/sister_all.txt";
 
+		overlap=5;
+		
 		genes			= new ArrayList[CHROMOSOME_COUNT+1];
 		frames			= new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList	= new ArrayList[CHROMOSOME_COUNT+1];
@@ -136,8 +140,14 @@ public class HBA_Server {
 		
 		//matching
 		matchFrames(hash);
-		nonMatches();
+		//nonMatches();
 		matchStats();
+		
+		/*
+		 * for (int j=0;j<frames[17].size();j++) { FrameData obj = frames[17].get(j);
+		 * obj.display(obj, 17); }
+		 */
+		
 		
 		// block to close connections
 		try {
@@ -165,14 +175,12 @@ public class HBA_Server {
 		int i=0,j=0;
 		//Splitting the string of locations into Array of Locations
 		String[] temp = locs.split(" ");
-		//Will go to Loggers
-		System.out.println("genes size	: "+ genes[chromosome].size());
-		System.out.println("temp size	: "+temp.length);
 		//Transforming array of locations to into a list of location
 		List<Integer> party = new ArrayList<>();
 		for( i = 0; i < temp.length; i++) 
 			party.add ( Integer.parseInt(temp[i]));
-		System.out.println("party size	: "+party.size());
+		System.out.println("Initial  size	: "+ genes[chromosome].size());
+		System.out.println("Received size	: "+ party.size());
 		i=0;
 		//Iterating through party's location list and current user's location list to find common locations
 		//and removing unwanted locations
@@ -203,6 +211,7 @@ public class HBA_Server {
 			}
 		}
 		//will go to loggers
+		System.out.println("Final    size	: " + genes[chromosome].size());
 		System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);
 	}
 	
@@ -466,7 +475,7 @@ public class HBA_Server {
 	
 	public void setFrames() {
 		try {
-			for (int i =0; i<1; i++) {	
+			for (int i =0; i<overlap; i++) {	
 				frameWithcM(i);
 		    }
 		} catch(Exception e) {
@@ -508,24 +517,52 @@ public class HBA_Server {
 	
 	public void matchStats() {
 		System.out.println("\n\nMatch Stats \n");
-		int overall=0,totMatch=0;
+		int overall=0,totMatch=0, totalCM=0, oevrallCM=0;
 		for (int i=1;i<=CHROMOSOME_COUNT;i++) {
 			int match=0;
-			int total=0;
+			int cmCount=0;
+			int start=0;
+			int end=0;
+			int cMNow=0;
 			for (int j=0;j<frames[i].size();j++) {
 				FrameData obj = frames[i].get(j);
-				if (obj.match)
+				if (obj.match) 
 					match++;
-				total++;
+				if (obj.match && start==0 && end==0) {
+					//System.out.println("Init");
+					if (cmCount > obj.cmStart) 
+						start=cmCount;
+					else
+						start=obj.cmStart;
+					end=obj.cmEnd;
+				}
+				
+				if (obj.match && start >=0 && end > 0)
+					end = obj.cmEnd;
+				if (!obj.match && obj.cmEnd > 0) {
+					cmCount += end-start;
+					start=0;
+					end=0;
+				}
+				if (j==frames[i].size()-1 && start >=0 && end >0)
+					cmCount += end-start;
+				
 			}
-			overall+=total;
+			overall+=frames[i].size();
 			totMatch+=match;
+			totalCM+=cmCount;
+			cMNow = (frames[i].get(frames[i].size()-1).cmEnd);
+			oevrallCM+=cMNow;
 			System.out.println("At Chromosome "+i);
-			System.out.println("\t\t\tTotal    Frames are "+ total);
-			System.out.println("\t\t\tMatching Frames are "+ match);
+			System.out.println("\t\t\tTotal    Frames are	"+ frames[i].size());
+			System.out.println("\t\t\tMatching Frames are	"+ match);
+			System.out.println("\t\t\tTotal    CMs    are	"+ cMNow);
+			System.out.println("\t\t\tMatching CentiMorgans	"+ cmCount);
 		}
-		System.out.println("Overall Total    Frames are "+ overall);
-		System.out.println("Overall Matching Frames are "+ totMatch);
+		System.out.println("Overall Total    Frames are	"+ overall);
+		System.out.println("Overall Matching Frames are	"+ totMatch);
+		System.out.println("Overall Total	 CMs	are	"+ oevrallCM);
+		System.out.println("Overall Matching CMs	are	"+ totalCM);
 	}
 	
 	public void nonMatches() {
@@ -685,6 +722,7 @@ public class HBA_Server {
 	
 	
 	public List<String> hashCodes() {
+		//Finding Total number of Hashes
 		int totalFrames=0;
 		System.out.println("\n\nSize of Frames");
 		for (int m=1;m<=CHROMOSOME_COUNT;m++) {
@@ -692,72 +730,56 @@ public class HBA_Server {
 			totalFrames+=frames[m].size();
 		}
 		System.out.println("Total Number of Frames : "+totalFrames);
-		//Sending Hashcodes
-		try {
-			System.out.println("   " +totalFrames);
+		//Create a list of all hashes
+		List<String> hashToBeSent = new ArrayList<>();
+		List<String> hashReceived = new ArrayList<>();
+		try {	
+			//Sending the value of total number of hashes
 			serverOut.writeInt(totalFrames);
-			Random ran = new Random();
-			for (int i=0;i< totalFrames;i++) {
-				int chr = ran.nextInt(22-1) + 1;
-				int fra = ran.nextInt(frames[chr].size()-1) + 1;
-				FrameData obj=frames[chr].get(fra);
-				if (!obj.sent) {
-					String s= obj.evenHashValue + " " + obj.oddHashValue;
-					obj.sent=true;
-					serverOut.writeUTF("cont");
-					serverOut.writeUTF(s);
-					//System.out.println("index :" +(index++)+ " " +s );
-				}
-			}
-			if (allSent()) {
-				serverOut.writeUTF("DONE");
-				serverOut.writeUTF("");
-				System.out.println("All Hashes Sent1");
-			}
-			else {
-				for (int i=1;i<=CHROMOSOME_COUNT;i++)
-					for (int j=0;j<frames[i].size();j++) {
-						FrameData obj= frames[i].get(j);
-						if (!obj.sent)
-						{
-							String s= obj.evenHashValue + " " + obj.oddHashValue;
-							obj.sent=true;
-							serverOut.writeUTF("cont");
-							serverOut.writeUTF(s);
-							//System.out.println("index :" +(index++)+ " " +s );
-						}
+			//Receiving total number of hashes count
+			int hashSize=serverIn.readInt();
+			System.out.println("Recieved Input for Hash Size : " +hashSize);
+			//Generating the list of hashes that needs to be sent
+			for (int i=1;i<=CHROMOSOME_COUNT;i++)
+				for (int j=0;j<frames[i].size();j++) {
+					FrameData obj= frames[i].get(j);
+					if (!obj.sent){
+						String s= obj.evenHashValue + " " + obj.oddHashValue;
+						obj.sent=true;
+						hashToBeSent.add(s);
 					}
-				if (allSent()) {
-					serverOut.writeUTF("DONE");
-					serverOut.writeUTF("");
-					System.out.println("All Hashes Sent2");
 				}
-				else
-					serverOut.writeUTF("Terminate");
+			//Sort the hashvalue list
+			Collections.sort(hashToBeSent);
+			//Sending and Receiving Hashcodes
+			String batch="", received="";
+			int counter=0;
+			for(String hashCode : hashToBeSent) {
+				batch += hashCode + "||";
+				counter++;
+				if (counter==100) {
+					//Sending batches of 100 HashCodes
+					serverOut.writeUTF(batch);
+					batch="";
+					//Receiving batch of 100 HashCodes
+					received +=serverIn.readUTF();
+					counter=0;
+				}
 			}
+			//Sending and Receiving the last batch of less than 100 hashes
+			serverOut.writeUTF(batch);
+			received += serverIn.readUTF();
+			//transforming received hashcodes into a list of strings
+			String []arr=received.split("[||]");
+			for (String w:arr) 
+				if (!w.contentEquals(""))
+					hashReceived.add(w);
+			System.out.println("Input Size : "+hashReceived.size());			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("All Hashes Sent");
-		List<String> hash = new ArrayList<>();
-		//Receiving HashCodes
-		try {
-			int hashsize=serverIn.readInt();
-			System.out.println("   " +hashsize);
-			String lines="";
-			int index=0;
-			while(!lines.equals("DONE") ) {
-				lines=serverIn.readUTF();
-				if (lines.contentEquals("cont") && index<hashsize-1) 
-					hash.add(serverIn.readUTF());
-				else
-					serverIn.readUTF();
-			}
-			System.out.println("Number of Hashes Received : "+hash.size());		
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return hash;
+		System.out.println("All Hashes Sent and Received");
+		return hashReceived;
 	}
 	
 }

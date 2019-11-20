@@ -8,7 +8,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.IntStream;
 import java.io.*;
 import java.math.BigInteger; 
@@ -40,17 +39,22 @@ public class HBA_Client {
 	//2D centiMogran Array holding the starting positions of each centiMorgan
 	int [][] cM;
 	
+	//Overlapping variable
+	int overlap;
+	
 	//Constructor to initialize the variables
 	public HBA_Client() {
 		clientAddress="127.0.0.1"; 
 		port=5000;
 	
+		overlap=5;
+		
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
 		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
 	
-		location="input/sister_all.txt";
+		location="input/son_all.txt";
 		
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();
@@ -142,8 +146,14 @@ public class HBA_Client {
 				
 		//matching
 		matchFrames(hash);
-		nonMatches();
+		//nonMatches();
 		matchStats();
+		
+		/*
+		 * //for (int i=1;i<=CHROMOSOME_COUNT;i++) for (int j=0;j<frames[17].size();j++)
+		 * { FrameData obj = frames[17].get(j); obj.display(obj, 17); }
+		 * 
+		 */
 		
 		//Block to close the connection 
 		try{ 
@@ -173,16 +183,13 @@ public class HBA_Client {
 	int i=0,j=0;
 	
 	//Splitting the string of locations into Array of Locations
-	String[] temp = locs.split(" ");
-	
-	System.out.println("genes size	: "+ genes[chromosome].size());
-	System.out.println("temp size	: "+temp.length);
-	
+	String[] temp = locs.split(" ");	
 	//Transforming array of locations to into a list of location
 	List<Integer> party = new ArrayList<>();
 	for( i = 0; i < temp.length; i++) 
 		party.add ( Integer.parseInt(temp[i]));
-	System.out.println("party size	: "+party.size());
+	System.out.println("Initial  size	: "+ genes[chromosome].size());
+	System.out.println("Received size	: "+ party.size());
 	
 	
 	i=0;
@@ -218,6 +225,7 @@ public class HBA_Client {
 			mismatches++;
 		}
 	}
+	System.out.println("Final    size	: " + genes[chromosome].size());
 	System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);
 	return party;
 	}
@@ -434,7 +442,6 @@ public class HBA_Client {
 				int cmStart=0;
 			//iterating through the data of each chromosomes
 				for(int j=0; j<genes[i].size(); j++) {
-					
 					//fetching first location in the centiMorgan
 					GenotypedData o= genes[i].get(j);
 					int loc = o.getLocation();
@@ -498,7 +505,7 @@ public class HBA_Client {
 						GenotypedData obj= genes[i].get(j-1);
 						end=obj.location;
 						endRsid=obj.getRSID();
-						System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
+						//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
 						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
 						gen.add(fr);
 						start=0;
@@ -508,34 +515,26 @@ public class HBA_Client {
 					}
 				}
 				cMIndex+=5;
-				
 				if (cM[i].length < (cMIndex+5))
 					break;
 				}
-				
-				
 			}
-			
-			
-			
 		}catch(Exception e) {
 			System.out.println("Exception occured: "+e);
 			e.printStackTrace();
 		}
-		System.out.println("exiting");
 	}
 	
 	
 	public void setFrames() {
 		try {
-			for (int i =0; i<1; i++) {	
+			for (int i =0; i<overlap; i++) {	
 				frameWithcM(i);
 		    }
 		} catch(Exception e) {
 			System.out.println("Exception occured: "+e);
 			e.printStackTrace();
 		}
-		
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(frames[x]));
 	}
 
@@ -572,22 +571,55 @@ public class HBA_Client {
 	}
 	
 	public void matchStats() {
-		
+		System.out.println("\n\nMatch Stats \n");
+		int overall=0,totMatch=0, totalCM=0, oevrallCM=0;
 		for (int i=1;i<=CHROMOSOME_COUNT;i++) {
 			int match=0;
-			int total=0;
+			int cmCount=0;
+			int start=0;
+			int end=0;
+			int cMNow=0;
 			for (int j=0;j<frames[i].size();j++) {
 				FrameData obj = frames[i].get(j);
-				if (obj.match)
+				if (obj.match) {
 					match++;
-				total++;
+					if (start==0 && end==0) {
+						if (cmCount > obj.cmStart) 
+							start=cmCount;
+						else
+							start=obj.cmStart;
+						end=obj.cmEnd;
+					}
+					
+					if (start >=0 && end > 0) 
+						end = obj.cmEnd;
+				}	
+				if (!obj.match && obj.cmEnd > 0) {
+					cmCount += end-start;
+					start=0;
+					end=0;
+				}
+				if (j==frames[i].size()-1 && start >=0 && end >0)
+					cmCount += end-start;
 			}
+			overall+=frames[i].size();
+			totMatch+=match;
+			totalCM+=cmCount;
+			cMNow = (frames[i].get(frames[i].size()-1).cmEnd);
+			oevrallCM+=cMNow;
 			System.out.println("At Chromosome "+i);
-			System.out.println("\t\t\tTotal    Frames are "+ total);
-			System.out.println("\t\t\tMatching Frames are "+ match);
-		
+			System.out.println("\t\t\tTotal    Frames are	"+ frames[i].size());
+			System.out.println("\t\t\tMatching Frames are	"+ match);
+			System.out.println("\t\t\tTotal    CMs    are	"+ cMNow);
+			System.out.println("\t\t\tMatching CentiMorgans	"+ cmCount);
 		}
+		System.out.println("Overall Total    Frames are	"+ overall);
+		System.out.println("Overall Matching Frames are	"+ totMatch);
+		System.out.println("Overall Total	 CMs	are	"+ oevrallCM);
+		System.out.println("Overall Matching CMs	are	"+ totalCM);
 	}
+	
+	
 	public void nonMatches() {
 		
 		for (int i=1;i<=CHROMOSOME_COUNT;i++)
@@ -727,6 +759,7 @@ public class HBA_Client {
 	}
 	
 	public List<String> hashCodes(){
+		//Finding Total number of Hashes
 		int totalFrames=0;
         System.out.println("\n\nSize of Frames");
 		for (int m=1;m<=CHROMOSOME_COUNT;m++) {
@@ -734,73 +767,58 @@ public class HBA_Client {
 			totalFrames+=frames[m].size();
 		}
 		System.out.println("Total Number of Frames : "+totalFrames);
-    	//Receiving Hashcodes	
+		//Create a list of all hashes
+		List<String> hashToBeSent = new ArrayList<>();
+		List<String> hashReceived = new ArrayList<>();
+		//Receiving and Sending HashCodes	
 		List<String> hash = new ArrayList<>();
 		try {
+			//Receiving total number of hashes count
 			int hashSize=clientIn.readInt();
 			System.out.println("Recieved Input for Hash Size : " +hashSize);
-			String lines="";
-			
-			int index=0;
-			while(!lines.equals("DONE") ) {
-				lines=clientIn.readUTF();
-				if (lines.contentEquals("cont") && index<hashSize-1) 
-					hash.add(clientIn.readUTF());
-				else
-					clientIn.readUTF();
-			}
-			System.out.println("Number of Hashes Received : "+hash.size());
-			if (hashSize == hash.size())
-				System.out.println("All Hashes Received !!");
-			else 
-				System.out.println("All Hashes Not Received !!");
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		//Sending Hashcodes
-		try {
-			System.out.println("   " +totalFrames);
+			//Sending the value of total number of hashes
 			clientOut.writeInt(totalFrames);
-			Random ran = new Random();
-			for (int i=0;i< totalFrames;i++) {
-				int chr = ran.nextInt(22-1) + 1;
-				int fra = ran.nextInt(frames[chr].size()-1) + 1;
-				FrameData obj=frames[chr].get(fra);
-				if (!obj.sent) {
-					String s= obj.evenHashValue + " " + obj.oddHashValue;
-					obj.sent=true;
-					clientOut.writeUTF("cont");
-					clientOut.writeUTF(s);
-				}
-			}
-			if (allSent()) {
-				clientOut.writeUTF("DONE");
-				clientOut.writeUTF("");
-			}
-			else {
-				for (int i=1;i<=CHROMOSOME_COUNT;i++)
-					for (int j=0;j<frames[i].size();j++) {
-						FrameData obj= frames[i].get(j);
-						if (!obj.sent)
-						{
-							String s= obj.evenHashValue + " " + obj.oddHashValue;
-							obj.sent=true;
-							clientOut.writeUTF("cont");
-							clientOut.writeUTF(s);
-						}
+			//Generating the list of hashes that needs to be sent
+			for (int i=1;i<=CHROMOSOME_COUNT;i++)
+				for (int j=0;j<frames[i].size();j++) {
+					FrameData obj= frames[i].get(j);
+					if (!obj.sent){
+						String s= obj.evenHashValue + " " + obj.oddHashValue;
+						obj.sent=true;
+						hashToBeSent.add(s);
 					}
-				if (allSent()) {
-					clientOut.writeUTF("DONE");
-					clientOut.writeUTF("");
 				}
-				else
-					clientOut.writeUTF("Terminate");
+			//Sort the hashvalue list
+			Collections.sort(hashToBeSent);
+			//Sending and Receiving Hashcodes
+			String batch="", received="";
+			int counter=0;
+			for(String hashCode : hashToBeSent) {
+				batch += hashCode + "||";
+				counter++;
+				if (counter==100) {
+					//Receiving batch of 100 HashCodes
+					received += clientIn.readUTF();
+					//Sending batches of 100 HashCodes
+					clientOut.writeUTF(batch);
+					batch="";
+					counter=0;
+				}
 			}
+			//Sending and Receiving the last batch of less than 100 hashes
+			received += clientIn.readUTF();
+			clientOut.writeUTF(batch);
+			//transforming received hashcodes in a list of strings
+			String []arr=received.split("[||]");
+			for (String w:arr)
+				if (!w.contentEquals(""))
+					hashReceived.add(w);
+			System.out.println("Input Size : "+hashReceived.size());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("All Hashes Sent");
-		return hash;
+		System.out.println("All Hashes Sent and received");
+		return hashReceived;
 	}
 	
 	
