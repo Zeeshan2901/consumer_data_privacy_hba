@@ -1,431 +1,451 @@
-Server started
-Waiting for a client ...
-Connection established with Client 
-Just connected to /127.0.0.1:58852
+Connected
+Connection established with Server 
+Just connected to /127.0.0.1:5000
 Other Party Is Honest
- My Data		: 7423631123373953145 :: 82796d6728147d2cfa340e6a9606211d1bfed8c2af7c34958bb90cc89fe5175d
+ My Data		: -4679188047861896327 :: 355b5cb5bbe90c9d610c9df4a4a791c9240b5554f1eab7f8ad933bc779a20705
 
- Party Data		: -3831958877131843632 :: afdefd73e3bf37ad1bf9022bb0169163a900a033baf59f960382c65203703f68
+ Party Data		: 8029565645421688216 :: b30d35578bd339ba1c822eddffc3a622b3cd33db12b4f8415211a9972c5739d1
 
- Nonce			: -5921058576144808023
-Sent data for chromosome : 1
-genes size	: 54891
-temp size	: 43968
-party size	: 43968
+ Nonce			: -3423140154712645919
+Received Data for Chromosome :1
+Initial  size	: 30224
+Received size	: 54829
+Final    size	: 22657
 Mismatches in Chromosome  1 are 0
-Received data for chromosome : 1
-Sent data for chromosome : 2
-genes size	: 54138
-temp size	: 42694
-party size	: 42694
+Sent Data for Chromosome :1
+Received Data for Chromosome :2
+Initial  size	: 31010
+Received size	: 54396
+Final    size	: 23815
 Mismatches in Chromosome  2 are 0
-Received data for chromosome : 2
-Sent data for chromosome : 3
-genes size	: 44586
-temp size	: 35232
-party size	: 35232
+Sent Data for Chromosome :2
+Received Data for Chromosome :3
+Initial  size	: 26088
+Received size	: 44574
+Final    size	: 22520
 Mismatches in Chromosome  3 are 0
-Received data for chromosome : 3
-Sent data for chromosome : 4
-genes size	: 38046
-temp size	: 29764
-party size	: 29764
+Sent Data for Chromosome :3
+Received Data for Chromosome :4
+Initial  size	: 23353
+Received size	: 38327
+Final    size	: 16832
 Mismatches in Chromosome  4 are 0
-Received data for chromosome : 4
-Sent data for chromosome : 5
-genes size	: 38877
-temp size	: 30521
-party size	: 30521
+Sent Data for Chromosome :4
+Received Data for Chromosome :5
+Initial  size	: 23579
+Received size	: 39091
+Final    size	: 18286
 Mismatches in Chromosome  5 are 0
-Received data for chromosome : 5
-Sent data for chromosome : 6
-genes size	: 46183
-temp size	: 36001
-party size	: 36001
+Sent Data for Chromosome :5
+Received Data for Chromosome :6
+Initial  size	: 25748
+Received size	: 44584
+Final    size	: 19731
 Mismatches in Chromosome  6 are 0
-Received data for chromosome : 6
-Sent data for chromosome : 7
-genes size	: 35635
-temp size	: 28000
-party size	: 28000
+Sent Data for Chromosome :6
+Received Data for Chromosome :7
+Initial  size	: 20848
+Received size	: 35527
+Final    size	: 17300
 Mismatches in Chromosome  7 are 0
-Received data for chromosome : 7
-Sent data for chromosome : 8
-genes size	: 34546
-temp size	: 26749
-party size	: 26749
+Sent Data for Chromosome :7
+Received Data for Chromosome :8
+Initial  size	: 21360
+Received size	: 52957
+Final    size	: 18604
 Mismatches in Chromosome  8 are 0
-Received data for chromosome : 8
-Sent data for chromosome : 9
-genes size	: 29676
-temp size	: 23115
-party size	: 23115
+Sent Data for Chromosome :8
+Received Data for Chromosome :9
+Initial  size	: 17922
+Received size	: 29690
+Final    size	: 13536
 Mismatches in Chromosome  9 are 0
-Received data for chromosome : 9
-Sent data for chromosome : 10
-genes size	: 35731
-temp size	: 28389
-party size	: 28389
+Sent Data for Chromosome :9
+Received Data for Chromosome :10
+Initial  size	: 20472
+Received size	: 35747
+Final    size	: 15548
 Mismatches in Chromosome  10 are 0
-Received data for chromosome : 10
-Sent data for chromosome : 11
-genes size	: 33620
-temp size	: 26476
-party size	: 26476
+Sent Data for Chromosome :10
+Received Data for Chromosome :11
+Initial  size	: 18971
+Received size	: 33770
+Final    size	: 13344
 Mismatches in Chromosome  11 are 0
-Received data for chromosome : 11
-Sent data for chromosome : 12
-genes size	: 33358
-temp size	: 26594
-party size	: 26594
+Sent Data for Chromosome :11
+Received Data for Chromosome :12
+Initial  size	: 19060
+Received size	: 33364
+Final    size	: 13972
 Mismatches in Chromosome  12 are 0
-Received data for chromosome : 12
-Sent data for chromosome : 13
-genes size	: 24909
-temp size	: 20076
-party size	: 20076
+Sent Data for Chromosome :12
+Received Data for Chromosome :13
+Initial  size	: 14855
+Received size	: 25451
+Final    size	: 11377
 Mismatches in Chromosome  13 are 0
-Received data for chromosome : 13
-Sent data for chromosome : 14
-genes size	: 21668
-temp size	: 16977
-party size	: 16977
+Sent Data for Chromosome :13
+Received Data for Chromosome :14
+Initial  size	: 12512
+Received size	: 21394
+Final    size	: 10727
 Mismatches in Chromosome  14 are 0
-Received data for chromosome : 14
-Sent data for chromosome : 15
-genes size	: 19512
-temp size	: 15228
-party size	: 15228
+Sent Data for Chromosome :14
+Received Data for Chromosome :15
+Initial  size	: 11622
+Received size	: 19655
+Final    size	: 7936
 Mismatches in Chromosome  15 are 0
-Received data for chromosome : 15
-Sent data for chromosome : 16
-genes size	: 21129
-temp size	: 16876
-party size	: 16876
+Sent Data for Chromosome :15
+Received Data for Chromosome :16
+Initial  size	: 11683
+Received size	: 21529
+Final    size	: 8560
 Mismatches in Chromosome  16 are 0
-Received data for chromosome : 16
-Sent data for chromosome : 17
-genes size	: 18909
-temp size	: 15353
-party size	: 15353
+Sent Data for Chromosome :16
+Received Data for Chromosome :17
+Initial  size	: 10561
+Received size	: 18991
+Final    size	: 7229
 Mismatches in Chromosome  17 are 0
-Received data for chromosome : 17
-Sent data for chromosome : 18
-genes size	: 19823
-temp size	: 15414
-party size	: 15414
+Sent Data for Chromosome :17
+Received Data for Chromosome :18
+Initial  size	: 11444
+Received size	: 19648
+Final    size	: 9389
 Mismatches in Chromosome  18 are 0
-Received data for chromosome : 18
-Sent data for chromosome : 19
-genes size	: 13440
-temp size	: 10355
-party size	: 10355
+Sent Data for Chromosome :18
+Received Data for Chromosome :19
+Initial  size	: 6582
+Received size	: 13017
+Final    size	: 4621
 Mismatches in Chromosome  19 are 0
-Received data for chromosome : 19
-Sent data for chromosome : 20
-genes size	: 16688
-temp size	: 13089
-party size	: 13089
+Sent Data for Chromosome :19
+Received Data for Chromosome :20
+Initial  size	: 9611
+Received size	: 16852
+Final    size	: 7506
 Mismatches in Chromosome  20 are 0
-Received data for chromosome : 20
-Sent data for chromosome : 21
-genes size	: 9629
-temp size	: 7710
-party size	: 7710
+Sent Data for Chromosome :20
+Received Data for Chromosome :21
+Initial  size	: 5772
+Received size	: 9697
+Final    size	: 4977
 Mismatches in Chromosome  21 are 0
-Received data for chromosome : 21
-Sent data for chromosome : 22
-genes size	: 9974
-temp size	: 7763
-party size	: 7763
+Sent Data for Chromosome :21
+Received Data for Chromosome :22
+Initial  size	: 5857
+Received size	: 9654
+Final    size	: 4255
 Mismatches in Chromosome  22 are 0
-Received data for chromosome : 22
+Sent Data for Chromosome :22
 Chromosome : 1
-	Heterozygotes		: 21881
-	Homozygotes		: 43968
-	Genotypes with --	: 366
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 37
-Chromosome : 2
-	Heterozygotes		: 23031
-	Homozygotes		: 42694
-	Genotypes with --	: 296
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 18
-Chromosome : 3
-	Heterozygotes		: 18589
-	Homozygotes		: 35232
-	Genotypes with --	: 230
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 4
-Chromosome : 4
-	Heterozygotes		: 16972
-	Homozygotes		: 29764
-	Genotypes with --	: 275
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 6
-Chromosome : 5
-	Heterozygotes		: 17171
-	Homozygotes		: 30521
-	Genotypes with --	: 218
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 9
-Chromosome : 6
-	Heterozygotes		: 17006
-	Homozygotes		: 36001
-	Genotypes with --	: 383
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 28
-Chromosome : 7
-	Heterozygotes		: 15315
-	Homozygotes		: 28000
-	Genotypes with --	: 299
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 33
-Chromosome : 8
-	Heterozygotes		: 40486
-	Homozygotes		: 26749
-	Genotypes with --	: 468
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 934
-Chromosome : 9
-	Heterozygotes		: 15456
-	Homozygotes		: 23115
-	Genotypes with --	: 1491
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 282
-Chromosome : 10
-	Heterozygotes		: 14548
-	Homozygotes		: 28389
-	Genotypes with --	: 224
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 15
-Chromosome : 11
-	Heterozygotes		: 14228
-	Homozygotes		: 26476
-	Genotypes with --	: 184
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 10
-Chromosome : 12
-	Heterozygotes		: 13644
-	Homozygotes		: 26594
-	Genotypes with --	: 229
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 13
-Chromosome : 13
-	Heterozygotes		: 11161
-	Homozygotes		: 20076
-	Genotypes with --	: 136
-	RSID starts with i & acceptable Genotypes		: 0
+	Heterozygotes	: 13568
+	Homozygotes	: 22657
+	RSID starts with i & acceptable Genotypes	: 0
 	RSID starts with i & unacceptable Genotypes	: 5
-Chromosome : 14
-	Heterozygotes		: 9119
-	Homozygotes		: 16977
-	Genotypes with --	: 121
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 6
-Chromosome : 15
-	Heterozygotes		: 8855
-	Homozygotes		: 15228
-	Genotypes with --	: 151
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 15
-Chromosome : 16
-	Heterozygotes		: 8946
-	Homozygotes		: 16876
-	Genotypes with --	: 174
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 10
-Chromosome : 17
-	Heterozygotes		: 7714
-	Homozygotes		: 15353
-	Genotypes with --	: 179
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 21
-Chromosome : 18
-	Heterozygotes		: 8152
-	Homozygotes		: 15414
-	Genotypes with --	: 84
-	RSID starts with i & acceptable Genotypes		: 0
+	Genotypes with --	: 61
+Chromosome : 2
+	Heterozygotes	: 15162
+	Homozygotes	: 23815
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 7
+	Genotypes with --	: 70
+Chromosome : 3
+	Heterozygotes	: 12205
+	Homozygotes	: 22520
+	RSID starts with i & acceptable Genotypes	: 0
 	RSID starts with i & unacceptable Genotypes	: 1
-Chromosome : 19
-	Heterozygotes		: 5036
-	Homozygotes		: 10355
-	Genotypes with --	: 179
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 13
-Chromosome : 20
-	Heterozygotes		: 7147
-	Homozygotes		: 13089
-	Genotypes with --	: 84
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 6
-Chromosome : 21
-	Heterozygotes		: 3772
-	Homozygotes		: 7710
-	Genotypes with --	: 66
-	RSID starts with i & acceptable Genotypes		: 0
+	Genotypes with --	: 70
+Chromosome : 4
+	Heterozygotes	: 10704
+	Homozygotes	: 16832
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 4
+	Genotypes with --	: 60
+Chromosome : 5
+	Heterozygotes	: 11085
+	Homozygotes	: 18286
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 1
+	Genotypes with --	: 51
+Chromosome : 6
+	Heterozygotes	: 11997
+	Homozygotes	: 19731
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 15
+	Genotypes with --	: 52
+Chromosome : 7
+	Heterozygotes	: 10109
+	Homozygotes	: 17300
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 8
+	Genotypes with --	: 46
+Chromosome : 8
+	Heterozygotes	: 23970
+	Homozygotes	: 18604
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 37
+	Genotypes with --	: 90
+Chromosome : 9
+	Heterozygotes	: 10896
+	Homozygotes	: 13536
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 213
+	Genotypes with --	: 40
+Chromosome : 10
+	Heterozygotes	: 9381
+	Homozygotes	: 15548
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 2
+	Genotypes with --	: 48
+Chromosome : 11
+	Heterozygotes	: 8902
+	Homozygotes	: 13344
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 5
+	Genotypes with --	: 43
+Chromosome : 12
+	Heterozygotes	: 8884
+	Homozygotes	: 13972
+	RSID starts with i & acceptable Genotypes	: 0
 	RSID starts with i & unacceptable Genotypes	: 0
+	Genotypes with --	: 51
+Chromosome : 13
+	Heterozygotes	: 6460
+	Homozygotes	: 11377
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 4
+	Genotypes with --	: 36
+Chromosome : 14
+	Heterozygotes	: 6179
+	Homozygotes	: 10727
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 2
+	Genotypes with --	: 24
+Chromosome : 15
+	Heterozygotes	: 5386
+	Homozygotes	: 7936
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 3
+	Genotypes with --	: 31
+Chromosome : 16
+	Heterozygotes	: 5543
+	Homozygotes	: 8560
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 5
+	Genotypes with --	: 31
+Chromosome : 17
+	Heterozygotes	: 4627
+	Homozygotes	: 7229
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 13
+	Genotypes with --	: 23
+Chromosome : 18
+	Heterozygotes	: 5443
+	Homozygotes	: 9389
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 0
+	Genotypes with --	: 27
+Chromosome : 19
+	Heterozygotes	: 3522
+	Homozygotes	: 4621
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 3
+	Genotypes with --	: 28
+Chromosome : 20
+	Heterozygotes	: 4763
+	Homozygotes	: 7506
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 0
+	Genotypes with --	: 27
+Chromosome : 21
+	Heterozygotes	: 2590
+	Homozygotes	: 4977
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 1
+	Genotypes with --	: 8
 Chromosome : 22
-	Heterozygotes		: 4104
-	Homozygotes		: 7763
-	Genotypes with --	: 125
-	RSID starts with i & acceptable Genotypes		: 0
-	RSID starts with i & unacceptable Genotypes	: 44
+	Heterozygotes	: 2812
+	Homozygotes	: 4255
+	RSID starts with i & acceptable Genotypes	: 0
+	RSID starts with i & unacceptable Genotypes	: 18
+	Genotypes with --	: 24
 
 		Exclusion List 
 
 
- No. of Frames excluded in Chromosome 1 is 0
- No. of Frames excluded in Chromosome 2 is 0
- No. of Frames excluded in Chromosome 3 is 0
- No. of Frames excluded in Chromosome 4 is 0
- No. of Frames excluded in Chromosome 5 is 0
- No. of Frames excluded in Chromosome 6 is 0
- No. of Frames excluded in Chromosome 7 is 0
- No. of Frames excluded in Chromosome 8 is 0
- No. of Frames excluded in Chromosome 9 is 1
- No. of Frames excluded in Chromosome 10 is 0
- No. of Frames excluded in Chromosome 11 is 0
- No. of Frames excluded in Chromosome 12 is 0
- No. of Frames excluded in Chromosome 13 is 0
- No. of Frames excluded in Chromosome 14 is 0
- No. of Frames excluded in Chromosome 15 is 2
- No. of Frames excluded in Chromosome 16 is 0
- No. of Frames excluded in Chromosome 17 is 2
- No. of Frames excluded in Chromosome 18 is 0
- No. of Frames excluded in Chromosome 19 is 3
- No. of Frames excluded in Chromosome 20 is 0
- No. of Frames excluded in Chromosome 21 is 0
- No. of Frames excluded in Chromosome 22 is 3
+ No. of Frames excluded in Chromosome 1 is 34
+ No. of Frames excluded in Chromosome 2 is 8
+ No. of Frames excluded in Chromosome 3 is 11
+ No. of Frames excluded in Chromosome 4 is 27
+ No. of Frames excluded in Chromosome 5 is 16
+ No. of Frames excluded in Chromosome 6 is 1
+ No. of Frames excluded in Chromosome 7 is 16
+ No. of Frames excluded in Chromosome 8 is 3
+ No. of Frames excluded in Chromosome 9 is 11
+ No. of Frames excluded in Chromosome 10 is 5
+ No. of Frames excluded in Chromosome 11 is 5
+ No. of Frames excluded in Chromosome 12 is 12
+ No. of Frames excluded in Chromosome 13 is 10
+ No. of Frames excluded in Chromosome 14 is 22
+ No. of Frames excluded in Chromosome 15 is 44
+ No. of Frames excluded in Chromosome 16 is 18
+ No. of Frames excluded in Chromosome 17 is 49
+ No. of Frames excluded in Chromosome 18 is 18
+ No. of Frames excluded in Chromosome 19 is 61
+ No. of Frames excluded in Chromosome 20 is 24
+ No. of Frames excluded in Chromosome 21 is 2
+ No. of Frames excluded in Chromosome 22 is 36
 
-Total number of Frames exluded is :11
+Total number of Frames exluded is :433
 
 
 Size of Frames
-Chromosome 1 :56
-Chromosome 2 :52
-Chromosome 3 :44
-Chromosome 4 :42
-Chromosome 5 :41
-Chromosome 6 :38
-Chromosome 7 :37
-Chromosome 8 :33
-Chromosome 9 :32
-Chromosome 10 :34
-Chromosome 11 :32
-Chromosome 12 :35
-Chromosome 13 :26
-Chromosome 14 :25
-Chromosome 15 :24
-Chromosome 16 :26
-Chromosome 17 :25
-Chromosome 18 :25
-Chromosome 19 :19
-Chromosome 20 :22
-Chromosome 21 :13
-Chromosome 22 :13
-Total Number of Frames : 694
-   694
-
-
-All Hashes Sent2
-All Hashes Sent
-   694
-Number of Hashes Received : 694
-Matches : 685
-
-
-Displaying Non Matched Frames
-
-
- Chromosome : 4 || Start :31192161 || StartRSID : rs10020070 || End : 37366977 || EndRSID : rs10222926 || CM_Start : 50 || CM_End : 55 || HashValues : a9c3218355f3a686c74791f7c812378bdbdeb866b1440252e97307764a17ec4e || 91985ccac8b17e7177b94c5282557f22b1845d56c63a3360ab38bedbe5aac29d || Sent : true || Match : false
-
- Chromosome : 4 || Start :77734394 || StartRSID : rs4859453 || End : 83332013 || EndRSID : rs12507749 || CM_Start : 90 || CM_End : 95 || HashValues : ecb195759ae326d0b633d5c7a239a9be4674d806ac8b014cf9a23e6e04ec1785 || ff83aaae950998e4ed030e4875dc151a94641378e06c6eb97f1bb1c18c5ff3cd || Sent : true || Match : false
-
- Chromosome : 5 || Start :109832876 || StartRSID : rs12515045 || End : 115166647 || EndRSID : rs13174348 || CM_Start : 120 || CM_End : 125 || HashValues : 3e6f620e298ff64fa77f41bf7d51732aabf781affc57beffe77d3c2cb2930e83 || 1dbf9a6474905939f33ea6c2d0c251369a605d59f601f20f599170953fee31cb || Sent : true || Match : false
-
- Chromosome : 6 || Start :33089826 || StartRSID : rs9276991 || End : 37977412 || EndRSID : rs12201208 || CM_Start : 55 || CM_End : 60 || HashValues : 47e39b7b8bc6b229186715661f973fe468a7d0cdf8295877518a12a166ffd4ff || 3c0de95b9df8f3b24dd9b86d3451b5d25ceef7c74b9f3eea95d224ad46548ded || Sent : true || Match : false
-
- Chromosome : 6 || Start :65643140 || StartRSID : rs2146757 || End : 72790768 || EndRSID : rs7761468 || CM_Start : 85 || CM_End : 90 || HashValues : 397c5f23770c9f4b216a5c4ab5e43cef52ebd81967328cd30337b9bd63055fa9 || fad003fbd565dff0d5b3d738c105211b3ab79cdf1f2b406500ee82556fa6d55b || Sent : true || Match : false
-
- Chromosome : 7 || Start :145437 || StartRSID : rs6583339 || End : 3756754 || EndRSID : rs10279868 || CM_Start : 0 || CM_End : 5 || HashValues : d93e1014b1a6681841d805402097a56d8504bf14511d72745433d0ac171006d5 || bbf1cceb0d65d15318231074cf37f9dedb04f6ba733e847ef1641af8159773ae || Sent : true || Match : false
-
- Chromosome : 8 || Start :2591594 || StartRSID : rs6558687 || End : 4540876 || EndRSID : rs7011905 || CM_Start : 5 || CM_End : 10 || HashValues : 2bc45b638a51a0ba61f08f5d2caa3b02bf83ca3841b43864e8e38c74d88b03f8 || 3858305e4c82d6ee484e550f9a6ad747b9c818d1f25fc284c88a5bd08f31eedc || Sent : true || Match : false
-
- Chromosome : 11 || Start :79333426 || StartRSID : rs660821 || End : 84629345 || EndRSID : rs2000962 || CM_Start : 90 || CM_End : 95 || HashValues : 93dea23a849d2c26dfadc87e69bd78e9f7f1eed677cb33a200278ae31821c71f || 2e5ec578b99e9e785431a96fd3fe71346b9b31aedcc45df11d30eb905b861777 || Sent : true || Match : false
-
- Chromosome : 12 || Start :9852782 || StartRSID : rs17807306 || End : 12587000 || EndRSID : rs7963695 || CM_Start : 25 || CM_End : 30 || HashValues : 23564015b746a7af031d9faf22e444d951b91ddbd8b8d67bda3b717b2d55e29 || 55a448d4156bd780e9d5a97603bdac80cbefcb641af741c5aacbf3e5502c65bb || Sent : true || Match : false
+Chromosome 1 : 243
+Chromosome 2 : 251
+Chromosome 3 : 209
+Chromosome 4 : 183
+Chromosome 5 : 189
+Chromosome 6 : 189
+Chromosome 7 : 167
+Chromosome 8 : 162
+Chromosome 9 : 152
+Chromosome 10 : 165
+Chromosome 11 : 152
+Chromosome 12 : 159
+Chromosome 13 : 117
+Chromosome 14 : 99
+Chromosome 15 : 82
+Chromosome 16 : 111
+Chromosome 17 : 84
+Chromosome 18 : 107
+Chromosome 19 : 45
+Chromosome 20 : 86
+Chromosome 21 : 63
+Chromosome 22 : 40
+Total Number of Frames : 3055
+Recieved Input for Hash Size : 3055
+Input Size : 3055
+All Hashes Sent and received
+Matches : 2302
 
 
 Match Stats 
 
 At Chromosome 1
-			Total    Frames are 56
-			Matching Frames are 56
+			Total    Frames are	243
+			Matching Frames are	176
+			Total    CMs    are	275
+			Matching CentiMorgans	190
 At Chromosome 2
-			Total    Frames are 52
-			Matching Frames are 52
+			Total    Frames are	251
+			Matching Frames are	136
+			Total    CMs    are	263
+			Matching CentiMorgans	157
 At Chromosome 3
-			Total    Frames are 44
-			Matching Frames are 44
+			Total    Frames are	209
+			Matching Frames are	166
+			Total    CMs    are	217
+			Matching CentiMorgans	177
 At Chromosome 4
-			Total    Frames are 42
-			Matching Frames are 40
+			Total    Frames are	183
+			Matching Frames are	143
+			Total    CMs    are	214
+			Matching CentiMorgans	157
 At Chromosome 5
-			Total    Frames are 41
-			Matching Frames are 40
+			Total    Frames are	189
+			Matching Frames are	182
+			Total    CMs    are	209
+			Matching CentiMorgans	202
 At Chromosome 6
-			Total    Frames are 38
-			Matching Frames are 36
+			Total    Frames are	189
+			Matching Frames are	121
+			Total    CMs    are	194
+			Matching CentiMorgans	134
 At Chromosome 7
-			Total    Frames are 37
-			Matching Frames are 36
+			Total    Frames are	167
+			Matching Frames are	162
+			Total    CMs    are	187
+			Matching CentiMorgans	182
 At Chromosome 8
-			Total    Frames are 33
-			Matching Frames are 32
+			Total    Frames are	162
+			Matching Frames are	144
+			Total    CMs    are	169
+			Matching CentiMorgans	148
 At Chromosome 9
-			Total    Frames are 32
-			Matching Frames are 32
+			Total    Frames are	152
+			Matching Frames are	89
+			Total    CMs    are	156
+			Matching CentiMorgans	97
 At Chromosome 10
-			Total    Frames are 34
-			Matching Frames are 34
+			Total    Frames are	165
+			Matching Frames are	150
+			Total    CMs    are	174
+			Matching CentiMorgans	159
 At Chromosome 11
-			Total    Frames are 32
-			Matching Frames are 31
+			Total    Frames are	152
+			Matching Frames are	78
+			Total    CMs    are	161
+			Matching CentiMorgans	86
 At Chromosome 12
-			Total    Frames are 35
-			Matching Frames are 34
+			Total    Frames are	159
+			Matching Frames are	112
+			Total    CMs    are	169
+			Matching CentiMorgans	123
 At Chromosome 13
-			Total    Frames are 26
-			Matching Frames are 26
+			Total    Frames are	117
+			Matching Frames are	106
+			Total    CMs    are	128
+			Matching CentiMorgans	117
 At Chromosome 14
-			Total    Frames are 25
-			Matching Frames are 25
+			Total    Frames are	99
+			Matching Frames are	93
+			Total    CMs    are	110
+			Matching CentiMorgans	104
 At Chromosome 15
-			Total    Frames are 24
-			Matching Frames are 24
+			Total    Frames are	82
+			Matching Frames are	43
+			Total    CMs    are	127
+			Matching CentiMorgans	49
 At Chromosome 16
-			Total    Frames are 26
-			Matching Frames are 26
+			Total    Frames are	111
+			Matching Frames are	63
+			Total    CMs    are	133
+			Matching CentiMorgans	83
 At Chromosome 17
-			Total    Frames are 25
-			Matching Frames are 25
+			Total    Frames are	84
+			Matching Frames are	31
+			Total    CMs    are	120
+			Matching CentiMorgans	47
 At Chromosome 18
-			Total    Frames are 25
-			Matching Frames are 25
+			Total    Frames are	107
+			Matching Frames are	107
+			Total    CMs    are	126
+			Matching CentiMorgans	126
 At Chromosome 19
-			Total    Frames are 19
-			Matching Frames are 19
+			Total    Frames are	45
+			Matching Frames are	26
+			Total    CMs    are	111
+			Matching CentiMorgans	62
 At Chromosome 20
-			Total    Frames are 22
-			Matching Frames are 22
+			Total    Frames are	86
+			Matching Frames are	71
+			Total    CMs    are	101
+			Matching CentiMorgans	75
 At Chromosome 21
-			Total    Frames are 13
-			Matching Frames are 13
+			Total    Frames are	63
+			Matching Frames are	63
+			Total    CMs    are	69
+			Matching CentiMorgans	69
 At Chromosome 22
-			Total    Frames are 13
-			Matching Frames are 13
-Overall Total    Frames are 694
-Overall Matching Frames are 685
+			Total    Frames are	40
+			Matching Frames are	40
+			Total    CMs    are	69
+			Matching CentiMorgans	69
+Overall Total    Frames are	3055
+Overall Matching Frames are	2302
+Overall Total	 CMs	are	3482
+Overall Matching CMs	are	2613
 	Connection closed !!!
+
