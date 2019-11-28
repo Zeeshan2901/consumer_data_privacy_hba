@@ -1,6 +1,5 @@
 package consumer_data_privacy_hba;
 
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -8,8 +7,9 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class CircuitBuilder {
-
-	public CircuitBuilder() {
+	private static int snips;
+	public CircuitBuilder(int snp) {
+		snips=snp;
 	}
 	
 	static String solve( int thresh, int nbits) {
@@ -35,8 +35,8 @@ public class CircuitBuilder {
     } 
 
 	public static void main(String[] args) {
-		
-		buildCircuit(700);
+		CircuitBuilder obj = new CircuitBuilder(700);
+		obj.buildCircuit();
 		
 	}
 	
@@ -51,22 +51,17 @@ public class CircuitBuilder {
 			
 	}
 	
-	@SuppressWarnings("unused")
-	public static void buildCircuit(int snips) {
+	public void buildCircuit() {
 		
 		int circuitSize= nextPowerOf2(snips);
 		int i, alice =0, bob= 3*snips , wires=6*snips, num_gates = 2;
 		int pad = wires+1;
 		int cin =pad;
-		
-		
+		StringBuilder gates= new StringBuilder();
 		Queue<Integer> lsb = new LinkedList<>();
 		int inter[] = new int[circuitSize];
 		
-		
-		//System .out.println("number of snips : "+snips);
-		//System .out.println("circuit size " +circuitSize);
-		FileWriter fw,fw1;
+		FileWriter gatesWriter;
 		try {
 			/*
 			 * First 2 lines of circuit to produce the zero output Carry in wire.
@@ -75,11 +70,7 @@ public class CircuitBuilder {
 			 */
 			String lines="1 1 0 "+wires +" INV\n2 1 0 "+ wires +" "+(++wires)+" AND\n";
 			wires++;
-			//System.out.println(lines);
-			fw = new FileWriter("input/Adders.txt");
-			BufferedWriter bw1  = new BufferedWriter(fw);
-			fw.write(lines);
-			
+			gates.append(lines);
 			
 			/*
 			 * Creating the circuit for #snips SNP DNA matching Circuit 
@@ -93,15 +84,14 @@ public class CircuitBuilder {
 					bob+=3;
 					wires+=8;
 					num_gates+=8;
-					fw.write(lines);
+					gates.append(lines);
 					lsb.add(wires-1);
-					
 				}
 				else {
 					lines=DNAMatch(pad, pad, wires, true);
 					wires+=8;
 					num_gates+=8;
-					fw.write(lines);
+					gates.append(lines);
 					lsb.add(wires-1);
 				}
 			}
@@ -118,22 +108,15 @@ public class CircuitBuilder {
 					   "2 1 "+ a + " " + b + " " + wires++ + " " + "XOR\n";
 				inter[index++]=wires-1;		// Sum output --- lsb
 				inter[index++]=wires-2;		// Carry output --- msb
-				//System.out.println("Half Adder Output : " );
-				//msb.add(wires-2);
-				//lsb.add(wires-1);
 				num_gates+=2;
-				fw.write(lines);
-				//System.out.println(lines);
+				gates.append(lines);
 			}
 			
 			if(circuitSize>=4)
 				circuitSize/=4;
 			else {
-				bw1.close();
-				fw.close();
 				return;
 			}
-			//System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
 			/*
 			 * Implementing n-bit Adder tree
 			 */
@@ -143,18 +126,7 @@ public class CircuitBuilder {
 				index=0;
 				newIndex=0;
 				for (i=0; i<circuitSize; i++) {
-					/*
-					 * System.out.println("\t\t\t\tcircuitSize : " +circuitSize);
-					 * System.out.println("\t\t\t\tcircuitSize : " +i);
-					 * System.out.println("\t\t\t\tnBitAdder : "+ nBitAdder);
-					 * System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
-					 * System.out.println("\t index: " + index); System.out.println("\t newIndex: "
-					 * + newIndex);
-					 */
-					//index=0;
-					//newIndex=0;
 					for(int j=0;j<nBitAdder;j++) {
-						//System.out.println("\t\t\t\tFULL ADDER : " +j);
 						lines="";
 						lines="2 1 " + inter[index] + " " + inter[index+nBitAdder] + " " + wires++ + " XOR\n";
 						bet[0]=wires-1;
@@ -178,22 +150,14 @@ public class CircuitBuilder {
 						carry=wires-2;
 						if (j==nBitAdder-1)
 							inter[newIndex++]=carry;
-						//System.out.println(lines);
-						//System.out.println("\t carry: " + carry);
-						fw.write(lines);
+						gates.append(lines);
 						num_gates+=8;
-						//System.out.println("\t index: " + index);
-						//System.out.println("\t newIndex: " + newIndex);
 					}
 					index+=nBitAdder;
 				}
 				nBitAdder++;
 				circuitSize/=2;
 			}
-			//System.out.println("\t\t\t\tnBitAdder: " +nBitAdder);
-			//System.out.println("MSB : "+(msb));
-			//System.out.println("LSB : "+(lsb));
-			//System.out.println("\t\t Inter: \t"+Arrays.toString(inter));
 			
 			/*
 			 * >=T2 circuit
@@ -202,31 +166,18 @@ public class CircuitBuilder {
 			int t2= Math.round( (float)snips/1000);
 			int adderOutput[] = new int[nBitAdder];
 			index=0;
-			for (i=0; i<nBitAdder;i++) {
+			for (i=0; i<nBitAdder;i++) 
 				adderOutput[index++]=inter[i];
-			}
-			//System.out.println("Values of Snips and t2 : " +snips+"  "+t2 );
-			
-			//System.out.println("Values output : " +nBitAdder );
-			//System.out.println("\t\t adderOutput: \t"+Arrays.toString(adderOutput));
-			
 			
 			//Calling solve method for the >=t2 circuit expression
 			String s=solve (t2+1,adderOutput.length);
-			
-			//System.out.println(s);
-			
+						
 			//Splitting the solution   V9 OR V8 OR V7 OR V6 OR V5 OR V4 OR V3 OR  ( V2 AND ( V1 OR V0 ) ) 
 		    String[] words = s.split("\\s+");
 		    boolean ands=false; 
 		    int braces=0;
-		    //System.out.println("words.length " +words.length);
-		    
-			/*
-			 * for (int x =0 ; x<words.length;x++) System.out.println(x+" : "+words[x]);
-			 */
 			
-		  //finding indexes for start, end of OR lines and starting of braces
+		    //finding indexes for start, end of OR lines and starting of braces
 		    int start=Integer.parseInt(words[0]);
 		    int end=0;
 		    for (i =1 ; i<words.length;i++) {	
@@ -239,40 +190,25 @@ public class CircuitBuilder {
 		    	if (i==words.length -1 && !ands)
 		    		end=Integer.parseInt(words[words.length -1]);	
 		    }
-		    	
-		    //System.out.println("Start :  " + start + "  || End : " +end);
-			
-			
 		    lines="";
-			//int wires=0;
 			
 			//Converting OR to NAND gates.
-			//Queue<Integer> lsb = new LinkedList<>();
 			for ( i=start;i>=end; i--) {
-				//lines += "2 1 " + i + " " + i + " "  + (wires++) + " AND\n";
 				lines += "1 1 " + adderOutput[i] + " " + (wires++) + " NOT\n";
 				lsb.add(wires-1);
 			}
-			//fw.write(lines);
-			//while(lsb.size()!=0)
-				//System.out.println(lsb.remove());
-		    
+			
 			int input1 , input2 ;
-		    
 			//Converging the NAND GATE outputs to ANDs
 			while(lsb.size() !=1) {
-				if (lsb.size() <= 0) {
-					bw1.close();
-					return;
-				}
-					
+				if (lsb.size() <= 0) 
+					return;	
 				input1 = lsb.remove();
 				input2 = lsb.remove();
 				lines += "2 1 " + input1 + " " + input2 + " " + (wires++) + " AND\n";
 				lsb.add(wires-1);
 			}
-			//System.out.println("\n\n"+lines);
-			fw.write(lines);
+			gates.append(lines);
 			int finalWire=lsb.remove();
 		    
 			Stack<Integer> openBraces = new Stack<Integer>();
@@ -284,29 +220,19 @@ public class CircuitBuilder {
 			
 			//Solving the braces if there are (())
 			//   V9 OR V8 OR V7 OR V6 OR V5 OR V4 OR V3 OR  ( V2 AND ( V1 OR V0 ) ) 
-			if (ands) {
-				
+			if (ands) {	
 				index=braces;
-				
 				//finding indexes of openBraces
 				while(!words[index].equals(")")) {
-					if (words[index].equals("(")) {
-						
-						//System.out.println(index);
+					if (words[index].equals("(")) 
 						openBraces.push(index);
-					}
 					index++;	
 				}	
 				
 				//finding indexes of closedBraces
 				while(index != words.length) 
 					closedBraces.add(index++);
-		    
-		    
-				//System.out.println(openBraces);
-				//System.out.println(closedBraces);
-				
-				input1=input2=-1;
+		    	input1=input2=-1;
 				String operator="";
 				boolean flag1=false;
 				boolean flag2=false;
@@ -316,14 +242,6 @@ public class CircuitBuilder {
 					int front = openBraces.pop();
 					int back = closedBraces.remove();
 		    
-					//System.out.print("\n\n "+counter+" : "+front+" " + back + " :  ");	
-					
-					//printing contents of each braces
-//					for(int i=front;i<=back;i++) {
-//						if (!words[i].equals("(") && !words[i].equals(")"))
-//						System.out.print(words[i] + " ");
-//					}
-					
 					//for (V0) scenario
 					if ((back-front)==2 && counter ==0) {
 						input1=Integer.parseInt(words[front+1].replaceAll("[^0-9]", ""));
@@ -332,9 +250,7 @@ public class CircuitBuilder {
 					//rest of the cases
 					else {
 						for( i=front;i<=back;i++) {
-							
 							if (!words[i].equals("(") && !words[i].equals(")")) {
-								
 								if (!flag1 && !words[i].equals("AND") && !words[i].equals("OR") ) {
 									int x =Integer.parseInt(words[i].replaceAll("[^0-9]", ""));
 									if(!ifProcessed(processed,x)) {
@@ -342,7 +258,6 @@ public class CircuitBuilder {
 										one=words[i];
 										flag1=true;
 										processed.push(x);
-										//System.out.println();
 									}
 								}
 								if (!flag2 && !words[i].equals("AND") && !words[i].equals("OR")) {
@@ -359,17 +274,9 @@ public class CircuitBuilder {
 									gates1.push(i);
 								}
 							}
-							
-							//System.out.print("\n\t\t index :"  +i+ "  : Input1 : "+one +" :  Input2 : "+two + " :   Operator : "+operator);
 						}
-						
-						//System.out.println("\n Processed : "+processed);
 					}
-					
-						
-					//System.out.print("\n****Final Ones   : Input1 : "+input1 +" :  Input2 : "+input2 + " :   Operator : "+operator);
 					lines="";
-					
 					if (counter==0 && input2==-1)
 						continue;
 					if (input1==-1 && input2==-1)
@@ -378,7 +285,7 @@ public class CircuitBuilder {
 						if (operator.equals("AND")) {
 							lines="2 1 " + input1 + " " + input2 + " " + (wires++) + " AND\n";
 							lsb.add(wires-1);
-							fw.write(lines);
+							gates.append(lines);
 						}
 						if (operator.equals("OR") ) {
 							lines="2 1 " + input1 + " " + input1 + " " + (wires++) + " AND\n";
@@ -388,15 +295,14 @@ public class CircuitBuilder {
 							lines+="2 1 " + (wires-3) + " " + (wires-1) + " " + (wires++) + " AND\n";
 							lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
 							lsb.add(wires-1);
-							fw.write(lines);
-						}
-							
+							gates.append(lines);
+						}	
 					}
 					if (input1>=0 && input2==-1 && !lsb.isEmpty() && !operator.isEmpty()) {
 						if (operator.equals("AND")) {
 							lines+="2 1 "+ input1 + " " + (lsb.remove()) + " " + (wires++) + " AND\n";
 							lsb.add(wires-1);
-							fw.write(lines);
+							gates.append(lines);
 						}
 						if (operator.contentEquals("OR")) {
 							int x= lsb.remove();
@@ -407,20 +313,15 @@ public class CircuitBuilder {
 							lines+="2 1 " + (wires-3) + " " + (wires-1) + " " + (wires++) + " AND\n";
 							lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
 							lsb.add(wires-1);
-							fw.write(lines);
+							gates.append(lines);
 						}
 					}
-					//System.out.println("\n\n"+lines);
-					//System.out.println("\n\n"+lsb);
 					flag1=false;
 					flag2=false;
 					one="";two="";
 					input1=-1;input2=-1;
 					counter++;
-					
 				}
-				
-				
 				//Merging the output wires of OR gates and the braces	
 				if (!lsb.isEmpty()) {
 					int x = lsb.remove();
@@ -428,17 +329,14 @@ public class CircuitBuilder {
 					lines+="1 1 " + (wires-1 ) + " " + (wires++) + " " + " NOT\n";
 					lines+="2 1 " + finalWire + " " + (wires-1) + " " + (wires++) + " AND\n";
 					lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
-					fw.write(lines);
-				}
-					
-				//System.out.println("\n" +lines);	
-					
-				}else {
-					lines = "1 1 " +(wires-1) + " " + (wires++) + " NOT\n";
-					//System.out.println(lines);
-					fw.write(lines);
-				}
-		
+					gates.append(lines);
+				}						
+			}else {
+				lines = "1 1 " +(wires-1) + " " + (wires++) + " NOT\n";
+				gates.append(lines);
+			}
+			lines="1 1 " + (wires-1) + " " + (wires++) + " NOT";
+			gates.append(lines);
 			/*
 			 * 
 			 * End of t2 circuit
@@ -446,34 +344,18 @@ public class CircuitBuilder {
 			 * 
 			 * 
 			 */
-		    
-		    
-			
-			
-			
-			fw.flush();
-			fw.close();
-			bw1.close();
-			fw1 = new FileWriter("input/Adders.txt",true);
-			BufferedWriter bw  = new BufferedWriter(fw1);
 			num_gates= wires - 6* snips;
-			lines=num_gates+ " " +  wires +"\n" +
+			String header=num_gates+ " " +  wires +"\n" +
 					(snips*3) + " " + (snips*3) + " " + "1" + "\n\n";
-			fw1.append(lines);
-			fw1.close();
-			bw.close();
-			//System.out.println(" Wires " + wires + " Gates " + num_gates);
-			//System.out.println(lines);
+			gatesWriter=new FileWriter("/home/zeeshan/Desktop/hashing_based/temp_dir/circuit_"+snips+".txt");
+			gatesWriter.write(header);
+			gatesWriter.write(gates.toString());
+			gatesWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		/*
-		 * System.out.println("Status of Queue\n"); System.out.println(lsb.size());
-		 * while(lsb.size()!=0) System.out.println(lsb.remove());
-		 */
 	}
 
-	
 	public static String DNAMatch(int user1, int user2, int wire , boolean isPadding) {
 		String  line="";
 		int last [] = new int[7];
@@ -494,9 +376,7 @@ public class CircuitBuilder {
 			last[index++]=wire-1;
 			line+= "2 1 "+ user1 + " " + user2 + " " + wire++ + " XOR\n";
 			last[index++]=wire-1;
-			
-		}
-			
+		}	
 		line+= "1 1 "+ last[1] + " " + wire++ + " " + "INV\n";
 		last[index++]=wire-1;
 		line+= "1 1 "+ last[2] + " " + wire++ + " " + "INV\n";
@@ -506,11 +386,6 @@ public class CircuitBuilder {
 		line+= "1 1 "+ last[5] + " " + wire++ + " " + "INV\n";
 		last[index++]=wire-1;			
 		line+= "2 1 "+ last[0] + " " + last[6] + " " + wire++ + " AND\n";
-			
-		
-		//System.out.println(line);
-		//System.out.println(Arrays.toString(last));
-		
 		return line;
 	}
 }
