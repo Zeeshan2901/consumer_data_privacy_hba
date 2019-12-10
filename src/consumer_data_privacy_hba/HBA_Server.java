@@ -47,7 +47,7 @@ public class HBA_Server {
 		port = 5000;
 		location="input/sister_all.txt";
 
-		overlap=5;
+		overlap=1;
 		
 		genes			= new ArrayList[CHROMOSOME_COUNT+1];
 		frames			= new ArrayList[CHROMOSOME_COUNT+1];

@@ -47,14 +47,14 @@ public class HBA_Client {
 		clientAddress="127.0.0.1"; 
 		port=5000;
 	
-		overlap=5;
+		overlap=1;
 		
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
 		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
 	
-		location="input/son_all.txt";
+		location="input/dad_all.txt";
 		
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();
@@ -149,11 +149,15 @@ public class HBA_Client {
 		//nonMatches();
 		matchStats();
 		
-		/*
-		 * //for (int i=1;i<=CHROMOSOME_COUNT;i++) for (int j=0;j<frames[17].size();j++)
-		 * { FrameData obj = frames[17].get(j); obj.display(obj, 17); }
-		 * 
-		 */
+		
+		  for (int i=1;i<=CHROMOSOME_COUNT;i++) 
+			  for (int j=0;j<frames[i].size();j++){ 
+				  FrameData obj = frames[i].get(j); 
+				  if (!obj.match)
+					  System.out.println("Chr : " +i + " || CM_Start : " + obj.cmStart + " ||Match : "+obj.match); 
+			  }
+		  
+		 
 		
 		//Block to close the connection 
 		try{ 

@@ -35,9 +35,10 @@ public class CircuitBuilder {
     } 
 
 	public static void main(String[] args) {
-		CircuitBuilder obj = new CircuitBuilder(700);
-		obj.buildCircuit();
-		
+		for (int i=5;i<16;i++){
+			CircuitBuilder obj = new CircuitBuilder( (int) Math.pow(2,i));
+			obj.buildCircuit();
+		}
 	}
 	
 	public static int nextPowerOf2 (int num) {
@@ -169,11 +170,15 @@ public class CircuitBuilder {
 			for (i=0; i<nBitAdder;i++) 
 				adderOutput[index++]=inter[i];
 			
+			//for (int k=0;k<adderOutput.length;k++)	
+				//System.out.println(k + " : " +adderOutput[k]);
+			
 			//Calling solve method for the >=t2 circuit expression
 			String s=solve (t2+1,adderOutput.length);
-						
+			System.out.println(snips+" : "+s);			
 			//Splitting the solution   V9 OR V8 OR V7 OR V6 OR V5 OR V4 OR V3 OR  ( V2 AND ( V1 OR V0 ) ) 
 		    String[] words = s.split("\\s+");
+		    
 		    boolean ands=false; 
 		    int braces=0;
 			
@@ -194,7 +199,7 @@ public class CircuitBuilder {
 			
 			//Converting OR to NAND gates.
 			for ( i=start;i>=end; i--) {
-				lines += "1 1 " + adderOutput[i] + " " + (wires++) + " NOT\n";
+				lines += "1 1 " + adderOutput[i] + " " + (wires++) + " INV\n";
 				lsb.add(wires-1);
 			}
 			
@@ -203,12 +208,15 @@ public class CircuitBuilder {
 			while(lsb.size() !=1) {
 				if (lsb.size() <= 0) 
 					return;	
+				
 				input1 = lsb.remove();
 				input2 = lsb.remove();
+				//System.out.println("Input1 : " +input1+ "|| Input2 : " +input2);
 				lines += "2 1 " + input1 + " " + input2 + " " + (wires++) + " AND\n";
 				lsb.add(wires-1);
 			}
 			gates.append(lines);
+			//System.out.println(lines);
 			int finalWire=lsb.remove();
 		    
 			Stack<Integer> openBraces = new Stack<Integer>();
@@ -253,6 +261,7 @@ public class CircuitBuilder {
 							if (!words[i].equals("(") && !words[i].equals(")")) {
 								if (!flag1 && !words[i].equals("AND") && !words[i].equals("OR") ) {
 									int x =Integer.parseInt(words[i].replaceAll("[^0-9]", ""));
+									
 									if(!ifProcessed(processed,x)) {
 										input1=x;
 										one=words[i];
@@ -262,6 +271,7 @@ public class CircuitBuilder {
 								}
 								if (!flag2 && !words[i].equals("AND") && !words[i].equals("OR")) {
 									int x=Integer.parseInt(words[i].replaceAll("[^0-9]", ""));
+									//System.out.println(x);
 									if(!ifProcessed(processed,x)) {
 										input2=x;
 										two=words[i];
@@ -276,6 +286,9 @@ public class CircuitBuilder {
 							}
 						}
 					}
+					//System.out.println("Input1 : " +input1+ "|| Input2 : " +input2);
+					//System.out.println(adderOutput[input1] +"  ||  " +adderOutput[input2]);
+					//System.out.println(one +" "+ two);
 					lines="";
 					if (counter==0 && input2==-1)
 						continue;
@@ -283,37 +296,41 @@ public class CircuitBuilder {
 						continue;
 					if (input1>=0 && input2>=0 && !operator.isEmpty()) {
 						if (operator.equals("AND")) {
-							lines="2 1 " + input1 + " " + input2 + " " + (wires++) + " AND\n";
+							lines="2 1 " + adderOutput[input1] + " " + adderOutput[input2] + " " + (wires++) + " AND\n";
 							lsb.add(wires-1);
 							gates.append(lines);
+							//System.out.println("input1>=0 && input2>=0 && !operator.isEmpty())--AND\n"+lines);
 						}
 						if (operator.equals("OR") ) {
-							lines="2 1 " + input1 + " " + input1 + " " + (wires++) + " AND\n";
-							lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
-							lines+="2 1 " + input2 + " " + input2 + " " + (wires++) + " AND\n";
-							lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
+							lines="2 1 " + adderOutput[input1] + " " + adderOutput[input1] + " " + (wires++) + " AND\n";
+							lines+="1 1 " + (wires-1) + " " + (wires++) + " INV\n";
+							lines+="2 1 " + adderOutput[input2] + " " + adderOutput[input2] + " " + (wires++) + " AND\n";
+							lines+="1 1 " + (wires-1) + " " + (wires++) + " INV\n";
 							lines+="2 1 " + (wires-3) + " " + (wires-1) + " " + (wires++) + " AND\n";
-							lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
+							lines+="1 1 " + (wires-1) + " " + (wires++) + " INV\n";
 							lsb.add(wires-1);
 							gates.append(lines);
+							//System.out.println("input1>=0 && input2>=0 && !operator.isEmpty())--OR\n"+lines);
 						}	
 					}
 					if (input1>=0 && input2==-1 && !lsb.isEmpty() && !operator.isEmpty()) {
 						if (operator.equals("AND")) {
-							lines+="2 1 "+ input1 + " " + (lsb.remove()) + " " + (wires++) + " AND\n";
+							lines+="2 1 "+ adderOutput[input1] + " " + (lsb.remove()) + " " + (wires++) + " AND\n";
 							lsb.add(wires-1);
 							gates.append(lines);
+							//System.out.println("input1>=0 && input2==-1 && !lsb.isEmpty() && !operator.isEmpty()---AND \n" +lines);
 						}
 						if (operator.contentEquals("OR")) {
 							int x= lsb.remove();
-							lines="2 1 " + input1 + " " + input1 + " " + (wires++) + " AND\n";
-							lines+="1 1 " + (wires-1 ) + " " + (wires++) + " " + " NOT\n";
+							lines="2 1 " + adderOutput[input1] + " " + adderOutput[input1] + " " + (wires++) + " AND\n";
+							lines+="1 1 " + (wires-1 ) + " " + (wires++) + " " + "INV\n";
 							lines+="2 1 " + x + " " + x + " " + (wires++) + " AND\n";
-							lines+="1 1 " + (wires-1 )  + (wires++) + " " + " NOT\n";
+							lines+="1 1 " + (wires-1 )  + (wires++) + " " + "INV\n";
 							lines+="2 1 " + (wires-3) + " " + (wires-1) + " " + (wires++) + " AND\n";
-							lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
+							lines+="1 1 " + (wires-1) + " " + (wires++) + " INV\n";
 							lsb.add(wires-1);
 							gates.append(lines);
+							//System.out.println("input1>=0 && input2==-1 && !lsb.isEmpty() && !operator.isEmpty()---OR \n" +lines);
 						}
 					}
 					flag1=false;
@@ -326,16 +343,17 @@ public class CircuitBuilder {
 				if (!lsb.isEmpty()) {
 					int x = lsb.remove();
 					lines="2 1 " + x + " " + x + " " + (wires++) + " AND\n";
-					lines+="1 1 " + (wires-1 ) + " " + (wires++) + " " + " NOT\n";
+					lines+="1 1 " + (wires-1 ) + " " + (wires++) + " " + "INV\n";
 					lines+="2 1 " + finalWire + " " + (wires-1) + " " + (wires++) + " AND\n";
-					lines+="1 1 " + (wires-1) + " " + (wires++) + " NOT\n";
+					lines+="1 1 " + (wires-1) + " " + (wires++) + " INV\n";
 					gates.append(lines);
+					//System.out.println("!lsb.isEmpty()\n"+lines);
 				}						
 			}else {
-				lines = "1 1 " +(wires-1) + " " + (wires++) + " NOT\n";
+				lines = "1 1 " +(wires-1) + " " + (wires++) + " INV\n";
 				gates.append(lines);
 			}
-			lines="1 1 " + (wires-1) + " " + (wires++) + " NOT";
+			lines="1 1 " + (wires-1) + " " + (wires++) + " INV";
 			gates.append(lines);
 			/*
 			 * 
@@ -351,6 +369,7 @@ public class CircuitBuilder {
 			gatesWriter.write(header);
 			gatesWriter.write(gates.toString());
 			gatesWriter.close();
+			//System.out.println("Completed");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
