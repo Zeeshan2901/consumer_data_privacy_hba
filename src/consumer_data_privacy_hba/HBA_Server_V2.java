@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 import java.io.*;
 import java.math.BigInteger;
 
-public class HBA_Server {
+public class HBA_Server_V2 {
 	//Declaring Communication Objects
 	private Socket	socket				= null;
 	private ServerSocket server			= null;
@@ -43,7 +43,7 @@ public class HBA_Server {
 	int [][] cM;
 	
 	//Constructor to initialize the variables
-	public HBA_Server() {
+	public HBA_Server_V2() {
 		port = 5000;
 		location="input/son_all.txt";
 
@@ -88,7 +88,7 @@ public class HBA_Server {
 	}
 
 	public static void main(String[] args) throws IOException {
-		HBA_Server server = new HBA_Server();
+		HBA_Server_V2 server = new HBA_Server_V2();
 		server.run();
 	}
 
@@ -140,7 +140,7 @@ public class HBA_Server {
 		
 		//matching
 		matchFrames(hash);
-		//nonMatches();
+		nonMatches();
 		matchStats();
 		
 		/*
@@ -171,48 +171,77 @@ public class HBA_Server {
 	}
 
 	//Method to find common SNIPS
-	public void removeLocations(int chromosome, String locs) {
+	public void removeLocations(int chromosome, String locs, String rsids) {
 		int i=0,j=0;
 		//Splitting the string of locations into Array of Locations
 		String[] temp = locs.split(" ");
+		String[] temp1 = rsids.split(" ");
 		//Transforming array of locations to into a list of location
-		List<Integer> party = new ArrayList<>();
-		for( i = 0; i < temp.length; i++) 
-			party.add ( Integer.parseInt(temp[i]));
+		List<Integer> pLocs = new ArrayList<>();
+		List<String> pRsids = new ArrayList<>();
+		for( i = 0; i < temp.length && i<temp1.length; i++) {
+			pLocs.add ( Integer.parseInt(temp[i]));
+			pRsids.add(temp1[i]);
+		}
 		System.out.println("Initial  size	: "+ genes[chromosome].size());
-		System.out.println("Received size	: "+ party.size());
+		System.out.println("Received size	: "+ pLocs.size() + "   " + pRsids.size());
 		i=0;
+		
 		//Iterating through party's location list and current user's location list to find common locations
 		//and removing unwanted locations
-		while(i<party.size() && j< genes[chromosome].size()) {
+		while(i<pLocs.size() && j< genes[chromosome].size() && i < pRsids.size()) {
 			GenotypedData obj = (GenotypedData) genes[chromosome].get(j);
-			int partyLoc=party.get(i);
-			if (partyLoc < obj.getLocation()) 
-				party.remove(i);
-			else if (partyLoc > obj.getLocation())
-				genes[chromosome].remove(j);
-			else if (partyLoc == obj.getLocation()) {
-				i++;
-				j++;
+			int partyLoc = pLocs.get(i);
+			String partyRsid = pRsids.get(i); 
+			
+			if (partyRsid.contentEquals(obj.getRSID())) {
+				if (partyLoc == obj.getLocation()) {
+					i++;
+					j++;
+				}
+				else if (partyLoc != obj.getLocation()) {
+					obj.location=partyLoc;
+					i++;
+					j++;
+				}
 			}
+			
+			
+			if (! partyRsid.contentEquals(obj.getRSID())) {
+				if (partyLoc < obj.getLocation()) {
+					pLocs.remove(i);
+					pRsids.remove(i);
+				}
+				else if (partyLoc > obj.getLocation())
+					genes[chromosome].remove(j);
+				else if (partyLoc == obj.getLocation()) {
+					genes[chromosome].remove(j);
+					pLocs.remove(i);
+					pRsids.remove(i);
+				}
+			}
+			
+			
 		}
-		//resizing the lists
-		if (party.size() > genes[chromosome].size())
-			party.subList(genes[chromosome].size(), party.size()).clear(); 
-		else if (genes[chromosome].size() > party.size()) 
-			genes[chromosome].subList(party.size(),genes[chromosome].size()).clear();
+		//resizing the data structures
+		if (pLocs.size() > genes[chromosome].size() && pRsids.size() > genes[chromosome].size()) {
+			pLocs.subList(genes[chromosome].size(), pLocs.size()).clear(); 
+			pRsids.subList(genes[chromosome].size(), pRsids.size()).clear(); 
+		}
+		else if (genes[chromosome].size() > pLocs.size() && genes[chromosome].size() > pRsids.size()) 
+			genes[chromosome].subList(pRsids.size(),genes[chromosome].size()).clear();
+		
+		
 		//looking for mismatches if any 
-		//will go to loggers
 		int mismatches=0;
-		for (i=0;i<party.size();i++) {
+		for (i=0;i<pRsids.size() && i <pLocs.size();i++) {
 			GenotypedData cur = (GenotypedData) genes[chromosome].get(i);
-			if (cur.location != party.get(i)) {
+			if (cur.location != pLocs.get(i) && cur.rsid.contentEquals(pRsids.get(i))) {
 				mismatches++;
 			}
 		}
-		//will go to loggers
 		System.out.println("Final    size	: " + genes[chromosome].size());
-		System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);
+		System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);	
 	}
 	
 	// Verify if the alleles are Homozygous and in "A,C,G,T" for
@@ -631,14 +660,16 @@ public class HBA_Server {
 	public void findSnips() {
 		try {
 			StringBuilder locs = new StringBuilder("");
+			StringBuilder rsids = new StringBuilder("");
 			int counter = 0;
 			for (int i = 1; i <= CHROMOSOME_COUNT; i++) {
 				locs.delete(0, locs.length());
 				for (int j = 0; j < genes[i].size(); j++) {
 					GenotypedData obj = genes[i].get(j);
-					int location = obj.getLocation();
-					locs.append(location);
+					locs.append(obj.getLocation());
+					rsids.append(obj.getRSID());
 					locs.append(" ");
+					rsids.append(" ");
 					counter++;
 					//shares the batch of 5000 location
 					if (counter == 5000) {
@@ -646,7 +677,9 @@ public class HBA_Server {
 						serverOut.writeUTF("continue");
 						serverOut.write(i);
 						serverOut.writeUTF(locs.toString());
+						serverOut.writeUTF(rsids.toString());
 						locs.delete(0, locs.length());
+						rsids.delete(0, rsids.length());
 						counter = 0;
 						serverIn.readUTF();
 					}
@@ -657,26 +690,30 @@ public class HBA_Server {
 					serverOut.writeUTF("last");
 					serverOut.write(i);
 					serverOut.writeUTF(locs.toString());
+					serverOut.writeUTF(rsids.toString());
 					locs.delete(0, locs.length());
+					rsids.delete(0, rsids.length());
 					counter = 0;
 					serverIn.readUTF();
 					System.out.println("Sent data for chromosome : " + i);
 					//Receiving from Server
 					String line="",locs1="";
-					String recLocs="";
+					String rsids1="";
 					while(!line.equals("complete")) {
 						line=serverIn.readUTF();
 						//receive the current batch and form a string for the complete chromosome
 						if (line.contentEquals("continue")) {
-							locs1=serverIn.readUTF();
-							recLocs += locs1;
+							locs1+=serverIn.readUTF();
+							rsids1+=serverIn.readUTF();
 						}
 						//receive the last batch for the chromosome
 						if (line.contentEquals("last")) {
-							locs1=serverIn.readUTF();
-							recLocs += locs1;
+							locs1+=serverIn.readUTF();
+							rsids1+=serverIn.readUTF();
 							//Method call to find the common snips between users
-							removeLocations(i,recLocs);
+							//System.out.println("locs1 : "+locs1);
+							//System.out.println("rsids : "+rsids1);
+							removeLocations(i,locs1,rsids1);
 						}
 						//all the batch received for the current chromosome
 						if (line.contentEquals("complete")) {

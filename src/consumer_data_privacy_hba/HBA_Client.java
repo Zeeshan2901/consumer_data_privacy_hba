@@ -47,14 +47,14 @@ public class HBA_Client {
 		clientAddress="127.0.0.1"; 
 		port=5000;
 	
-		overlap=1;
+		overlap=5;
 		
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
 		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
 	
-		location="input/dad_all.txt";
+		location="input/sister_all.txt";
 		
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();

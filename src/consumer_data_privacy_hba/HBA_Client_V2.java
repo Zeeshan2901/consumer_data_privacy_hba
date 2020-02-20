@@ -10,55 +10,57 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.io.*;
-import java.math.BigInteger;
+import java.math.BigInteger; 
 
-public class HBA_Server {
+public class HBA_Client_V2 {
 	//Declaring Communication Objects
-	private Socket	socket				= null;
-	private ServerSocket server			= null;
-	private DataInputStream serverIn	= null;
-	private DataOutputStream serverOut	= null;
-	private int port;
+	private Socket 			 socket		= null; 
+	private DataInputStream  clientIn	= null; 
+	private DataOutputStream clientOut	= null; 
+	String clientAddress;
+	int port;
 	
 	//Location of the input File
 	private String location;
-
-	//Overlapping variable
-	int overlap;
 	
-	// NONCE fields
+	//Nonce fields
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
-
+	
 	//CHROMOSOME Count Constant
-	final static int CHROMOSOME_COUNT = 22;
-
+	final static int CHROMOSOME_COUNT =22;
+	
 	//Necessary Data Structures
-	ArrayList<GenotypedData>[]	genes;			//holds the data files
-	ArrayList<FrameData>[]		frames;			//holds frame data
-	ArrayList<FrameData>[]		exclusionList;	//holds excluded frame data
-	ArrayList<GenotypedData>[]	readRejects;	//holds rejected input snips
+	ArrayList<GenotypedData>[] genes;		//holds the data files
+	ArrayList<FrameData>[] frames;			//holds frame data
+	ArrayList<FrameData>[] exclusionList;	//holds excluded frame data
+	ArrayList<GenotypedData>[] readRejects;	//holds rejected input snips
 	
 	//2D centiMogran Array holding the starting positions of each centiMorgan
 	int [][] cM;
 	
+	//Overlapping variable
+	int overlap;
+	
 	//Constructor to initialize the variables
-	public HBA_Server() {
-		port = 5000;
-		location="input/son_all.txt";
-
+	public HBA_Client_V2() {
+		clientAddress="127.0.0.1"; 
+		port=5000;
+	
 		overlap=5;
 		
-		genes			= new ArrayList[CHROMOSOME_COUNT+1];
-		frames			= new ArrayList[CHROMOSOME_COUNT+1];
-		exclusionList	= new ArrayList[CHROMOSOME_COUNT+1];
-		readRejects		= new ArrayList[CHROMOSOME_COUNT+1];
+		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
+		frames = new ArrayList[CHROMOSOME_COUNT+1];
+		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
+		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
+	
+		location="input/sister_all.txt";
 		
-		for (int i = 1; i <= CHROMOSOME_COUNT; i++) {
-			genes[i]		= new ArrayList<GenotypedData>();
-			frames[i]		= new ArrayList<FrameData>();
+		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
+			genes[i]= new ArrayList<GenotypedData>();
+			frames[i]= new ArrayList<FrameData>();
 			exclusionList[i]= new ArrayList<FrameData>();
-			readRejects[i]	= new ArrayList<GenotypedData>();
+			readRejects[i]= new ArrayList<GenotypedData>();
 		}
 		
 		cM = new int[23][];
@@ -84,37 +86,41 @@ public class HBA_Server {
 		cM[19] = new int [] {0,1398143,1648775,1890208,2122195,2344415,2559414,2770398,2971737,3140417,3328178,3512450,3736846,3992241,4392287,4759202,5037621,5386109,5869422,6421007,6689370,6929088,7218258,7582097,8087393,8458960,8737231,8979295,9291409,9667838,10118295,10783479,11720524,12900235,13506088,13937236,14346265,14862266,15530309,16145842,16678653,17237209,17621162,17895440,18191326,18612351,19956496,21962698,23863494,29705013,30493153,30895138,31260464,31755108,32376262,33063370,33910148,34331923,34765571,35276938,35645456,36004392,36523414,39051505,39829392,40444318,41054490,41856179,43244288,43965527,44673417,45416923,45954475,46621595,47540221,48040556,48402277,48753254,49050390,49382755,49893536,50532296,50851254,51027312,51210064,51377468,51564804,51759854,51957751,52235563,52585016,52965324,53348413,53590025,53792148,53971665,54151897,54324262,54490330,54654093,54855982,55107277,55370243,55672949,55971203,56263195,56531437,56821596,57176048,57674962,58325003,59028585};
 		cM[20] = new int [] {0,292926,473572,657014,857705,1058561,1485403,1868544,2228613,2612327,3093221,3868950,4301024,4631253,4912279,5165835,5363969,5542615,5710026,5928997,6198774,6777277,7140542,7476497,7866823,8329857,8742429,9220478,9589642,9861232,10096856,10404513,10949573,11309086,11897415,12542449,13007458,14115933,15121236,15426859,15745120,16122887,16747146,17460421,17981314,18516299,19247229,19550347,19869399,20214152,20750637,22476444,23401586,24546569,31395376,33203720,35923804,36575029,37231268,38639140,39253077,40500258,41089920,41679793,42370533,42823326,43212974,43815483,44935675,45411077,45764825,46150188,46547031,46802928,47292852,48283371,49056840,49581434,49984981,50429686,51302501,51761875,52151300,52509760,52817727,53159660,53754424,54423889,54834063,55101528,55393237,55693956,56086811,56421058,56639238,56926138,57231209,57602511,58028697,58339147,58593321,58827173,59026508,59224997,59415032,59584269,59781064,59992603,60180246,60387571,60652459,60941554,61291092,61685923,62215157};
 		cM[21] = new int [] {0,15017120,15289230,15573653,15880487,16207072,16555253,16928766,17438020,18005187,18485950,18803323,19130800,19450826,19783453,20168667,20725543,21353548,21813721,22232616,22694068,23269418,24452040,24974344,25467241,25973042,27306700,27809441,28155670,28466224,28850268,29345477,30529801,32011080,32753030,33329510,33815124,34315884,34962746,35596002,36097297,36516609,36943494,37343254,37692924,38116721,38855111,39475249,39928171,40369657,40910101,41298314,41556414,41815151,42128875,42451917,42689189,42879403,43058575,43228464,43421244,43718533,44100986,44682777,45302237,45839986,46401312,46888364,47339222,47763294};
-		cM[22] = new int [] {0,17230886,17378089,17529780,17688402,17854613,18029673,18212895,18384517,18597145,18924126,19287025,19772690,20273355,20777656,21301888,21787200,22312185,22724244,23082496,23425013,23800260,24208170,24773248,25274533,25707786,26049534,26354531,26616798,26916438,27161035,27373075,27575745,27760974,27965634,28221691,28752505,30471488,31921646,32728170,33293516,34047210,34841505,35649051,36007393,36628801,36906275,37117819,37294383,37457870,37696902,38467350,39408307,40296265,43225022,44102225,44388337,44602972,44803086,45003255,45219212,45479372,45816269,46284559,47031166,47674260,48008505,48229112,48412197,48572724,48725736,48846648,48991997,49134912,49294065,49456722,49626712,49839539,50076448,50414983,51155059};	
+		cM[22] = new int [] {0,17230886,17378089,17529780,17688402,17854613,18029673,18212895,18384517,18597145,18924126,19287025,19772690,20273355,20777656,21301888,21787200,22312185,22724244,23082496,23425013,23800260,24208170,24773248,25274533,25707786,26049534,26354531,26616798,26916438,27161035,27373075,27575745,27760974,27965634,28221691,28752505,30471488,31921646,32728170,33293516,34047210,34841505,35649051,36007393,36628801,36906275,37117819,37294383,37457870,37696902,38467350,39408307,40296265,43225022,44102225,44388337,44602972,44803086,45003255,45219212,45479372,45816269,46284559,47031166,47674260,48008505,48229112,48412197,48572724,48725736,48846648,48991997,49134912,49294065,49456722,49626712,49839539,50076448,50414983,51155059};
 	}
+
+	
 
 	public static void main(String[] args) throws IOException {
-		HBA_Server server = new HBA_Server();
-		server.run();
+		
+		HBA_Client_V2 client = new HBA_Client_V2();		
+		client.run();
 	}
-
+	
 	//Executioner Method
-	public void run() {
-		// try block to create connection
-		try {
-			server = new ServerSocket(port);
-			System.out.println("Server started");
-			System.out.println("Waiting for a client ...");
-			socket = server.accept();
-			System.out.println("Connection established with Client ");
-			System.out.println("Just connected to " + socket.getRemoteSocketAddress());
-		} catch (IOException i) {
-			System.out.println(i);
+	public void run() throws IOException {
+		//Block to establish the connection 
+		try{ 
+			socket = new Socket(clientAddress, port); 
+			System.out.println("Connected"); 
+			System.out.println("Connection established with Server ");
+			System.out.println("Just connected to " + socket.getRemoteSocketAddress()); 
+        } catch(UnknownHostException u) { 
+            System.out.println(u); 
+        } catch(IOException i){ 
+        	System.out.println(i); 
+        }
+		
+        //block to create input, output objects
+  		try {
+			// takes input from the client socket 
+			clientIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+			// sends output to the socket 
+			clientOut= new DataOutputStream(socket.getOutputStream());
+  		} catch(IOException i) { 
+			System.out.println(i); 
 		}
-
-		// block to create input, output objects
-		try {
-			// takes input from the client socket
-			serverIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-			// sends output to the socket
-			serverOut = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException i) {
-			System.out.println(i);
-		}
+		
 		
 		//Method Call to Initiate Nonce
 		initiateNonce();
@@ -137,99 +143,162 @@ public class HBA_Server {
 		//Method Call to receive and send Hashcodes
 		List<String> hash = new ArrayList<>();
 		hash=hashCodes();
-		
+				
 		//matching
 		matchFrames(hash);
 		//nonMatches();
 		matchStats();
 		
+		
 		/*
-		 * for (int j=0;j<frames[17].size();j++) { FrameData obj = frames[17].get(j);
-		 * obj.display(obj, 17); }
+		 * for (int i=1;i<=CHROMOSOME_COUNT;i++) for (int j=0;j<frames[i].size();j++){
+		 * FrameData obj = frames[i].get(j); if (!obj.match) System.out.println("Chr : "
+		 * +i + " || CM_Start : " + obj.cmStart + " ||Match : "+obj.match); }
 		 */
+		  
+		 
 		
-		
-		// block to close connections
-		try {
-			socket.close();
-			serverIn.close();
-			serverOut.close();
-			System.out.println("\tConnection closed !!!");
-		} catch (IOException i) {
-			System.out.println(i);
-		}
+		//Block to close the connection 
+		try{ 
+			clientIn.close(); 
+			clientOut.close(); 
+		    socket.close(); 
+		    System.out.println("\tConnection closed !!!");
+		} catch(IOException i) { 
+			System.out.println(i); 
+		} 
 	}
-
+	
 	public void removeDupLocs() {
-		for (int i = 1; i <= CHROMOSOME_COUNT; i++)
-			for (int j = 0; j < genes[i].size() - 1; j++) {
-				GenotypedData obj = genes[i].get(j);
-				GenotypedData ob = genes[i].get(j + 1);
-				if (obj.getLocation() == ob.getLocation())
-					genes[i].remove(j + 1);
+		for (int i=1 ; i<= CHROMOSOME_COUNT; i++)
+			for (int j=0; j<genes[i].size()-1; j++ ) {
+				GenotypedData obj= genes[i].get(j);
+				GenotypedData ob= genes[i].get(j+1); 
+				if (obj.getLocation()==ob.getLocation()) 
+					genes[i].remove(j+1);
 			}
 	}
-
+	
+	
 	//Method to find common SNIPS
-	public void removeLocations(int chromosome, String locs) {
-		int i=0,j=0;
-		//Splitting the string of locations into Array of Locations
-		String[] temp = locs.split(" ");
-		//Transforming array of locations to into a list of location
-		List<Integer> party = new ArrayList<>();
-		for( i = 0; i < temp.length; i++) 
-			party.add ( Integer.parseInt(temp[i]));
-		System.out.println("Initial  size	: "+ genes[chromosome].size());
-		System.out.println("Received size	: "+ party.size());
-		i=0;
-		//Iterating through party's location list and current user's location list to find common locations
-		//and removing unwanted locations
-		while(i<party.size() && j< genes[chromosome].size()) {
-			GenotypedData obj = (GenotypedData) genes[chromosome].get(j);
-			int partyLoc=party.get(i);
-			if (partyLoc < obj.getLocation()) 
-				party.remove(i);
-			else if (partyLoc > obj.getLocation())
-				genes[chromosome].remove(j);
-			else if (partyLoc == obj.getLocation()) {
+	public void removeLocations(int chromosome, String locs, String rsids) {
+	
+	int i=0,j=0;
+	
+	//Splitting the string of locations, rsids into Array of Locations and RSIDs
+	String[] temp = locs.split(" ");	
+	String[] temp1 = rsids.split(" ");
+	
+	//Transforming array of locations to into a lists of location, rsid
+	List<Integer> pLocs = new ArrayList<>();
+	List<String> pRsids = new ArrayList<>();
+	for( i = 0; i < temp.length && i<temp1.length; i++) { 
+		pLocs.add(Integer.parseInt(temp[i]));
+		pRsids.add(temp1[i]);
+	}
+	System.out.println("Initial  size	: "+ genes[chromosome].size());
+	System.out.println("Received size	: "+ pLocs.size() + "  " + pRsids.size() );
+	
+	
+	i=0;
+	//Iterating through party's location list and current location list to find common locations
+	//and removing unwanted locations
+	while(i<pLocs.size() && i <pRsids.size() && j< genes[chromosome].size() ) {
+		GenotypedData obj = (GenotypedData) genes[chromosome].get(j);
+		int partyLoc = pLocs.get(i);
+		String partyRsid = pRsids.get(i);
+		//System.out.println(i+" "+j);
+		
+		//System.out.println("L : "+ partyLoc +" || "+ partyRsid  + " size : "+ pLocs.size() + " || gene " + genes[chromosome].size() );
+		//obj.display(obj);
+		if (partyRsid.contentEquals(obj.getRSID())) {
+			if (partyLoc == obj.getLocation()) {
+				i++;
+				j++;
+			}
+			else if (partyLoc != obj.getLocation()) {
+				obj.location=partyLoc;
 				i++;
 				j++;
 			}
 		}
-		//resizing the lists
-		if (party.size() > genes[chromosome].size())
-			party.subList(genes[chromosome].size(), party.size()).clear(); 
-		else if (genes[chromosome].size() > party.size()) 
-			genes[chromosome].subList(party.size(),genes[chromosome].size()).clear();
-		//looking for mismatches if any 
-		//will go to loggers
-		int mismatches=0;
-		for (i=0;i<party.size();i++) {
-			GenotypedData cur = (GenotypedData) genes[chromosome].get(i);
-			if (cur.location != party.get(i)) {
-				mismatches++;
+		
+		if (! partyRsid.contentEquals(obj.getRSID())) {
+			if (partyLoc < obj.getLocation()) {
+				pLocs.remove(i);
+				pRsids.remove(i);
 			}
+			else if (partyLoc > obj.getLocation())
+				genes[chromosome].remove(j);
+			else if (partyLoc == obj.getLocation()) {
+				genes[chromosome].remove(j);
+				pLocs.remove(i);
+				pRsids.remove(i);
+			}
+				
 		}
-		//will go to loggers
-		System.out.println("Final    size	: " + genes[chromosome].size());
-		System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);
+
 	}
 	
-	// Verify if the alleles are Homozygous and in "A,C,G,T" for
-	public boolean isPermissible(char a, char b) {
-		if (a != b)
+	//resizing the data structures
+	if (pLocs.size() > genes[chromosome].size() && pRsids.size() > genes[chromosome].size()) {
+		pLocs.subList(genes[chromosome].size(), pLocs.size()).clear(); 
+		pRsids.subList(genes[chromosome].size(), pRsids.size()).clear(); 
+	}
+	else if (genes[chromosome].size() > pLocs.size() && genes[chromosome].size() > pRsids.size()) 
+		genes[chromosome].subList(pRsids.size(),genes[chromosome].size()).clear();
+	
+	
+	//looking for mismatches if any 
+	int mismatches=0;
+	for (i=0;i<pRsids.size() && i <pLocs.size();i++) {
+		GenotypedData cur = (GenotypedData) genes[chromosome].get(i);
+		if (cur.location != pLocs.get(i) && cur.rsid.contentEquals(pRsids.get(i))) {
+			mismatches++;
+		}
+	}
+	System.out.println("Final    size	: " + genes[chromosome].size());
+	System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);		
+	}
+	
+	
+	
+	public boolean ifLocationExists(int chromosome, int location) {
+		
+		//Binary Search
+		int l=0;
+		int r= genes[chromosome].size();
+		
+		while (l<r) {
+			int m= (l+r)/2;
+			GenotypedData o= genes[chromosome].get(m);
+			if (o.location==location ) 
+				return true;
+			else if (o.location > location)
+				l=m+1;
+			else if (o.location < location)
+				r=m-1;
+		}		
+		
+		return false;
+	}
+
+	// Verify if the alleles are Homozygous and in "A,C,G,T" for 
+	public boolean isPermissible (char a, char b) {
+		if (a!=b)
 			return false;
 		else {
-			char[] permissible = { 'A', 'C', 'G', 'T' };
-			for (int i = 0; i < permissible.length; i++) {
-				if (a == permissible[i] && b == permissible[i]) 
+			char [] permissible= {'A','C','G','T'};
+			for (int i=0; i< permissible.length;i++) {
+				if (a==permissible[i] && b==permissible[i])
 					return true;
 			}
 		}
 		return false;
 	}
-
-	public void csvParser(String location) throws IOException{		
+	
+	public void csvParser(String location) throws IOException{
+		
 		String s="";
 		FileReader fr = new FileReader(location);
 		BufferedReader bf = new BufferedReader(fr);
@@ -237,9 +306,12 @@ public class HBA_Server {
         	GenotypedData obj =new GenotypedData();
         	int index = 0;
             int len = s.length();
+            
             for(; (index  < len) && (s.charAt(index) != '\t'); index++) {}
             obj.rsid= s.substring(0, index);
+            
             index++;
+            
             char c;
             c = s.charAt(index);
             int chromosome = c & 0xF;
@@ -249,11 +321,17 @@ public class HBA_Server {
             	chromosome = (chromosome << 3) + (chromosome << 1) + (c & 0xF);
                 index++;
             }
+            
+          
+            
             if((chromosome > CHROMOSOME_COUNT) || (chromosome <=0)) {
             	bf.close();
             	return;
             }
-            index++;           
+            
+             
+            index++;
+            
             int loc = 0;
             for(;index  < len; index++) {
                 c = s.charAt(index);
@@ -264,6 +342,7 @@ public class HBA_Server {
                 }
             }
             obj.location=loc;
+
             //index++;
             obj.gene1=s.charAt(len-2);
             obj.gene2=s.charAt(len-1);
@@ -275,106 +354,107 @@ public class HBA_Server {
             else {
             	ArrayList <GenotypedData> gen =  readRejects[chromosome];
             	gen.add(obj);
-            }	
+            }
+            	
+        	
+        	
         }
 		bf.close();
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(genes[x]));
 	}
 
-	// Method to generate a Random number
-	public long generateRandom() throws NoSuchAlgorithmException, NoSuchProviderException {
 
+	//Method to generate a Random number
+	public long generateRandom() throws NoSuchAlgorithmException, NoSuchProviderException {
+		
 		SecureRandom secureRandomNumber = SecureRandom.getInstance("SHA1PRNG", "SUN");
 		byte[] randomBytes = new byte[128];
 		secureRandomNumber.nextBytes(randomBytes);
-		return my_nonce = secureRandomNumber.nextLong();
-
-		// my_nonce
-		// =ThreadLocalRandom.current().nextLong(-9223372036854775807L,9223372036854775807L)
+		return my_nonce=secureRandomNumber.nextLong();
+		
+		//my_nonce =ThreadLocalRandom.current().nextLong(-9223372036854775807L,9223372036854775807L)
 	}
-
-	// Method to send Hash of random number to the other party
+	
+	//Method to send Hash of random number to the other party
 	public String sendHash() throws NoSuchAlgorithmException, NoSuchProviderException {
-		return (hashOfMyNonce = getSHA(String.valueOf(generateRandom())));
+		return(hashOfMyNonce=getSHA(String.valueOf(generateRandom())));
 	}
-
-	// Method to send Random number to the other party
+	
+	
+	//Method to send Random number to the other party
 	public long sendRandom() {
 		return my_nonce;
 	}
-
-	// Method to verify if Hash of Random matches with the random number sent by
-	// other party
+	//Method to verify if Hash of Random matches with the random number sent by other party
 	public boolean verifyHashNonce() {
 		return hashOfPartyNonce.contentEquals(getSHA(String.valueOf(party_nonce)));
 	}
-
-	// Display the NONCE fields
+	
+	//Method to generate Hash with nonce
+	public  String getSHAWitnNonce(String input, long nonce1 ){ 
+        try { 
+            // Static getInstance method is called with hashing SHA 
+            MessageDigest md = MessageDigest.getInstance("SHA-256");             
+            //update the digest with nonce
+            md.update(String.valueOf(nonce1).getBytes());
+            // digest() method called 
+            // to calculate message digest of an input 
+            // and return array of byte 
+            byte[] messageDigest = md.digest(input.getBytes()); 
+            // Convert byte array into sign-magnitude  representation 
+            BigInteger no = new BigInteger(1, messageDigest); 
+            // Convert message digest into hex value 
+            String hashtext = no.toString(16); 
+            while (hashtext.length() < 32) { 
+                hashtext = "0" + hashtext; 
+            } 
+            return hashtext; 
+        } 
+        // For specifying wrong message digest algorithms 
+        catch (NoSuchAlgorithmException e) { 
+            System.out.println("Exception thrown"
+                               + " for incorrect algorithm: " + e); 
+            return null; 
+        } 
+    } 
+	
+	//Display the NONCE fields
 	public void displayNonce() {
-		System.out.println("\n My Data		: " + my_nonce + " :: " + hashOfMyNonce);
-		System.out.println("\n Party Data		: " + party_nonce + " :: " + hashOfPartyNonce);
-		System.out.println("\n Nonce			: " + nonce);
+		System.out.println("\n My Data		: "+my_nonce+" :: "+hashOfMyNonce);
+		System.out.println("\n Party Data		: "+party_nonce+" :: "+hashOfPartyNonce);
+		System.out.println("\n Nonce			: "+nonce);
 	}
-
-	// Method to Calculate the Ultimate NONCE
+	
+	//Method to Calculate the Ultimate NONCE
 	public void caluclateNonce() {
-		nonce = my_nonce ^ party_nonce;
-		// System.out.println("\n Nonce : " +nonce);
-	}
-
-	// Method to generate Hash with nonce
-	public String getSHAWitnNonce(String input, long nonce1) {
-		try {
-			// Static getInstance method is called with hashing SHA
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			// update the digest with nonce
-			md.update(String.valueOf(nonce1).getBytes());
-			// digest() method called
-			// to calculate message digest of an input
-			// and return array of byte
-			byte[] messageDigest = md.digest(input.getBytes());
-			// Convert byte array into sign-magnitude representation
-			BigInteger no = new BigInteger(1, messageDigest);
-			// Convert message digest into hex value
-			String hashtext = no.toString(16);
-			while (hashtext.length() < 32) {
-				hashtext = "0" + hashtext;
-			}
-			return hashtext;
-		}
-		// For specifying wrong message digest algorithms
-		catch (NoSuchAlgorithmException e) {
-			System.out.println("Exception thrown" + " for incorrect algorithm: " + e);
-			return null;
-		}
-	}
-
-	// Method to generate Hash w/o nonce
-	public String getSHA(String input) {
-		try {
-			// Static getInstance method is called with hashing SHA
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			// digest() method called
-			// to calculate message digest of an input
-			// and return array of byte
-			byte[] messageDigest = md.digest(input.getBytes());
-			// Convert byte array into sign-magnitude representation
-			BigInteger no = new BigInteger(1, messageDigest);
-			// Convert message digest into hex value
-			String hashtext = no.toString(16);
-			while (hashtext.length() < 32) {
-				hashtext = "0" + hashtext;
-			}
-			return hashtext;
-		}
-		// For specifying wrong message digest algorithms
-		catch (NoSuchAlgorithmException e) {
-			System.out.println("Exception thrown for incorrect algorithm: " + e);
-			return null;
-		}
+		nonce=my_nonce^party_nonce;
+		//System.out.println("\n Nonce : " +nonce);
 	}
 	
-	
+	//Method to generate Hash w/o nonce
+	public  String getSHA(String input ){ 
+        try {   
+            // Static getInstance method is called with hashing SHA 
+            MessageDigest md = MessageDigest.getInstance("SHA-256"); 
+            // digest() method called 
+            // to calculate message digest of an input 
+            // and return array of byte 
+            byte[] messageDigest = md.digest(input.getBytes()); 
+            // Convert byte array into sign-magnitude  representation 
+            BigInteger no = new BigInteger(1, messageDigest); 
+            // Convert message digest into hex value 
+            String hashtext = no.toString(16); 
+            while (hashtext.length() < 32) { 
+                hashtext = "0" + hashtext; 
+            } 
+            return hashtext; 
+        } 
+        // For specifying wrong message digest algorithms 
+        catch (NoSuchAlgorithmException e) { 
+            System.out.println("Exception thrown for incorrect algorithm: " + e); 
+            return null; 
+        } 
+    } 
 	
 	
 	public void frameWithcM(int offset) {
@@ -391,16 +471,18 @@ public class HBA_Server {
 				int odd=0;
 				int cMIndex=0+offset;
 				int cmStart=0;
-				//iterating through the data of each chromosomes
-				for(int j=0; j<genes[i].size(); j++) {	
+			//iterating through the data of each chromosomes
+				for(int j=0; j<genes[i].size(); j++) {
 					//fetching first location in the centiMorgan
 					GenotypedData o= genes[i].get(j);
 					int loc = o.getLocation();
 					int counter=0;
+					
 					while(loc <= cM[i][cMIndex] && j<genes[i].size()) {
 						GenotypedData x= genes[i].get(j++);
 						loc = x.getLocation();
 					}
+					
 					if (cM[i].length > (cMIndex+5)) {
 						while (loc > cM[i][cMIndex] && loc < cM[i][cMIndex+5] && j<genes[i].size()) {
 							GenotypedData obj= genes[i].get(j);
@@ -440,6 +522,7 @@ public class HBA_Server {
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
+					//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
 					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
 					gen.add(fr);
 					start=0;
@@ -453,6 +536,7 @@ public class HBA_Server {
 						GenotypedData obj= genes[i].get(j-1);
 						end=obj.location;
 						endRsid=obj.getRSID();
+						//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
 						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
 						gen.add(fr);
 						start=0;
@@ -482,7 +566,6 @@ public class HBA_Server {
 			System.out.println("Exception occured: "+e);
 			e.printStackTrace();
 		}
-		
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(frames[x]));
 	}
 
@@ -497,7 +580,9 @@ public class HBA_Server {
 		return true;
 	}
 	
-	public void matchFrames(List<String> hashes) {	
+	
+	public void matchFrames(List<String> hashes) {
+		
 		int matches=0;
 		for (String str : hashes) {
 			String []temp=str.split(" ");
@@ -513,60 +598,80 @@ public class HBA_Server {
 				}
 		}
 		System.out.println("Matches : "+(matches));
+		
 	}
 	
 	public void matchStats() {
 		System.out.println("\n\nMatch Stats \n");
 		int overall=0,totMatch=0, totalCM=0, oevrallCM=0;
+		ArrayList<String> segments= new ArrayList<String>(CHROMOSOME_COUNT);
+		ArrayList<Integer> matchCounts= new ArrayList<Integer>(CHROMOSOME_COUNT);
+		ArrayList<Integer> cMCounts= new ArrayList<Integer>(CHROMOSOME_COUNT);
 		for (int i=1;i<=CHROMOSOME_COUNT;i++) {
 			int match=0;
 			int cmCount=0;
 			int start=0;
 			int end=0;
 			int cMNow=0;
+			String len="";
 			for (int j=0;j<frames[i].size();j++) {
 				FrameData obj = frames[i].get(j);
-				if (obj.match) 
+				if (obj.match) {
 					match++;
-				if (obj.match && start==0 && end==0) {
-					//System.out.println("Init");
-					if (cmCount > obj.cmStart) 
-						start=cmCount;
-					else
-						start=obj.cmStart;
-					end=obj.cmEnd;
-				}
-				
-				if (obj.match && start >=0 && end > 0)
-					end = obj.cmEnd;
+					if (start==0 && end==0) {
+						if (cmCount > obj.cmStart) 
+							start=cmCount;
+						else
+							start=obj.cmStart;
+						end=obj.cmEnd;
+					}
+					
+					if (start >=0 && end > 0) 
+						end = obj.cmEnd;
+				}	
 				if (!obj.match && obj.cmEnd > 0) {
 					cmCount += end-start;
+					if (end >0)
+						len += "["+start+"cM - " +end +"cM]";
 					start=0;
 					end=0;
 				}
-				if (j==frames[i].size()-1 && start >=0 && end >0)
+				if (j==frames[i].size()-1 && start >=0 && end >0) {
 					cmCount += end-start;
-				
+					if ( end >0)
+						len += "["+start+"cM - " +end +"cM]";
+				}
 			}
 			overall+=frames[i].size();
 			totMatch+=match;
 			totalCM+=cmCount;
 			cMNow = (frames[i].get(frames[i].size()-1).cmEnd);
 			oevrallCM+=cMNow;
-			System.out.println("At Chromosome "+i);
-			System.out.println("\t\t\tTotal    Frames are	"+ frames[i].size());
-			System.out.println("\t\t\tMatching Frames are	"+ match);
-			System.out.println("\t\t\tTotal    CMs    are	"+ cMNow);
-			System.out.println("\t\t\tMatching CentiMorgans	"+ cmCount);
+			//System.out.println("At Chromosome "+i);
+			//System.out.println("\t\t\tTotal    Frames are	"+ frames[i].size());
+			//System.out.println("\t\t\tMatching Frames are	"+ match);
+			//System.out.println("\t\t\tTotal    CMs    are	"+ cMNow);
+			//System.out.println("\t\t\tMatching CentiMorgans	"+ cmCount);
+			//System.out.println("\t\t\tMatching Segments		"+len);
+			segments.add(len);
+			matchCounts.add(cmCount);
+			cMCounts.add(cMNow);
 		}
-		System.out.println("Overall Total    Frames are	"+ overall);
+		
+		System.out.println("\n\n\n\t\t\tMatching Segments");
+		System.out.println("Chromosome\tTotal cM\tMatching cM\tMatching Segments");
+		for (int i=1;i<=CHROMOSOME_COUNT;i++) {
+			System.out.println( i+"\t"  +"\t" +cMCounts.get(i-1)+"\t"+"\t" +matchCounts.get(i-1)+ "\t"+"\t"+ segments.get(i-1));
+		}
+		System.out.println("\n\n\nOverall Total    Frames are	"+ overall);
 		System.out.println("Overall Matching Frames are	"+ totMatch);
 		System.out.println("Overall Total	 CMs	are	"+ oevrallCM);
 		System.out.println("Overall Matching CMs	are	"+ totalCM);
 	}
 	
+	
 	public void nonMatches() {
-		System.out.println("\n\nDisplaying Non Matched Frames\n");
+		
 		for (int i=1;i<=CHROMOSOME_COUNT;i++)
 			for (int j=0;j<frames[i].size();j++) {
 				FrameData obj = frames[i].get(j);
@@ -574,6 +679,7 @@ public class HBA_Server {
 					obj.display(obj, i);
 			}
 	}
+	
 	public void displayExclusionList() {
 		System.out.println("\n\t\tExclusion List \n\n");
 		int total =0;
@@ -584,161 +690,164 @@ public class HBA_Server {
 		System.out.println("\nTotal number of Frames exluded is :"+total);
 	}
 	
-	// Method code to create and share NONCE
-	public void initiateNonce() {
+	 public void initiateNonce() {	    	
 		try {
-			serverOut.writeUTF(sendHash());
-			hashOfPartyNonce = serverIn.readUTF();
-
-			serverOut.writeLong(sendRandom());
-			party_nonce = serverIn.readLong();
-
+			
+			hashOfPartyNonce=clientIn.readUTF();
+			clientOut.writeUTF(sendHash());
+		
+			party_nonce=clientIn.readLong();
+			clientOut.writeLong(sendRandom());
+			
+			
 			if (verifyHashNonce())
 				System.out.print("Other Party Is Honest");
 			else {
 				System.out.print("Other Party Is Dishonest !!!\nHence Closing Connection");
 				try {
-					socket.close();
-					serverIn.close();
-					serverOut.close();
-				} catch (IOException i) {
-					System.out.println(i);
-				}
-			}
+					clientIn.close(); 
+					clientOut.close(); 
+					socket.close(); 
+					}catch(IOException i) { 
+						System.out.println(i); 
+					}
+				} 	
 			caluclateNonce();
-			displayNonce();
-		} catch (NoSuchProviderException i) {
-			System.out.println(i);
-		} catch (IOException i) {
-			System.out.println(i);
-		} catch (NoSuchAlgorithmException i) {
-			System.out.println(i);
-		}
-	}
-	
+			displayNonce();	
+		} catch(NoSuchProviderException i) { 
+			System.out.println(i); 
+		} catch(IOException i) { 
+			System.out.println(i); 
+		} catch(NoSuchAlgorithmException i) { 
+			System.out.println(i); 
+		} 	
+	 }
+	 
 	public void inputFile(String location) {
 		try {
+			clientIn.readUTF();
 			csvParser(location);
-			serverOut.writeUTF("a");
 			removeDupLocs();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	 
+			} catch (IOException e) {
+				e.printStackTrace();
+			}		 
 	}
 	
-	//Creates a string of all locations for each chromosome in a batch of 5000 locations
-	//Sends the batch of strings one by one 
 	public void findSnips() {
+		//Block to find common snips
+		//Client receives and sends all the snips from Server
 		try {
-			StringBuilder locs = new StringBuilder("");
-			int counter = 0;
-			for (int i = 1; i <= CHROMOSOME_COUNT; i++) {
-				locs.delete(0, locs.length());
-				for (int j = 0; j < genes[i].size(); j++) {
-					GenotypedData obj = genes[i].get(j);
-					int location = obj.getLocation();
-					locs.append(location);
-					locs.append(" ");
-					counter++;
-					//shares the batch of 5000 location
-					if (counter == 5000) {
-						//signifies the next batch will come for this chromosome
-						serverOut.writeUTF("continue");
-						serverOut.write(i);
-						serverOut.writeUTF(locs.toString());
-						locs.delete(0, locs.length());
-						counter = 0;
-						serverIn.readUTF();
-					}
+			String line="",locs="",rsids="",finalChromosomeLocation="",finalChromosomeRsid="";
+			int chromosome=1;
+			while(!line.equals("over")) {
+				line=clientIn.readUTF();
+				if (line.contentEquals("continue")) {
+						chromosome=clientIn.read();
+						locs=clientIn.readUTF();
+						rsids=clientIn.readUTF();
+						finalChromosomeLocation += locs;
+						finalChromosomeRsid += rsids;
+						clientOut.writeUTF("done");
 				}
-				//shares the last batch of locations 
-				if (counter > 0 && counter < 5000) {
-					//signifies this is the last batch for the chromosome
-					serverOut.writeUTF("last");
-					serverOut.write(i);
-					serverOut.writeUTF(locs.toString());
-					locs.delete(0, locs.length());
-					counter = 0;
-					serverIn.readUTF();
-					System.out.println("Sent data for chromosome : " + i);
-					//Receiving from Server
-					String line="",locs1="";
-					String recLocs="";
-					while(!line.equals("complete")) {
-						line=serverIn.readUTF();
-						//receive the current batch and form a string for the complete chromosome
-						if (line.contentEquals("continue")) {
-							locs1=serverIn.readUTF();
-							recLocs += locs1;
+				if (line.contentEquals("last")) {
+						chromosome=clientIn.read();
+						locs=clientIn.readUTF();
+						rsids=clientIn.readUTF();
+						System.out.println("Received Data for Chromosome :" +chromosome);
+						finalChromosomeLocation += locs;
+						finalChromosomeRsid += rsids;
+						removeLocations(chromosome,finalChromosomeLocation,finalChromosomeRsid);
+						//System.out.println("Sending Data for Chromosome : " +chromosome + " size :  "+genes[chromosome].size());
+						
+						clientOut.writeUTF("done");
+						finalChromosomeLocation="";	
+						finalChromosomeRsid="";
+						//Sending chunks to Server
+						//System.out.println("Received Size :" +received.length);
+						StringBuilder locs1 = new StringBuilder("");
+						StringBuilder rsids1 = new StringBuilder("");
+						System.out.println("Sending Data for Chromosome : " +chromosome + " size :  "+genes[chromosome].size());
+						for (int i=0;i<genes[chromosome].size();i++) {
+							GenotypedData obj = genes[chromosome].get(i);
+							locs1.append(obj.getLocation());
+							rsids1.append(obj.getRSID());
+							locs1.append(" ");
+							rsids1.append(" ");
+							if (i%5000==0 && i >0) {
+								clientOut.writeUTF("continue");
+								clientOut.writeUTF(locs1.toString());
+								clientOut.writeUTF(rsids1.toString());
+								//System.out.println("locs1 : "+locs1);
+								//System.out.println("rsids : "+rsids1);
+								locs1.delete(0, locs1.length());
+								rsids1.delete(0, rsids1.length());
+							}
 						}
-						//receive the last batch for the chromosome
-						if (line.contentEquals("last")) {
-							locs1=serverIn.readUTF();
-							recLocs += locs1;
-							//Method call to find the common snips between users
-							removeLocations(i,recLocs);
-						}
-						//all the batch received for the current chromosome
-						if (line.contentEquals("complete")) {
-		            		serverOut.writeUTF("done");
-		            		System.out.println("Received data for chromosome : " + i);
-		            		break;
-		            	}
-					}
+						clientOut.writeUTF("last");
+						clientOut.writeUTF(locs1.toString());
+						clientOut.writeUTF(rsids1.toString());
+						//System.out.println("locs1 : "+locs1);
+						//System.out.println("rsids : "+rsids1);
+						clientOut.writeUTF("complete");
+						clientIn.readUTF();
+						System.out.println("Sent Data for Chromosome :" +chromosome);
+				}
+				if (line.contentEquals("over")) {
+					clientOut.writeUTF("done");
+			        break;
 				}
 			}
-			//signifies that the sharing of snips is over
-			String s = "over";
-			serverOut.writeUTF(s);
-			//System.out.println("String " + s + " sent");
-			serverIn.readUTF();
-		} catch (IOException i) {
-			System.out.println(i);
-		}
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }   
 	}
+	
 	
 	public void displayInputFileProperties() {
 		for (int x=1;x<=CHROMOSOME_COUNT;x++) {
 			System.out.println("Chromosome : " +x);
-			int hetero=0,idn=0,hyphen=0,heh=0;
+			int hetero=0,idn=0,hyphen=0,sdn=0;
 			for (int y=0;y<readRejects[x].size();y++) {
 				GenotypedData xy= readRejects[x].get(y);
 				if (xy.getGene1()!=xy.getGene2())
 					hetero++;
 				if (xy.getRSID().charAt(0)=='i' && isPermissible(xy.gene1,xy.gene2)) 
 					idn++;
-				if (xy.getRSID().charAt(0)=='i' && !isPermissible(xy.gene1,xy.gene2)) 
-					heh++;
+				if (xy.getRSID().charAt(0)=='i' && !isPermissible(xy.gene1,xy.gene2)) {
+					sdn++;
+				}
+				
 				if (xy.getGene1()=='-' || xy.getGene2()=='-')
 					hyphen++;
 			}
-		System.out.println("\tHeterozygotes		: " +hetero);
-		System.out.println("\tHomozygotes		: " +genes[x].size());
-		System.out.println("\tGenotypes with --	: " +hyphen);
-		System.out.println("\tRSID starts with i & acceptable Genotypes		: " +idn);
-		System.out.println("\tRSID starts with i & unacceptable Genotypes	: " +heh);	
+			System.out.println("\tHeterozygotes	: " +hetero);
+			System.out.println("\tHomozygotes	: "+genes[x].size());
+			System.out.println("\tRSID starts with i & acceptable Genotypes	: " +idn);
+			System.out.println("\tRSID starts with i & unacceptable Genotypes	: " +sdn);
+			System.out.println("\tGenotypes with --	: " +hyphen);
 		}
 	}
 	
-	
-	public List<String> hashCodes() {
+	public List<String> hashCodes(){
 		//Finding Total number of Hashes
 		int totalFrames=0;
-		System.out.println("\n\nSize of Frames");
+        System.out.println("\n\nSize of Frames");
 		for (int m=1;m<=CHROMOSOME_COUNT;m++) {
-			System.out.println("Chromosome "+m+" :" +frames[m].size());
+			System.out.println("Chromosome " +m +" : " +frames[m].size());
 			totalFrames+=frames[m].size();
 		}
 		System.out.println("Total Number of Frames : "+totalFrames);
 		//Create a list of all hashes
 		List<String> hashToBeSent = new ArrayList<>();
 		List<String> hashReceived = new ArrayList<>();
-		try {	
-			//Sending the value of total number of hashes
-			serverOut.writeInt(totalFrames);
+		//Receiving and Sending HashCodes	
+		List<String> hash = new ArrayList<>();
+		try {
 			//Receiving total number of hashes count
-			int hashSize=serverIn.readInt();
+			int hashSize=clientIn.readInt();
 			System.out.println("Recieved Input for Hash Size : " +hashSize);
+			//Sending the value of total number of hashes
+			clientOut.writeInt(totalFrames);
 			//Generating the list of hashes that needs to be sent
 			for (int i=1;i<=CHROMOSOME_COUNT;i++)
 				for (int j=0;j<frames[i].size();j++) {
@@ -758,28 +867,30 @@ public class HBA_Server {
 				batch += hashCode + "||";
 				counter++;
 				if (counter==100) {
-					//Sending batches of 100 HashCodes
-					serverOut.writeUTF(batch);
-					batch="";
 					//Receiving batch of 100 HashCodes
-					received +=serverIn.readUTF();
+					received += clientIn.readUTF();
+					//Sending batches of 100 HashCodes
+					clientOut.writeUTF(batch);
+					batch="";
 					counter=0;
 				}
 			}
 			//Sending and Receiving the last batch of less than 100 hashes
-			serverOut.writeUTF(batch);
-			received += serverIn.readUTF();
-			//transforming received hashcodes into a list of strings
+			received += clientIn.readUTF();
+			clientOut.writeUTF(batch);
+			//transforming received hashcodes in a list of strings
 			String []arr=received.split("[||]");
-			for (String w:arr) 
+			for (String w:arr)
 				if (!w.contentEquals(""))
 					hashReceived.add(w);
-			System.out.println("Input Size : "+hashReceived.size());			
+			System.out.println("Input Size : "+hashReceived.size());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("All Hashes Sent and Received");
+		System.out.println("All Hashes Sent and received");
 		return hashReceived;
 	}
+	
+	
 	
 }
