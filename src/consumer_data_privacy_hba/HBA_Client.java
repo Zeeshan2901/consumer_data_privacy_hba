@@ -54,7 +54,7 @@ public class HBA_Client {
 		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
 		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
 	
-		location="test_files/case3/1.txt";
+		location="test_files/case3/3.txt";
 		
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();
@@ -153,8 +153,8 @@ public class HBA_Client {
 		  for (int i=1;i<=CHROMOSOME_COUNT;i++) 
 			  for (int j=0;j<frames[i].size();j++){ 
 				  FrameData obj = frames[i].get(j); 
-				  if (!obj.match)
-					  System.out.println("Chr : " +i + " || CM_Start : " + obj.cmStart + " ||Match : "+obj.match); 
+				  if (obj.sent)
+					  obj.display(obj, i);
 			  }
 		  
 		 

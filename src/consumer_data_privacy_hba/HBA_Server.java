@@ -45,7 +45,7 @@ public class HBA_Server {
 	//Constructor to initialize the variables
 	public HBA_Server() {
 		port = 5000;
-		location="test_files/case3/3.txt";
+		location="test_files/case3/2.txt";
 
 		overlap=5;
 		
