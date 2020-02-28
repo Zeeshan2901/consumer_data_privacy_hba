@@ -1,6 +1,11 @@
 package consumer_data_privacy_hba;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Test {
@@ -32,18 +37,41 @@ public class Test {
 				"  % of Homozygotes : " +(totalHomo*100/(totalHomo+totalHetero)));
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		
-		ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
-		ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
+		//ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
+		//ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
 		
-		b.csvParser("input/mather_all.txt");
+		//b.csvParser("input/mather_all.txt");
+		long startTime = System.currentTimeMillis();
 		
-		
-		genecount(b.genes);
-		
-
+		//genecount(b.genes);
+		try {
+			String s="",lastline="";
+			FileReader fr = new FileReader("input/non_matching_case_1_test_results.csv");
+			BufferedReader bf = new BufferedReader(fr);
+			while ( ( s= bf.readLine()) != null) {
+				lastline=s;
+			}
+			System.out.println("yo : "+lastline);	
+			System.out.println("yo : "+lastline);	
+			String [] temp = lastline.split(",");
+			int id = Integer.parseInt(temp[0]) + 1;
+			System.out.println(id);
+				
+			FileWriter fw = new FileWriter("input/non_matching_case_1_test_results.csv", true);
+		    BufferedWriter bw = new BufferedWriter(fw);
+		    PrintWriter out = new PrintWriter(bw);		
+		    //out.println("the text");
+		    //out.println("more text");
+		    out.close();
+			} catch (IOException e) {
+			    //exception handling left as an exercise for the reader
+			}
+		Thread.sleep(29);
+		long stopTime = System.currentTimeMillis();
+	      long elapsedTime = stopTime - startTime;
+	      System.out.println("Time : " +elapsedTime);
 	}
-
 }

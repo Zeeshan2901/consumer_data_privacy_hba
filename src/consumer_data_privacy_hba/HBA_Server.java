@@ -45,7 +45,7 @@ public class HBA_Server {
 	//Constructor to initialize the variables
 	public HBA_Server() {
 		port = 5000;
-		location="input/son_all.txt";
+		location="test_files/case3/3.txt";
 
 		overlap=5;
 		
@@ -233,49 +233,61 @@ public class HBA_Server {
 		String s="";
 		FileReader fr = new FileReader(location);
 		BufferedReader bf = new BufferedReader(fr);
+		int flag =0;
 		while ( (s= bf.readLine()) != null) {
-        	GenotypedData obj =new GenotypedData();
-        	int index = 0;
-            int len = s.length();
-            for(; (index  < len) && (s.charAt(index) != '\t'); index++) {}
-            obj.rsid= s.substring(0, index);
-            index++;
-            char c;
-            c = s.charAt(index);
-            int chromosome = c & 0xF;
-            index++;
-            c = s.charAt(index);
-            if(c != '\t') {
-            	chromosome = (chromosome << 3) + (chromosome << 1) + (c & 0xF);
-                index++;
-            }
-            if((chromosome > CHROMOSOME_COUNT) || (chromosome <=0)) {
-            	bf.close();
-            	return;
-            }
-            index++;           
-            int loc = 0;
-            for(;index  < len; index++) {
-                c = s.charAt(index);
-                if(c != '\t') {
-                	loc = (loc << 3) + (loc << 1) + (c & 0xF);
-                } else {
-                    break;
-                }
-            }
-            obj.location=loc;
-            //index++;
-            obj.gene1=s.charAt(len-2);
-            obj.gene2=s.charAt(len-1);
-            
-            if (isPermissible(obj.gene1,obj.gene2) ) {
-            	ArrayList <GenotypedData> gen =  genes[chromosome];
-            	gen.add(obj);
-            }
-            else {
-            	ArrayList <GenotypedData> gen =  readRejects[chromosome];
-            	gen.add(obj);
-            }	
+			
+			if (flag==0 && s.length() > 3 && s.substring(0, 2).contentEquals("rs"))
+				flag =1;
+			
+			if (flag ==1) {
+			
+			
+	        	GenotypedData obj =new GenotypedData();
+	        	int index = 0;
+	            int len = s.length();
+	            for(; (index  < len) && (s.charAt(index) != '\t'); index++) {}
+	            obj.rsid= s.substring(0, index);
+	            index++;
+	            char c;
+	            c = s.charAt(index);
+	            int chromosome = c & 0xF;
+	            index++;
+	            c = s.charAt(index);
+	            if(c != '\t') {
+	            	chromosome = (chromosome << 3) + (chromosome << 1) + (c & 0xF);
+	                index++;
+	            }
+	            if((chromosome > CHROMOSOME_COUNT) || (chromosome <=0)) {
+	            	bf.close();
+	            	return;
+	            }
+	            index++;           
+	            int loc = 0;
+	            for(;index  < len; index++) {
+	                c = s.charAt(index);
+	                if(c != '\t') {
+	                	loc = (loc << 3) + (loc << 1) + (c & 0xF);
+	                } else {
+	                    break;
+	                }
+	            }
+	            obj.location=loc;
+	            //index++;
+	            obj.gene1=s.charAt(len-2);
+	            obj.gene2=s.charAt(len-1);
+	            
+	            if (isPermissible(obj.gene1,obj.gene2) ) {
+	            	ArrayList <GenotypedData> gen =  genes[chromosome];
+	            	gen.add(obj);
+	            }
+	            else {
+	            	ArrayList <GenotypedData> gen =  readRejects[chromosome];
+	            	gen.add(obj);
+	            }	
+	            
+			}     
+	            
+	            
         }
 		bf.close();
 		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(genes[x]));
@@ -544,15 +556,20 @@ public class HBA_Server {
 					start=0;
 					end=0;
 				}
-				if (j==frames[i].size()-1 && start >=0 && end >0)
-					cmCount += end-start;
+				if (frames[i].size() > 0 && start >=0 && end >0) {
+					if (j==frames[i].size()-1) {
+						cmCount += end-start;
+					}
+				}
 				
 			}
 			overall+=frames[i].size();
 			totMatch+=match;
 			totalCM+=cmCount;
-			cMNow = (frames[i].get(frames[i].size()-1).cmEnd);
-			oevrallCM+=cMNow;
+			if (frames[i].size() > 0) {
+				cMNow = (frames[i].get(frames[i].size()-1).cmEnd);
+				oevrallCM+=cMNow;
+			}
 			System.out.println("At Chromosome "+i);
 			System.out.println("\t\t\tTotal    Frames are	"+ frames[i].size());
 			System.out.println("\t\t\tMatching Frames are	"+ match);
