@@ -194,8 +194,8 @@ public class MapLogic {
 						// Zee: Will work on that(T1 is set for 700)
 						//System.out.println("\n Chromosome : "+chromosome+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +substring+" || Hashed Value : "+getSHA(substring.toString()));
 						
-						FrameData obj=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce));
-						set.add(obj);
+						//FrameData obj=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(substring.toString(),nonce),counter,counter, counter);
+						//set.add(obj);
 						start=0;
 						substring.delete(0, substring.length());
 					}
@@ -212,8 +212,8 @@ public class MapLogic {
 		            if (counter == (y*(t1/n))) {
 		            	y+=2;
 		            	l2End=(Integer) m.getKey();
-		            	FrameData obj=new FrameData(l2Start,findRsid(chromosome,l2Start),l2End,findRsid(chromosome,l2End),getSHAWitnNonce(l2Substring.toString(),nonce));
-		            	l2set.add(obj);
+		            	//FrameData obj=new FrameData(l2Start,findRsid(chromosome,l2Start),l2End,findRsid(chromosome,l2End),getSHAWitnNonce(l2Substring.toString(),nonce));
+		            	//l2set.add(obj);
 		            	
 		            	l2Substring.delete(0, l2Substring.length());
 		            	//System.out.println(l2End);
@@ -404,7 +404,7 @@ public class MapLogic {
 		
 		
 		public boolean someMatch(FrameData my, FrameData party) {
-			return (my.start==party.start && my.end==party.end && my.hashValue.contentEquals(party.hashValue)) ? true : false;		
+			return true ;//(my.start==party.start && my.end==party.end && my.hashValue.contentEquals(party.hashValue)) ? true : false;		
 		}
 	
 	

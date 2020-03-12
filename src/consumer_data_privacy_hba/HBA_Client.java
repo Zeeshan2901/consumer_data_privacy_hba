@@ -502,7 +502,7 @@ public class HBA_Client {
 					end=obj.location;
 					endRsid=obj.getRSID();
 					//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5), even, odd);
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -516,7 +516,7 @@ public class HBA_Client {
 						end=obj.location;
 						endRsid=obj.getRSID();
 						//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5), even, odd);
 						gen.add(fr);
 						start=0;
 						oddSubstring.delete(0, oddSubstring.length());

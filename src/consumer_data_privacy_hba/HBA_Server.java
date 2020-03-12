@@ -452,7 +452,7 @@ public class HBA_Server {
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5), even, odd);
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -465,7 +465,7 @@ public class HBA_Server {
 						GenotypedData obj= genes[i].get(j-1);
 						end=obj.location;
 						endRsid=obj.getRSID();
-						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5), even, odd);
 						gen.add(fr);
 						start=0;
 						oddSubstring.delete(0, oddSubstring.length());
