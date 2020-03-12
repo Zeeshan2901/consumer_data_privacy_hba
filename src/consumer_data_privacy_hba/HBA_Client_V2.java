@@ -39,8 +39,9 @@ public class HBA_Client_V2 {
 	//2D centiMogran Array holding the starting positions of each centiMorgan
 	int [][] cM;
 	
-	//Overlapping variable
+	//Overlapping and threshold variable
 	int overlap;
+	int threshold;
 	
 	//testing variables
 	int totalcM, matchcM,  totalFrames, matchFrames,mathingSegments, excludedFrames;
@@ -68,6 +69,26 @@ public class HBA_Client_V2 {
 		System.out.println("iUnAcc : "+iUnAcc);
 		System.out.println("result : ");
 		System.out.println("relationship : ");
+	}
+	
+	public void writeExclusionList() {
+		try {
+			String file = "input/rejects.csv";
+			FileWriter fw = new FileWriter(file, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter out = new PrintWriter(bw);
+			for (int i =1 ; i<=CHROMOSOME_COUNT; i++) 
+				for (int j= 0; j< exclusionList[i].size();j++){
+					FrameData obj = exclusionList[i].get(j);
+					out.println(participant1 + "," + participant2 + "," + i + "," + obj.cmStart + "," + obj.cmEnd + "," + obj.evenCount + "," + obj.oddCount);
+			}
+			out.close();
+		    bw.close();
+		    fw.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public int findLastline(String filename) {
@@ -127,6 +148,7 @@ public class HBA_Client_V2 {
 		port=5000;
 	
 		overlap=5;
+		threshold =50;
 		
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
@@ -286,8 +308,9 @@ public class HBA_Client_V2 {
 		//Sending & receiving last comms
 		//clientIn.readUTF();
 		//clientOut.writeUTF("close");
+		//writeExclusionList();
 		
-		System.out.println("Client   :  Sending & receiving last comms");
+		System.out.println("Client   :  writeExclusionList");
 		
 		/*
 		 * for (int i=1;i<=CHROMOSOME_COUNT;i++) for (int j=0;j<frames[i].size();j++){
@@ -663,14 +686,13 @@ public class HBA_Client_V2 {
 				//System.out.println("For Chromosome "+i+ " Number of alleles between cM "+cMIndex+" and "+ (cMIndex+5) + " is : " +counter);	
 				//capture the end of Frame
 				//check if the length of even and odd substring are greater than the threshold or not
-				int threshold = 100;
 				if (even >= threshold && odd >= threshold && counter >1) {
 					GenotypedData obj= genes[i].get(j-1);
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
 					//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -684,7 +706,7 @@ public class HBA_Client_V2 {
 						end=obj.location;
 						endRsid=obj.getRSID();
 						//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
 						gen.add(fr);
 						start=0;
 						oddSubstring.delete(0, oddSubstring.length());
@@ -748,6 +770,27 @@ public class HBA_Client_V2 {
 		//System.out.println("Client hashes size"+hashes.size());
 	}
 	
+	public void matchstats1() {
+		System.out.println("\n\nMatch Stats \n");
+		int overallFrames=0,totMatchFrames=0, totalmatchCM=0, oevrallCM=0;
+		ArrayList<String> segments= new ArrayList<String>(CHROMOSOME_COUNT);	//Holds segment string for each chromosome
+		ArrayList<Integer> matchCounts= new ArrayList<Integer>(CHROMOSOME_COUNT);
+		ArrayList<Integer> cMCounts= new ArrayList<Integer>(CHROMOSOME_COUNT);
+		for (int i=1;i<=CHROMOSOME_COUNT;i++) {
+			int match=0;			//Number of matching Frames
+			int cmCount=0;			//Matching cM
+			int start=0;			//Start of a matching segment
+			int end=0;				//End of a matching segment
+			int cMNow=0;
+			String len="";			//Segment String
+			for (int j=0;j<frames[i].size();j++) {
+				
+			}
+		}
+		
+	}
+	
+	
 	public void matchStats() {
 		System.out.println("\n\nMatch Stats \n");
 		int overall=0,totMatch=0, totalCM=0, oevrallCM=0;
@@ -755,30 +798,28 @@ public class HBA_Client_V2 {
 		ArrayList<Integer> matchCounts= new ArrayList<Integer>(CHROMOSOME_COUNT);
 		ArrayList<Integer> cMCounts= new ArrayList<Integer>(CHROMOSOME_COUNT);
 		for (int i=1;i<=CHROMOSOME_COUNT;i++) {
-			int match=0;
-			int cmCount=0;
-			int start=0;
-			int end=0;
+			int match=0;			//Number of matching Frames
+			int cmCount=0;			//Matching cM
+			int start=0;			//Start of a matching segment
+			int end=0;				//End of a matching segment
 			int cMNow=0;
-			String len="";
+			String len="";			//Segment String
 			for (int j=0;j<frames[i].size();j++) {
 				FrameData obj = frames[i].get(j);
 				//obj.display(obj, i);
 				if (obj.match) {
 					match++;
-					if (start==0 && end==0) {
-						if (cmCount > obj.cmStart) 
-							start=cmCount;
-						else
-							start=obj.cmStart;
+					
+					if (start == 0 && end == 0 ) {
+						start=obj.cmStart;
 						end=obj.cmEnd;
 					}
 					
-					if (start >=0 && end > 0) 
+					if (start > 0 && end > 0)
 						end = obj.cmEnd;
 				}	
-				if (!obj.match && obj.cmEnd > 0) {
-					cmCount += end-start;
+				if (!obj.match && end > 0) {
+					cmCount += (end-start);
 					if (end >0) {
 						len += "["+start+"cM - " +end +"cM]";
 						mathingSegments++;
@@ -788,7 +829,7 @@ public class HBA_Client_V2 {
 				}
 				if (frames[i].size() > 0 && start >=0 && end >0) {
 					if (j==frames[i].size()-1) {
-						cmCount += end-start;
+						cmCount += (end-start);
 						if ( end >0) {
 							len += "["+start+"cM - " +end +"cM]";
 							mathingSegments++;

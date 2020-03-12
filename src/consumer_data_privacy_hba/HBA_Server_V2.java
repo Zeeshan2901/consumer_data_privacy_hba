@@ -23,8 +23,9 @@ public class HBA_Server_V2 {
 	//Location of the input File
 	private String location;
 
-	//Overlapping variable
+	//Overlapping & threshold variable
 	int overlap;
+	int threshold ;
 	
 	// NONCE fields
 	long my_nonce, party_nonce, nonce;
@@ -52,7 +53,7 @@ public class HBA_Server_V2 {
 		//location = "input/dad_all.txt";
 		location= inp;
 		overlap=5;
-		
+		threshold = 50;
 		genes			= new ArrayList[CHROMOSOME_COUNT+1];
 		frames			= new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList	= new ArrayList[CHROMOSOME_COUNT+1];
@@ -502,13 +503,12 @@ public class HBA_Server_V2 {
 				//System.out.println("For Chromosome "+i+ " Number of alleles between cM "+cMIndex+" and "+ (cMIndex+5) + " is : " +counter);	
 				//capture the end of Frame
 				//check if the length of even and odd substring are greater than the threshold or not
-				int threshold = 100;
 				if (even >= threshold && odd >= threshold && counter >1) {
 					GenotypedData obj= genes[i].get(j-1);
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -521,7 +521,7 @@ public class HBA_Server_V2 {
 						GenotypedData obj= genes[i].get(j-1);
 						end=obj.location;
 						endRsid=obj.getRSID();
-						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5));
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
 						gen.add(fr);
 						start=0;
 						oddSubstring.delete(0, oddSubstring.length());

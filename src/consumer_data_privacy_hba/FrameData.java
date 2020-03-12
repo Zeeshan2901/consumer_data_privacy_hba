@@ -7,8 +7,9 @@ public class FrameData implements Comparable <FrameData> {
 	String evenHashValue, oddHashValue;
 	boolean sent;
 	boolean match;
+	int evenCount, oddCount;
 	
-	public FrameData(int st, String stRsid, int en, String enRsid, String ehash, String ohash, int cms, int cme) {
+	public FrameData(int st, String stRsid, int en, String enRsid, String ehash, String ohash, int cms, int cme, int ec, int oc) {
 		start=st;
 		startRSID=stRsid;
 		end=en;
@@ -19,6 +20,8 @@ public class FrameData implements Comparable <FrameData> {
 		cmEnd=cme;
 		sent=false;
 		match=false;
+		evenCount=ec;
+		oddCount=oc;
 	}
 	
 	public FrameData(FrameData obj) {
@@ -30,11 +33,14 @@ public class FrameData implements Comparable <FrameData> {
 		this.oddHashValue=obj.oddHashValue;
 		this.sent=false;
 		this.match=false;
+		this.oddCount=obj.oddCount;
+		this.evenCount=obj.evenCount;
 	}
 	
 	
 	public void display(FrameData ob, int chromo) {
-		System.out.println("\n Chromosome : "+chromo+" || Start :" +ob.start+" || StartRSID : "+ob.startRSID+" "
+		System.out.println("\n Chromosome : "+chromo+" || Start :" +ob.start+" || StartRSID : "+ob.startRSID+" " + " || EvenCount : "
+				+ ob.evenCount + " || Odd Count : "+ ob.oddCount 
 				+ "|| End : "+ob.end+" || EndRSID : "+ob.endRSID+ " || CM_Start : " +ob.cmStart + " || CM_End : "+ob.cmEnd+
 				" || HashValues : "+ob.evenHashValue+" || "
 				+ob.oddHashValue + " || Sent : "+ob.sent+" || Match : "+ob.match);
