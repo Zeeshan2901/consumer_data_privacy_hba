@@ -143,7 +143,7 @@ public class HBA_Client_V2 {
 	
 	
 	//Constructor to initialize the variables
-	public HBA_Client_V2(String inp) {
+	public HBA_Client_V2(/*String inp*/) {
 		clientAddress="127.0.0.1"; 
 		port=5000;
 	
@@ -161,9 +161,9 @@ public class HBA_Client_V2 {
 		mathingSegments=0;
 		
 		//location="test_files/case3/1.txt";
-		//location = "input/son_all.txt";
-		location = inp;
-		participant1=inp.substring(inp.length()-6, inp.length()).replaceAll("[^0-9]", "");
+		location = "input/son_all.txt";
+		//location = inp;
+		//participant1=inp.substring(inp.length()-6, inp.length()).replaceAll("[^0-9]", "");
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();
 			frames[i]= new ArrayList<FrameData>();
@@ -204,7 +204,7 @@ public class HBA_Client_V2 {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
-		HBA_Client_V2 client = new HBA_Client_V2(args[0]);		
+		HBA_Client_V2 client = new HBA_Client_V2(/*args[0]*/);		
 		client.run();
 	}
 	

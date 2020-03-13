@@ -47,9 +47,9 @@ public class FrameData implements Comparable <FrameData> {
 	}
 	
 	public int compareTo(FrameData fd) {
-		if (start==fd.start)
+		if (start==fd.cmStart)
 			return 0;
-		if (fd.start < start)
+		if (fd.cmStart < cmStart)
 			return 1;
 		else 
 			return -1;

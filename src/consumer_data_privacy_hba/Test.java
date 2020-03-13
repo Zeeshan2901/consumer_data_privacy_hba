@@ -17,7 +17,10 @@ public class Test {
 	
 	public static void genecount(ArrayList<GenotypedData>[] checkGenes) {
 		
-		int homo=0, hetero=0, totalHomo=0, totalHetero=0;
+		
+		
+		
+		/*int homo=0, hetero=0, totalHomo=0, totalHetero=0;
 		 
 		for (int i =1 ; i<=22; i++) {
 			homo=hetero=0;
@@ -34,15 +37,20 @@ public class Test {
 			totalHetero+=hetero;
 		}
 		System.out.println("\n\n\n\t Total Homo : "+totalHomo+" Total Hetero : "+ totalHetero+ 
-				"  % of Homozygotes : " +(totalHomo*100/(totalHomo+totalHetero)));
+				"  % of Homozygotes : " +(totalHomo*100/(totalHomo+totalHetero)));*/
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
+		int chromosome = 'M' & 0xF;
+		System.out.println(chromosome);
+		
+		
 		// TODO Auto-generated method stub
 		
 		//ConsumerDataPrivacyHBA a = new ConsumerDataPrivacyHBA();
 		//ConsumerDataPrivacyHBA b = new ConsumerDataPrivacyHBA();
 		
+		/*
 		//b.csvParser("input/mather_all.txt");
 		long startTime = System.currentTimeMillis();
 		
@@ -72,6 +80,6 @@ public class Test {
 		Thread.sleep(29);
 		long stopTime = System.currentTimeMillis();
 	      long elapsedTime = stopTime - startTime;
-	      System.out.println("Time : " +elapsedTime);
+	      System.out.println("Time : " +elapsedTime);*/
 	}
 }

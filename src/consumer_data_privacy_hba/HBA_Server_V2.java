@@ -47,11 +47,11 @@ public class HBA_Server_V2 {
 	
 	
 	//Constructor to initialize the variables
-	public HBA_Server_V2(String inp) {
+	public HBA_Server_V2(/*String inp*/) {
 		port = 5000;
 		//location="test_files/case3/2.txt";
-		//location = "input/dad_all.txt";
-		location= inp;
+		location = "input/dad_all.txt";
+		//location= inp;
 		overlap=5;
 		threshold = 50;
 		genes			= new ArrayList[CHROMOSOME_COUNT+1];
@@ -95,7 +95,7 @@ public class HBA_Server_V2 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		HBA_Server_V2 server = new HBA_Server_V2(args[0]);
+		HBA_Server_V2 server = new HBA_Server_V2(/*args[0]*/);
 		server.run();
 	}
 
