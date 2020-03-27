@@ -23,9 +23,10 @@ public class HBA_Server_Individual {
 	//Location of the input File
 	private String location;
 
-	//Overlapping & threshold variable
-	int overlap;
-	int threshold ;
+	//Overlapping, threshold and centiMorgans per Frame variable
+	final static int overlap = 5;
+	final static int threshold = 100;
+	final static int cMPerFrame = 5;
 	
 	// NONCE fields
 	long my_nonce, party_nonce, nonce;
@@ -49,13 +50,12 @@ public class HBA_Server_Individual {
 	//Constructor to initialize the variables
 	public HBA_Server_Individual() {
 		port = 5000;
-		//location="test_files/case3/2.txt";
-		//location = "input/dad_all.txt";
-		//location = "input/dad_all.txt";
+		//location="test_files/case3/3.txt";
+		location = "input/dad_all.txt";
+		//location = "input/Father.txt";
 		//location= inp;
-		location = "test_files/case3/1.txt";
-		overlap=5;
-		threshold = 50;
+		//location = "test_files/case3/1.txt";
+		
 		genes			= new ArrayList[CHROMOSOME_COUNT+1];
 		frames			= new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList	= new ArrayList[CHROMOSOME_COUNT+1];
@@ -279,8 +279,10 @@ public class HBA_Server_Individual {
 				mismatches++;
 			}
 		}
-		//System.out.println("Final    size	: " + genes[chromosome].size());
-		//System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);	
+		if (mismatches >0) {
+			System.out.println("Final    size	: " + genes[chromosome].size());
+			System.out.println("Mismatches in Chromosome  "+ chromosome+ " are "+mismatches);	
+		}
 	}
 	
 	// Verify if the alleles are Homozygous and in "A,C,G,T" for
@@ -446,7 +448,7 @@ public class HBA_Server_Individual {
 		}
 		// For specifying wrong message digest algorithms
 		catch (NoSuchAlgorithmException e) {
-			System.out.println("Exception thrown" + " for incorrect algorithm: " + e);
+			System.out.println("Exception thrown for incorrect algorithm: " + e);
 			return null;
 		}
 	}
@@ -503,8 +505,8 @@ public class HBA_Server_Individual {
 						GenotypedData x= genes[i].get(j++);
 						loc = x.getLocation();
 					}
-					if (cM[i].length > (cMIndex+5)) {
-						while (loc > cM[i][cMIndex] && loc < cM[i][cMIndex+5] && j<genes[i].size()) {
+					if (cM[i].length > (cMIndex+cMPerFrame)) {
+						while (loc > cM[i][cMIndex] && loc < cM[i][cMIndex+cMPerFrame] && j<genes[i].size()) {
 							GenotypedData obj= genes[i].get(j);
 							int loc1 = obj.getLocation();
 							counter++;
@@ -541,7 +543,7 @@ public class HBA_Server_Individual {
 					ArrayList <FrameData> gen =  frames[i];
 					end=obj.location;
 					endRsid=obj.getRSID();
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+cMPerFrame),even,odd);
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -554,7 +556,7 @@ public class HBA_Server_Individual {
 						GenotypedData obj= genes[i].get(j-1);
 						end=obj.location;
 						endRsid=obj.getRSID();
-						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+cMPerFrame),even,odd);
 						gen.add(fr);
 						start=0;
 						oddSubstring.delete(0, oddSubstring.length());
@@ -562,8 +564,8 @@ public class HBA_Server_Individual {
 						even=odd=0;
 					}
 				}
-				cMIndex+=5;
-				if (cM[i].length < (cMIndex+5))
+				cMIndex+=cMPerFrame;
+				if (cM[i].length < (cMIndex+cMPerFrame))
 					break;
 				}
 			}

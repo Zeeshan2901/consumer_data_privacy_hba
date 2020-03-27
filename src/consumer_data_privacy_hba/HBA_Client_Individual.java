@@ -29,7 +29,7 @@ public class HBA_Client_Individual {
 	String hashOfMyNonce, hashOfPartyNonce;
 	
 	//CHROMOSOME Count Constant
-	final static int CHROMOSOME_COUNT =22;
+	final static int CHROMOSOME_COUNT = 22;
 	
 	//Necessary Data Structures
 	ArrayList<GenotypedData>[] genes;		//holds the data files
@@ -40,9 +40,10 @@ public class HBA_Client_Individual {
 	//2D centiMogran Array holding the starting positions of each centiMorgan
 	int [][] cM;
 	
-	//Overlapping and threshold variable
-	int overlap;
-	int threshold;
+	//Overlapping, threshold and centiMorgans per Frame variable
+	final static int overlap = 5;
+	final static int threshold = 100;
+	final static int cMPerFrame = 5;
 	
 	//testing variables
 	int totalcM, matchcM,  totalFrames, matchFrames,mathingSegments, excludedFrames;
@@ -57,9 +58,6 @@ public class HBA_Client_Individual {
 	public HBA_Client_Individual() {
 		clientAddress="127.0.0.1"; 
 		port=5000;
-	
-		overlap=5;
-		threshold =50;
 		
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
@@ -73,8 +71,8 @@ public class HBA_Client_Individual {
 		
 		//location="test_files/case3/1.txt";
 		//location = "input/Proband.txt";
-		//location = "input/sister_all.txt";
-		location = "test_files/case3/4.txt";
+		location = "input/sister_all.txt";
+		//location = "test_files/case3/4.txt";
 		//location = "input/FTdna.csv";
 		//location = inp;
 		//participant1=inp.substring(inp.length()-6, inp.length()).replaceAll("[^0-9]", "");
@@ -124,6 +122,7 @@ public class HBA_Client_Individual {
 				for (int j= 0; j< frames[i].size();j++){
 					FrameData obj = frames[i].get(j);
 					out.println( i + " , " + obj.cmStart + " , " + obj.cmEnd + " , " + obj.match);
+					//out.println(obj.display(obj, i));
 			}
 			out.close();
 		    bw.close();
@@ -156,8 +155,9 @@ public class HBA_Client_Individual {
 	
 	public void writeExclusionList() {
 		try {
+			IntStream.range(1,CHROMOSOME_COUNT+1).parallel().forEach(x -> Collections.sort(exclusionList[x]));
 			String file = "input/rejects.csv";
-			FileWriter fw = new FileWriter(file, true);
+			FileWriter fw = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter out = new PrintWriter(bw);
 			for (int i =1 ; i<=CHROMOSOME_COUNT; i++) 
@@ -529,7 +529,7 @@ public class HBA_Client_Individual {
 	            c = s.charAt(index);
 	            if (c=='X'||c=='M'){
 	            	bf.close();
-	        		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(genes[x]));
+	        		IntStream.range(1,CHROMOSOME_COUNT+1).parallel().forEach(x -> Collections.sort(genes[x]));
 	        		return;
 	            }
 	            int chromosome = c & 0xF;
@@ -583,7 +583,7 @@ public class HBA_Client_Individual {
         	
         }
 		bf.close();	        		
-		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(genes[x]));
+		IntStream.range(1,CHROMOSOME_COUNT+1).parallel().forEach(x -> Collections.sort(genes[x]));
 	}
 
 
@@ -706,8 +706,8 @@ public class HBA_Client_Individual {
 						loc = x.getLocation();
 					}
 					
-					if (cM[i].length > (cMIndex+5)) {
-						while (loc > cM[i][cMIndex] && loc < cM[i][cMIndex+5] && j<genes[i].size()) {
+					if (cM[i].length > (cMIndex+cMPerFrame)) {
+						while (loc > cM[i][cMIndex] && loc < cM[i][cMIndex+cMPerFrame] && j<genes[i].size()) {
 							GenotypedData obj= genes[i].get(j);
 							int loc1 = obj.getLocation();
 							counter++;
@@ -745,7 +745,7 @@ public class HBA_Client_Individual {
 					end=obj.location;
 					endRsid=obj.getRSID();
 					//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
+					FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+cMPerFrame),even,odd);
 					gen.add(fr);
 					start=0;
 					oddSubstring.delete(0, oddSubstring.length());
@@ -759,7 +759,7 @@ public class HBA_Client_Individual {
 						end=obj.location;
 						endRsid=obj.getRSID();
 						//System.out.println("\n Chromosome : "+i+" || Start : "+start+" || RSID : "+startRsid+" || End : "+end+" || RSID : "+endRsid+" || String of Alleles : " +evenSubstring +" || String of Alleles : " +oddSubstring);
-						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+5),even,odd);
+						FrameData fr=new FrameData(start,startRsid,end,endRsid,getSHAWitnNonce(evenSubstring.toString(),nonce),getSHAWitnNonce(oddSubstring.toString(),nonce),cmStart,(cmStart+cMPerFrame),even,odd);
 						gen.add(fr);
 						start=0;
 						oddSubstring.delete(0, oddSubstring.length());
@@ -767,8 +767,8 @@ public class HBA_Client_Individual {
 						even=odd=0;
 					}
 				}
-				cMIndex+=5;
-				if (cM[i].length < (cMIndex+5))
+				cMIndex+=cMPerFrame;
+				if (cM[i].length < (cMIndex+cMPerFrame))
 					break;
 				}
 			}
@@ -788,7 +788,7 @@ public class HBA_Client_Individual {
 			System.out.println("Exception occured: "+e);
 			e.printStackTrace();
 		}
-		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(frames[x]));
+		IntStream.range(1,CHROMOSOME_COUNT+1).parallel().forEach(x -> Collections.sort(frames[x]));
 	}
 
 	public boolean allSent() {
@@ -1062,7 +1062,6 @@ public class HBA_Client_Individual {
 	
 	public void matchStats() {
 		System.out.println("\n\nMatch Stats \n");
-		IntStream.range(1,CHROMOSOME_COUNT).parallel().forEach(x -> Collections.sort(frames[x]));
 		ArrayList<String> segments= new ArrayList<String>(CHROMOSOME_COUNT);
 		ArrayList<Integer> chromosomeWiseTotalCM= new ArrayList<Integer>(CHROMOSOME_COUNT);
 		ArrayList<Integer> chromosomeWiseMatchCM= new ArrayList<Integer>(CHROMOSOME_COUNT);
@@ -1076,6 +1075,7 @@ public class HBA_Client_Individual {
 			int start=0;				//Start of a matching segment
 			int end=0;					//End of a matching segment
 			String len="";				//Segment String for each chromosome
+			int tempSt=0, tempEnd=0;
 			int startOfCM=0, endOfCm=0;	//CM end Points
 			int currentChromosomeTotalFrames = frames[i].size();
 			for (int j=0;j<currentChromosomeTotalFrames;j++) {
@@ -1089,7 +1089,7 @@ public class HBA_Client_Individual {
 					endOfCm=obj.cmEnd;
 				else {
 					cMCount += endOfCm-startOfCM;
-					if (cMCount > obj.cmStart)
+					if (cMCount > obj.cmStart && j < currentChromosomeTotalFrames)
 						startOfCM=cMCount;
 					else
 						startOfCM=obj.cmStart;
@@ -1106,27 +1106,44 @@ public class HBA_Client_Individual {
 				
 				if (obj.match) {
 					matchFrame++;
-					if (start==0 && end ==0) {
+					if (start == 0 && end == 0 && tempEnd == 0 && tempSt == 0) {
 						start=obj.cmStart;
 						end=obj.cmEnd;
 					}
-					if (end >0)
+					else if (obj.cmEnd > tempSt && tempSt >0) {
 						end=obj.cmEnd;
+						if ((obj.end - end ) >= cMPerFrame )
+							start= obj.cmStart;
+					}
+					else if ((obj.cmEnd - end ) <= cMPerFrame ) {
+						end=obj.cmEnd;
+					}
+					else if (obj.cmEnd - end > cMPerFrame){
+						len += "[ "+start+"cM - " +end +"cM ]";
+						matchCMcount += (end-start);
+						mathingSegments++;
+						tempSt=tempEnd=0;
+						start= obj.cmStart;
+						end=obj.cmEnd;
+					}
 				}
 				if (!obj.match && end >0) {
-					matchCMcount += (end-start);
-					if (end >0) {
-						len += "["+start+"cM - " +end +"cM]";
+					tempSt=start;
+					tempEnd=end;
+					if (end >0 && tempEnd > obj.cmStart) {}
+					else {
+						len += "[ "+start+"cM - " +end +"cM ]";
+						matchCMcount += (end-start);
 						mathingSegments++;
+						tempSt=tempEnd=0;
+						start=end=0;
 					}
-					start=0;
-					end=0;
 				}
 				if (currentChromosomeTotalFrames > 0 && start >=0 && end >0) {
 					if (j==currentChromosomeTotalFrames-1) {
 						matchCMcount += (end-start);
 						if ( end >0) {
-							len += "["+start+"cM - " +end +"cM]";
+							len += "[ "+start+"cM - " +end +"cM ]";
 							mathingSegments++;
 						}
 					}
@@ -1140,6 +1157,8 @@ public class HBA_Client_Individual {
 			chromosomeWiseMatchCM.add(matchCMcount);
 			chromosomeWiseTotalCM.add(cMCount);
 		}
+		
+		
 		System.out.println("\n\n\n\t\t\tMatching Segments");
 		System.out.println("Chromosome\tTotal cM\tMatching cM\tMatching Segments");
 		for (int i=1;i<=CHROMOSOME_COUNT;i++) 
@@ -1149,6 +1168,8 @@ public class HBA_Client_Individual {
 		System.out.println("Overall Matching Frames are	"+ matchFrames);
 		System.out.println("Overall Total	 CMs	are	"+ totalcM);
 		System.out.println("Overall Matching CMs	are	"+ matchcM);
+		
+
 	}
 	
 	

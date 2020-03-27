@@ -15,13 +15,15 @@ public class TestCases {
 		
 		String loc = "test_files/case3/";
 		String ext = ".txt";
+		String test_file= "input/case3_test_results.csv";
+		String data_file= "input/case3_data_characteristics.csv";
 		for (int i=1; i<=14;i++) {
 			for (int j= i+1; j<=15; j++) {
 				//Thread.sleep(15000);
 				System.out.println("\n\n\n\t\t\t\t\tExecution of "+i +" and "+j);
 				
-				HBA_Server_V2 obj = new HBA_Server_V2(loc+i+ext);
-				HBA_Client_V2 obj1 = new HBA_Client_V2(loc+j+ext);
+				Server_Test obj = new Server_Test(loc+i+ext);
+				Client_Test obj1 = new Client_Test((loc+j+ext), test_file, data_file );
 				System.out.println("Objects Created");
 				
 				Callable<Void> callable1 = new Callable<Void>(){

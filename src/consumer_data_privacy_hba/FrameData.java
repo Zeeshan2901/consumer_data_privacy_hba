@@ -44,10 +44,11 @@ public class FrameData implements Comparable <FrameData> {
 				+ "|| End : "+ob.end+" || EndRSID : "+ob.endRSID+ " || CM_Start : " +ob.cmStart + " || CM_End : "+ob.cmEnd+
 				" || HashValues : "+ob.evenHashValue+" || "
 				+ob.oddHashValue + " || Sent : "+ob.sent+" || Match : "+ob.match);
+		
 	}
 	
 	public int compareTo(FrameData fd) {
-		if (start==fd.cmStart)
+		if (cmStart==fd.cmStart)
 			return 0;
 		if (fd.cmStart < cmStart)
 			return 1;
