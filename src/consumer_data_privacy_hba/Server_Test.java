@@ -44,7 +44,7 @@ public class Server_Test {
 	//2D centiMogran Array holding the starting positions of each centiMorgan
 	int [][] cM;
 	
-	
+	int totalSnips;
 	
 	
 	//Constructor to initialize the variables
@@ -67,6 +67,8 @@ public class Server_Test {
 			exclusionList[i]= new ArrayList<FrameData>();
 			readRejects[i]	= new ArrayList<GenotypedData>();
 		}
+		
+		totalSnips=0;
 		
 		cM = new int[23][];
 		cM[0] = null;
@@ -182,6 +184,8 @@ public class Server_Test {
 		//serverOut.writeUTF("close");
 		//serverIn.readUTF();
 		System.out.println("Server : Sending & receiving last comms");
+		System.out.println("\t\t\t\t Server : SNIPS " + totalSnips);
+		serverOut.writeUTF(String.valueOf(totalSnips));
 		
 		// block to close connections
 		try {
@@ -324,6 +328,7 @@ public class Server_Test {
 			if (flag ==1) {
 				//System.out.println(s + "\t\t\t"+ flag);
 	        	GenotypedData obj =new GenotypedData();
+	        	totalSnips++;
 	        	int index = 0;
 	            int len = s.length();
 	            

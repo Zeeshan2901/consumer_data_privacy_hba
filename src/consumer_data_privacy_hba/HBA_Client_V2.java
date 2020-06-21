@@ -161,7 +161,7 @@ public class HBA_Client_V2 {
 		mathingSegments=0;
 		
 		//location="test_files/case3/1.txt";
-		location = "input/son_all.txt";
+		location = "input/sister_all.txt";
 		//location = inp;
 		//participant1=inp.substring(inp.length()-6, inp.length()).replaceAll("[^0-9]", "");
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
