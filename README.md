@@ -41,6 +41,19 @@ javac consumer_data_privacy_hba/*.java
 * To run multple test cases on the same machine
 	
 	* Modify the TestCases.java file accordingly.
+	```
+	/*
+	 * Modify Below Variables Accordingly To Run Tests 
+	 */
+		String loc = "test_files/case3/";		//directory for test files for Server
+		String loc1= "test_files/case3/";		//directory for test files for Server
+		String csv = ".csv";				//extension of the test file
+		String txt =".txt";				//extension of the test file
+		String results= "input/TestCasesResults.csv";	//results are stored in this file
+	/*
+	 * 
+	 */
+	```
 	* Compile TestCases.java 
 	```
 	cd  src/
@@ -54,3 +67,4 @@ javac consumer_data_privacy_hba/*.java
 	```
 	java -jar TestCases.jar
 	```
+
