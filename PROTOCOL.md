@@ -2,23 +2,23 @@
 ## Generate Nonce
 
 * Generate and Hash Secure Random Number
-	* Alice and Bob both generate secure random number R<sub>A<sub> and R<sub>B<sub> respectively.
-	* Alice and Bob both generate the hash of the secure random number h<sub>A<sub>=H(R<sub>A<sub>) and h<sub>B<sub>=H(R<sub>B<sub>) respectively.
+	* Alice and Bob both generate secure random number R<sub>A</sub> and R<sub>B</sub> respectively.
+	* Alice and Bob both generate the hash of the secure random number h<sub>A</sub>=H(R<sub>A</sub>) and h<sub>B</sub>=H(R<sub>B</sub>) respectively.
 	
 * Share hashes of secure random number
-	* Alice sends h<sub>A<sub> to Bob.
-	* Bob sends h<sub>B<sub> to Alice.
+	* Alice sends h<sub>A</sub> to Bob.
+	* Bob sends h<sub>B</sub> to Alice.
 	
 * Share secure random numbers
-	* Alice sends R<sub>A<sub> to Bob.
-	* Bob sends R<sub>B<sub> to Alice.
+	* Alice sends R<sub>A</sub> to Bob.
+	* Bob sends R<sub>B</sub> to Alice.
 
 * Verify random numbers
-	* Alice verifies if H(R<sub>B<sub>)= h<sub>B<sub>.
-	* Bob verififes if H(R<sub>A<sub>)= h<sub>A<sub>.
+	* Alice verifies if H(R<sub>B</sub>)= h<sub>B</sub>.
+	* Bob verififes if H(R<sub>A</sub>)= h<sub>A</sub>.
 
 * Nonce creation
-	* If verfifictaion for both Alice and Bob is true, then nonce = R<sub>A<sub> XOR R<sub>B<sub> 
+	* If verfifictaion for both Alice and Bob is true, then nonce = R<sub>A</sub> XOR R<sub>B</sub> 
 	* If verfifictaion for both Alice and Bob is false, then abort.
 
 
