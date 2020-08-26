@@ -8,25 +8,29 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TestCases {
-	
-	 
-	
 	public static void main (String [] a) throws InterruptedException, IOException {
 		
-		String loc = "test_files/case4/";
+		/*
+		 * Modify Below Variables Accordingly To Run Tests 
+		 */
+		String loc = "test_files/case3/";
 		String loc1= "test_files/case3/";
 		String csv = ".csv";
 		String txt =".txt";
-		String test_file= "input/case5_test_results.csv";
-		for (int i=1; i<=10;i++) {
-			for (int j= 70; j<=79; j++) {
-				//Thread.sleep(15000);
+		String test_file= "input/TestCasesResults.csv";
+		/*
+		 * 
+		 */
+				
+		for (int i=1; i<=1;i++) {
+			for (int j= 2; j<=2; j++) {
 				System.out.println("\n\n\n\t\t\t\t\tExecution of "+i +" and "+j);
 				
-				Server_Test obj = new Server_Test(loc1+i+txt);
-				Client_Test obj1 = new Client_Test((loc+j+csv), test_file );
+				Server_Test obj = new Server_Test(loc1+"1"+txt);
+				Client_Test obj1 = new Client_Test((loc+j+txt), test_file );
 				System.out.println("Objects Created");
-				
+				System.out.println(i+"1"+j);
+
 				Callable<Void> callable1 = new Callable<Void>(){
 					public Void call() throws Exception{
 						obj.run();

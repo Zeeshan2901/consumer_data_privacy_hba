@@ -43,9 +43,9 @@ public class Client_Test {
 	int [][] cM;
 	
 	//Overlapping, threshold and centiMorgans per Frame variable
-	final static int overlap = 25;
+	final static int overlap = 5;
 	final static int threshold = 100;
-	final static int cMPerFrame = 25;
+	final static int cMPerFrame = 5;
 	
 	//testing variables
 	int totalcM, matchcM,  totalFrames, matchFrames,mathingSegments, excludedFrames;
@@ -1037,6 +1037,20 @@ public class Client_Test {
 			//Sort the hashvalue list
 			Collections.sort(hashToBeSent);
 			//Sending and Receiving Hashcodes
+			
+			
+			//Checksum Exchange: 
+			//Client Side Receives first half of the checksum first
+			
+			String checksum = generateCheckSum(hashToBeSent);
+			String partyChecksum=clientIn.readUTF();
+			clientOut.writeUTF(checksum);
+			partyChecksum += clientIn.readUTF();
+			
+			//Checksum Exchange: End
+			
+			
+			
 			String batch="", received="";
 			int counter=0;
 			for(String hashCode : hashToBeSent) {
@@ -1060,6 +1074,16 @@ public class Client_Test {
 				if (!w.contentEquals(""))
 					hashReceived.add(w);
 			//System.out.println("Input Size : "+hashReceived.size());
+			
+			//Verify Checksum
+			String calculatedChecksum=generateCheckSum(hashReceived);
+			if (partyChecksum.contentEquals(calculatedChecksum))
+				System.out.println("\n\n\n\t CheckSum Verification Successful");
+			else
+				System.out.println("\n\n\n\tOther Party CheckSum Verification Failed\n\n\n\tOther Party Dishonest");
+			
+			
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1179,5 +1203,30 @@ public class Client_Test {
 	}
 	
 	
+	////////////////////////////////Checksum stuff////////////////////////////////
+	
+	public String generateCheckSum(List <String> hashes) {
+	
+		try {
+			String hash = new String("");
+			for (String s:hashes)
+				hash+=s;
+		
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] messageDigest = md.digest(hash.getBytes());
+		
+			BigInteger no = new BigInteger(1, messageDigest);
+			String checksum = no.toString(16);
+			while (checksum.length() < 32) {
+				checksum = "0" + checksum;
+			}
+			return checksum;
+			}
+		catch (NoSuchAlgorithmException e) {
+			System.out.println("Exception thrown for incorrect algorithm: " + e);
+			return null;
+		}
+	
+	}
 	
 }
