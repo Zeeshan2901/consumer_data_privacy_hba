@@ -9,7 +9,7 @@ Dependencies: Need Java 1.8
 To build this project:
 
 * Clone the project
-* compile the java source code
+* Compile the java source code
 ```
 cd  src/
 javac consumer_data_privacy_hba/*.java
@@ -24,11 +24,11 @@ javac consumer_data_privacy_hba/*.java
 	jar cfm User2.jar Manifest2.txt consumer_data_privacy_hba/*.class
 	```
 	* Execute the jars by opening 2 shells and executing each jar. 
-	Make sure User1.jar is executed before User2.jar.
+		* Make sure User1.jar is executed before User2.jar.
 	``` 	
 	java -jar User1.jar "port (e.g: 5000)" "location of the input GENOTYPED datafile" "cMPerFrame(value: 5 or 25)"
 	java -jar User2.jar "port (e.g: 5000)" "IP address of the Server (in this case same machine address e.g:127.0.0.1)" "location of the input GENOTYPED datafile" "cMPerFrame(value: 5 or 25)"
-
+	```
 
 * To run the project on different machines
 	* End users should decide on the roles (Server/Client)
@@ -36,3 +36,21 @@ javac consumer_data_privacy_hba/*.java
 	* User1 should share their IP address and port to bind to the User2
 	* Both User1 and User2 should follow the same commands.
 	* Make sure User1.jar is executed before User2.jar.
+
+
+* To run multple test cases on the same machine
+	
+	* Modify the TestCases.java file accordingly.
+	* Compile TestCases.java 
+	```
+	cd  src/
+	javac consumer_data_privacy_hba/TestCases.java
+	``` 
+	* Create the jar
+	```
+	jar cfm TestCases.jar Manifest3.txt consumer_data_privacy_hba/*.class
+	```
+ 	* Execute
+	```
+	java -jar TestCases.jar
+	```
