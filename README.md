@@ -67,4 +67,12 @@ javac consumer_data_privacy_hba/*.java
 	```
 	java -jar TestCases.jar
 	```
-
+* Sample Genotypes files are also provided with this project:
+	* Genotypes files for Spanish Family and Ancestry Family
+		```
+		cd input
+		```
+	* Test Files used in the thesis
+		```
+		cd test_files
+		``` 
