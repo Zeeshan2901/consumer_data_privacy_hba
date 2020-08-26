@@ -23,17 +23,17 @@ public class User2 {
 	
 	//Location of the input File
 	private String location;
+	int cMPerFrame;
 	
 	//Nonce fields
 	long my_nonce, party_nonce, nonce;
 	String hashOfMyNonce, hashOfPartyNonce;
 	
 	//CHROMOSOME Count Constant
-	//Overlapping, threshold and centiMorgans per Frame variable
+	//Overlapping, threshold and variable
 	final static int CHROMOSOME_COUNT = 22;
 	final static int overlap = 5;
 	final static int threshold = 100;
-	final static int cMPerFrame = 5;
 	
 	//Necessary Data Structures
 	ArrayList<GenotypedData>[] genes;		//holds the data files
@@ -53,18 +53,19 @@ public class User2 {
 	
 	
 	//Constructor to initialize the variables
-	public User2() {
-		clientAddress="127.0.0.1"; 
-		port=5000;
+	public User2(String cPort, String cClientAddress, String cLocation, String cCMPerFrame ) {
+		port = Integer.parseInt(cPort);
+		clientAddress= cClientAddress;
+		location = cLocation;
+		cMPerFrame= Integer.parseInt(cCMPerFrame);
+		
+		mathingSegments=0;
+		totalSnips=0;
 		
 		genes  = new ArrayList[CHROMOSOME_COUNT+1]; 
 		frames = new ArrayList[CHROMOSOME_COUNT+1];
 		exclusionList = new ArrayList[CHROMOSOME_COUNT+1];
 		readRejects = new ArrayList[CHROMOSOME_COUNT+1];
-	
-		mathingSegments=0;
-		totalSnips=0;
-		location = "input/sister_all.txt";
 		
 		for (int i=1; i<=CHROMOSOME_COUNT; i++) {
 			genes[i]= new ArrayList<GenotypedData>();
@@ -100,7 +101,7 @@ public class User2 {
 	}
 	 
 	public static void main(String[] args) throws IOException, InterruptedException {	
-		User2 client = new User2();		
+		User2 client = new User2( args[1],args[2], args[3], args[4] );		
 		client.run();
 	}
 	

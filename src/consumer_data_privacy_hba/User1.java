@@ -22,13 +22,14 @@ public class User1 {
 	
 	//Location of the input File
 	private String location;
+	int cMPerFrame;
 
 	//CHROMOSOME Count Constant
-	//Overlapping, threshold and centiMorgans per Frame variable
+	//Overlapping, threshold and  variable
 	final static int CHROMOSOME_COUNT = 22;
 	final static int overlap = 5;
 	final static int threshold = 100;
-	final static int cMPerFrame = 5;
+	
 	
 	// NONCE fields
 	long my_nonce, party_nonce, nonce;
@@ -53,9 +54,11 @@ public class User1 {
 	
 	
 	//Constructor to initialize the variables
-	public User1() {
-		port = 5000;
-		location = "input/dad_all.txt";
+	public User1(String cPort, String cLocation, String cCMPerFrame ) {
+		port = Integer.parseInt(cPort);
+		location = cLocation;
+		cMPerFrame= Integer.parseInt(cCMPerFrame);
+		
 		totalSnips=0;
 		mathingSegments=0;
 
@@ -98,7 +101,7 @@ public class User1 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		User1 server = new User1();
+		User1 server = new User1(args[0], args[1], args[2]);
 		server.run();
 	}
 
