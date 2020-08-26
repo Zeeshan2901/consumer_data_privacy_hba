@@ -13,11 +13,11 @@ public class TestCases {
 		/*
 		 * Modify Below Variables Accordingly To Run Tests 
 		 */
-		String loc = "test_files/case3/";
-		String loc1= "test_files/case3/";
-		String csv = ".csv";
-		String txt =".txt";
-		String test_file= "input/TestCasesResults.csv";
+		String loc = "test_files/case3/";				//directory for test files for Server
+		String loc1= "test_files/case3/";				//directory for test files for Server
+		String csv = ".csv";							//extension of the test file
+		String txt =".txt";								//extension of the test file
+		String results= "input/TestCasesResults.csv";	//results are stored in this file 
 		/*
 		 * 
 		 */
@@ -27,7 +27,7 @@ public class TestCases {
 				System.out.println("\n\n\n\t\t\t\t\tExecution of "+i +" and "+j);
 				
 				Server_Test obj = new Server_Test(loc1+"1"+txt);
-				Client_Test obj1 = new Client_Test((loc+j+txt), test_file );
+				Client_Test obj1 = new Client_Test((loc+j+txt), results );
 				System.out.println("Objects Created");
 				System.out.println(i+"1"+j);
 
