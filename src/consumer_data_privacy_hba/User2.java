@@ -101,7 +101,7 @@ public class User2 {
 	}
 	 
 	public static void main(String[] args) throws IOException, InterruptedException {	
-		User2 client = new User2( args[1],args[2], args[3], args[4] );		
+		User2 client = new User2( args[0],args[1], args[2], args[3] );		
 		client.run();
 	}
 	
